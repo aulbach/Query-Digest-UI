@@ -1,0 +1,73 @@
+
+#Queries_filter {
+    float: right;
+    padding-right: 1em;
+}
+
+#Queries_length {
+    float: right;
+    padding-right: 1em;
+}
+
+#Queries_processing {
+    padding-left: 1em;
+}
+
+.fg-toolbar {
+    padding-top: .5em;
+    padding-bottom: .5em;
+}
+
+#Queries_info {
+    float: right;
+    padding-right: 1em;
+}
+
+#Queries_previous {
+    margin: 0px;
+}
+
+#Queries_next {
+    margin: 0px;
+}
+
+.number {
+    text-align: right;
+}
+
+td {
+    padding-right: .5em;
+    padding-left: .5em;
+}
+
+.even {
+    background-color: #DCEEFF;
+}
+
+#navMenu {
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+}
+
+.sf-menu {
+    width: 100%;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+#content {
+    padding: 8px;
+    padding-top: 48px;
+}
+
+.date {
+    width: 8em;
+}

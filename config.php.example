@@ -1,0 +1,10 @@
+<?php
+
+$reviewhost = array(
+    'db_host'                       => 'hostname:3306',
+    'db_user'                       => 'user',
+    'db_password'                   => 'password',
+    'db_database'                   => 'database',
+    'review_table'                  => 'review',
+    'review_history_table'          => 'review_history',
+);
