@@ -1,0 +1,13 @@
+Query-Digest-UI
+---------------
+
+This is a simple web ui for pt-query-digest[1] or mk-query-digest[2]. It is designed to be as simple as possible but allow reviews easily.
+
+Install
+-------
+Clone to a docroot, copy config.php.example to config.php and edit. Head to the root url in your browser and away you go!
+
+Citations
+---------
+[1] http://www.percona.com/doc/percona-toolkit/pt-query-digest.html
+[2] http://www.maatkit.org/doc/mk-query-digest.html
