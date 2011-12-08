@@ -2,24 +2,22 @@
 
 require('config.php');
 
-$review = new mysqli($reviewhost['db_host'], $reviewhost['db_user'], $reviewhost['db_password'], $reviewhost['db_database']);
+$dbh = new PDO("mysql:host={$reviewhost['db_host']};dbname={$reviewhost['db_database']}", $reviewhost['db_user'], $reviewhost['db_password']);
 
-$list = $review->prepare('SELECT review.checksum                            AS checksum,
-                                 review.fingerprint                         AS sample,
-                                 SUM(history.ts_cnt)                        AS count,
-                                 SUM(history.query_time_sum)                AS time,
-                                 review.last_seen                           AS last_seen
-                            FROM '.$reviewhost['review_table'].'            AS review
-                       LEFT JOIN '.$reviewhost['review_history_table'].'    AS history
-                              ON history.checksum = review.checksum
-                           WHERE review.reviewed_on IS NOT NULL
-                             AND review.last_seen > review.reviewed_on
-                        GROUP BY review.checksum
+$list = $dbh->prepare('SELECT review.checksum                            AS checksum,
+                              review.fingerprint                         AS sample,
+                              SUM(history.ts_cnt)                        AS count,
+                              SUM(history.query_time_sum)                AS time,
+                              review.last_seen                           AS last_seen
+                         FROM '.$reviewhost['review_table'].'            AS review
+                    LEFT JOIN '.$reviewhost['review_history_table'].'    AS history
+                           ON history.checksum = review.checksum
+                        WHERE review.reviewed_on IS NOT NULL
+                          AND review.reviewed_on < review.last_seen
+                     GROUP BY review.checksum
                             ');
-
-#$list->bind_param();
 $list->execute();
-$result = $list->get_result();
+
 ?>
 
 <?php include('templates/header.php'); ?>
@@ -37,7 +35,7 @@ $result = $list->get_result();
         </thead>
         <tbody>
             <?php
-                while ($row = $result->fetch_assoc()) {
+                while ($row = $list->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr>";
                     echo "<td class='count number'>".$row['count']."</td>";
                     echo "<td class='avgTime number'>".round(($row['time'] / $row['count']) * 1000, 0)."</td>";

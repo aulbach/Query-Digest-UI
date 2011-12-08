@@ -2,35 +2,32 @@
 
 require('config.php');
 
+$dbh = new PDO("mysql:host={$reviewhost['db_host']};dbname={$reviewhost['db_database']}", $reviewhost['db_user'], $reviewhost['db_password']);
+
 $review = new mysqli($reviewhost['db_host'], $reviewhost['db_user'], $reviewhost['db_password'], $reviewhost['db_database']);
 
 if (@$_REQUEST['Review'] == 'Review' ) {
-    $query = $review->prepare('UPDATE review SET reviewed_by = ?, reviewed_on = NOW(), comments = ? WHERE checksum = ?');
-    $query->bind_param("sss", $_REQUEST['reviewed_by'], $_REQUEST['comments'], $_REQUEST['checksum']);
-    $query->execute();
+    $query = $dbh->prepare('UPDATE review SET reviewed_by = ?, reviewed_on = NOW(), comments = ? WHERE checksum = ?');
+    $query->execute(array($_REQUEST['reviewed_by'], $_REQUEST['comments'], $_REQUEST['checksum']));
     header( "Location: review.php?checksum={$_REQUEST['checksum']}" ) ;
     exit;
 }
 
-$query = $review->prepare('SELECT review.*
-                    FROM '.$reviewhost['review_table'].' AS review
-                   WHERE review.checksum = ?
-                GROUP BY review.checksum
+$query = $dbh->prepare('SELECT review.*
+                          FROM '.$reviewhost['review_table'].' AS review
+                         WHERE review.checksum = ?
+                      GROUP BY review.checksum
                     ');
-$query->bind_param("s", $_REQUEST['checksum']);
-$query->execute();
-$result = $query->get_result();
-$reviewData = $result->fetch_assoc();
+$query->execute(array($_REQUEST['checksum']));
+$reviewData = $query->fetch(PDO::FETCH_ASSOC);
 
-$query = $review->prepare('SELECT review.*
-                    FROM '.$reviewhost['review_history_table'].' AS review
-                   WHERE review.checksum = ?
-                GROUP BY review.checksum
-                    ');
-$query->bind_param("s", $_REQUEST['checksum']);
-$query->execute();
-$result = $query->get_result();
-$reviewHistoryData = $result->fetch_assoc();
+$query = $dbh->prepare('SELECT review.*
+                          FROM '.$reviewhost['review_history_table'].' AS review
+                         WHERE review.checksum = ?
+                      GROUP BY review.checksum
+                          ');
+$query->execute(array($_REQUEST['checksum']));
+$reviewHistoryData = $query->fetch(PDO::FETCH_ASSOC);
 
 foreach ($reviewData as $key=>&$val) {
     if (in_array($key, array('checksum')))
