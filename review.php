@@ -118,7 +118,7 @@ unset ($key, $val);
 <div class="accordionOpen">
     <h3><a href="#">Detailed Stats</a></h3>
     <div>
-        <p>Seen between <?php echo $reviewHistoryData['ts_min']; ?> and <?php echo $reviewHistoryData['ts_max']; ?>.</p>
+        <p>Seen between <?php echo $reviewData['first_seen']; ?> and <?php echo $reviewData['last_seen']; ?>.</p>
         <table class="dataTable">
             <thead>
                 <tr>
