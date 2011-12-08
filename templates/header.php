@@ -30,9 +30,23 @@
 
 	<div id="navMenu">
 		<ul id="menu" class="sf-menu">
-			<li><a href="list-unreviewed.php">Unreviewed Queries</a></li>
-			<li><a href="list-reviewed-seen.php">Seen after Reviewed Queries</a></li>
-			<li><a href="list-reviewed.php">Reviewed Queries</a></li>
+			<li><a href="list-unreviewed.php" title="Never reviewed queries">Unreviewed Queries</a>
+                <ul>
+                    <li><a href="list-unreviewed.php">All</a></li>
+                    <li><a href="list-unreviewed-past-month.php">Past Month</a></li>
+                    <li><a href="list-unreviewed-past-two-week.php">Past Two Weeks</a></li>
+                    <li><a href="list-unreviewed-past-week.php">Past Week</a></li>
+                </ul>
+            </li>
+			<li><a href="list-reviewed-seen.php" title="Queries seen after a review">Seen after Reviewed Queries</a></li>
+			<li><a href="list-reviewed.php" title="Reviewed Queries">Reviewed Queries</a>
+                <ul>
+                    <li><a href="list-reviewed.php">All</a></li>
+                    <li><a href="list-reviewed-past-month.php">Past Month</a></li>
+                    <li><a href="list-reviewed-past-two-week.php">Past Two Weeks</a></li>
+                    <li><a href="list-reviewed-past-week.php">Past Week</a></li>
+                </ul>
+            </li>
 		</ul>
 	</div>
 
