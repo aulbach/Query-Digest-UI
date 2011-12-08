@@ -122,43 +122,53 @@ unset ($key, $val);
         <table class="dataTable">
             <thead>
                 <tr>
-                    <th></th>
+                    <th>Boolean Attributes</th>
                     <th>Count</th>
                     <th>Sum</th>
+                    <th>%</th>
                 </tr>
             </thead>
             <tbody>
                 <tr><td>Query Count</td>
                     <td class="number"><?php echo $reviewHistoryData['ts_cnt']; ?></td>
-                    <td class="number">-</td></tr>
+                    <td class="center">-</td>
+                    <td class="center">-</td></tr>
                 <tr><td>Query Cache</td>
                     <td class="number"><?php echo $reviewHistoryData['QC_Hit_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['QC_Hit_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['QC_Hit_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['QC_Hit_cnt']) echo round($reviewHistoryData['QC_Hit_sum']/$reviewHistoryData['QC_Hit_cnt']*100, 0); ?></td></tr>
                 <tr><td>Full Scan</td>
                     <td class="number"><?php echo $reviewHistoryData['Full_scan_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Full_scan_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['Full_scan_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['Full_scan_cnt']) echo round($reviewHistoryData['Full_scan_sum']/$reviewHistoryData['Full_scan_cnt']*100, 0); ?></td></tr>
                 <tr><td>Full Join</td>
                     <td class="number"><?php echo $reviewHistoryData['Full_join_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Full_join_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['Full_join_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['Full_join_cnt']) echo round($reviewHistoryData['Full_join_sum']/$reviewHistoryData['Full_join_cnt']*100, 0); ?></td></tr>
                 <tr><td>Temporary Tables</td>
                     <td class="number"><?php echo $reviewHistoryData['Tmp_table_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Tmp_table_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['Tmp_table_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['Tmp_table_cnt']) echo round($reviewHistoryData['Tmp_table_sum']/$reviewHistoryData['Tmp_table_cnt']*100, 0); ?></td></tr>
                 <tr><td>On Disk Temporary Tables</td>
                     <td class="number"><?php echo $reviewHistoryData['Disk_tmp_table_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Disk_tmp_table_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['Disk_tmp_table_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['Disk_tmp_table_cnt']) echo round($reviewHistoryData['Disk_tmp_table_sum']/$reviewHistoryData['Disk_tmp_table_cnt']*100, 0); ?></td></tr>
                 <tr><td>File Sorts</td>
                     <td class="number"><?php echo $reviewHistoryData['Filesort_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Filesort_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['Filesort_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['Filesort_cnt']) echo round($reviewHistoryData['Filesort_sum']/$reviewHistoryData['Filesort_cnt']*100, 0); ?></td></tr>
                 <tr><td>On Disk File Sorts</td>
                     <td class="number"><?php echo $reviewHistoryData['Disk_filesort_cnt']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Disk_filesort_sum']; ?></td></tr>
+                    <td class="number"><?php echo $reviewHistoryData['Disk_filesort_sum']; ?></td>
+                    <td class="number"><?php if ($reviewHistoryData['Disk_filesort_cnt']) echo round($reviewHistoryData['Disk_filesort_sum']/$reviewHistoryData['Disk_filesort_cnt']*100, 0); ?></td></tr>
             </tbody>
         </table>
-
+        <br>
+        <br>
         <table class="dataTable">
             <thead>
                 <tr>
-                    <th></th>
+                    <th>Attribute</th>
                     <th>Sum</th>
                     <th>Min</th>
                     <th>Max</th>

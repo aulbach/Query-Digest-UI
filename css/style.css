@@ -35,6 +35,10 @@
     text-align: right;
 }
 
+.center {
+    text-align: center;
+}
+
 td {
     padding-right: .5em;
     padding-left: .5em;
