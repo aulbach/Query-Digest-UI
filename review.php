@@ -21,14 +21,6 @@ $query = $dbh->prepare('SELECT review.*
 $query->execute(array($_REQUEST['checksum']));
 $reviewData = $query->fetch(PDO::FETCH_ASSOC);
 
-$query = $dbh->prepare('SELECT review.*
-                          FROM '.$reviewhost['review_history_table'].' AS review
-                         WHERE review.checksum = ?
-                      GROUP BY review.checksum
-                          ');
-$query->execute(array($_REQUEST['checksum']));
-$reviewHistoryData = $query->fetch(PDO::FETCH_ASSOC);
-
 foreach ($reviewData as $key=>&$val) {
     if (in_array($key, array('checksum')))
         continue;
@@ -43,6 +35,38 @@ foreach ($reviewData as $key=>&$val) {
     }
 }
 unset ($key, $val);
+
+$query = $dbh->prepare('SELECT review.*
+                          FROM '.$reviewhost['review_history_table'].' AS review
+                         WHERE review.checksum = ?
+                          ');
+$query->execute(array($_REQUEST['checksum']));
+$reviewHistoryData = $query->fetch(PDO::FETCH_ASSOC);
+
+while ($newData = $query->fetch(PDO::FETCH_ASSOC)) {
+    foreach ($newData as $key=>$value) {
+        if (!$value)
+            continue;
+        if (stripos($key, '_sum') !== false)
+            $reviewHistoryData[$key] += $value;
+        else if (stripos($key, '_cnt') !== false)
+            $reviewHistoryData[$key] += $value;
+        else if (stripos($key, '_min') !== false)
+            $reviewHistoryData[$key] = min($value, $reviewHistoryData[$key]);
+        else if (stripos($key, '_max') !== false)
+            $reviewHistoryData[$key] = max($value, $reviewHistoryData[$key]);
+        else if (   stripos($key, '_pct_95') !== false
+                 || stripos($key, '_stddev') !== false
+                 || stripos($key, '_median') !== false
+                 || stripos($key, '_rank') !== false
+                 ){
+            $reviewHistoryData[$key] = (($value * $newData['ts_cnt'])
+                                     + ($reviewHistoryData[$key] * $reviewHistoryData['ts_cnt']))
+                                     / ($newData['ts_cnt']+$reviewHistoryData['ts_cnt']);
+        }
+    }
+}
+unset($newData);
 
 foreach ($reviewHistoryData as $key=>&$val) {
     if (in_array($key, array('checksum')))
@@ -169,107 +193,107 @@ unset ($key, $val);
             <thead>
                 <tr>
                     <th>Attribute</th>
-                    <th>Sum</th>
-                    <th>Min</th>
-                    <th>Max</th>
+                    <th>Median</th>
                     <th>95%</th>
                     <th>StdDev</th>
-                    <th>Median</th>
+                    <th>Min</th>
+                    <th>Max</th>
+                    <th>Sum</th>
                 </tr>
             </thead>
             <tbody>
                 <tr><td>Query Time (ms)</td>
-                    <td class="number"><?php echo $reviewHistoryData['Query_time_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Query_time_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Query_time_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Query_time_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Query_time_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Query_time_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Query_time_median']; ?></td></tr>
-                <tr><td>Lock Time (ms)</td>
-                    <td class="number"><?php echo $reviewHistoryData['Lock_time_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Lock_time_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Lock_time_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Query_time_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Query_time_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Query_time_sum']; ?></td>
+                </tr><tr><td>Lock Time (ms)</td>
+                    <td class="number"><?php echo $reviewHistoryData['Lock_time_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Lock_time_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Lock_time_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Lock_time_median']; ?></td></tr>
-                <tr><td>Rows Sent</td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Lock_time_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Lock_time_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Lock_time_sum']; ?></td>
+                </tr><tr><td>Rows Sent</td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_sent_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_sent_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_median']; ?></td></tr>
-                <tr><td>Rows Examined</td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_sent_sum']; ?></td>
+                </tr><tr><td>Rows Examined</td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_examined_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_examined_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_median']; ?></td></tr>
-                <tr><td>Rows Affected</td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_examined_sum']; ?></td>
+                </tr><tr><td>Rows Affected</td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_affected_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_affected_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_median']; ?></td></tr>
-                <tr><td>Rows Read</td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_read_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_read_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_read_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_affected_sum']; ?></td>
+                </tr><tr><td>Rows Read</td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_read_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_read_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Rows_read_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Rows_read_median']; ?></td></tr>
-                <tr><td>Merge_passes</td>
-                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_sum']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_read_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_read_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Rows_read_sum']; ?></td>
+                </tr><tr><td>Merge_passes</td>
+                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Merge_passes_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['Merge_passes_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_median']; ?></td></tr>
-                <tr><td>InnoDB IO Read Ops</td>
-                    <td class="number"></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_max']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['Merge_passes_sum']; ?></td>
+                </tr><tr><td>InnoDB IO Read Ops</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_median']; ?></td></tr>
-                <tr><td>InnoDB IO Read Bytes</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_ops_max']; ?></td>
                     <td class="number"></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_max']; ?></td>
+                </tr><tr><td>InnoDB IO Read Bytes</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_median']; ?></td></tr>
-                <tr><td>InnoDB IO Read Wait</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_bytes_max']; ?></td>
                     <td class="number"></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_max']; ?></td>
+                </tr><tr><td>InnoDB IO Read Wait</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_median']; ?></td></tr>
-                <tr><td>InnoDB Record Lock Wait</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_IO_r_wait_max']; ?></td>
                     <td class="number"></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_max']; ?></td>
+                </tr><tr><td>InnoDB Record Lock Wait</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_median']; ?></td></tr>
-                <tr><td>InnoDB Queue Wait</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_rec_lock_wait_max']; ?></td>
                     <td class="number"></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_max']; ?></td>
+                </tr><tr><td>InnoDB Queue Wait</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_median']; ?></td></tr>
-                <tr><td>InnoDB Distinct Pages</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_queue_wait_max']; ?></td>
                     <td class="number"></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_min']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_max']; ?></td>
+                </tr><tr><td>InnoDB Distinct Pages</td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_median']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_pct_95']; ?></td>
                     <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_stddev']; ?></td>
-                    <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_median']; ?></td></tr>
-
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_min']; ?></td>
+                    <td class="number"><?php echo $reviewHistoryData['InnoDB_pages_distinct_max']; ?></td>
+                    <td class="number"></td>
+                </tr>
             </tbody>
         </table>
     </div>
