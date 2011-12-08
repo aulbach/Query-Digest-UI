@@ -4,9 +4,6 @@ require('config.php');
 
 $review = new mysqli($reviewhost['db_host'], $reviewhost['db_user'], $reviewhost['db_password'], $reviewhost['db_database']);
 
-if (!is_null($livehost))
-    $live = new mysqli($livehost['db_host'], $livehost['db_user'], $livehost['db_password'], $livehost['db_database']);
-
 $list = $review->prepare('SELECT review.checksum                            AS checksum,
                                  review.fingerprint                         AS sample,
                                  SUM(history.ts_cnt)                        AS count,
@@ -64,5 +61,5 @@ $(function() {
     });
 } );
 </script>
-    
+
 <?php include('templates/footer.php');
