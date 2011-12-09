@@ -4,8 +4,6 @@ require('config.php');
 
 $dbh = new PDO("mysql:host={$reviewhost['db_host']};dbname={$reviewhost['db_database']}", $reviewhost['db_user'], $reviewhost['db_password']);
 
-$review = new mysqli($reviewhost['db_host'], $reviewhost['db_user'], $reviewhost['db_password'], $reviewhost['db_database']);
-
 if (@$_REQUEST['Review'] == 'Review' ) {
     $query = $dbh->prepare('UPDATE review SET reviewed_by = ?, reviewed_on = NOW(), comments = ? WHERE checksum = ?');
     $query->execute(array($_REQUEST['reviewed_by'], $_REQUEST['comments'], $_REQUEST['checksum']));
