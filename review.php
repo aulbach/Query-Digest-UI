@@ -45,6 +45,10 @@ while ($newData = $query->fetch(PDO::FETCH_ASSOC)) {
     foreach ($newData as $key=>$value) {
         if (!$value)
             continue;
+        if ( is_null($reviewHistoryData[$key])) {
+            $reviewHistoryData[$key] = $value;
+            continue;
+        }
         if (stripos($key, '_sum') !== false)
             $reviewHistoryData[$key] += $value;
         else if (stripos($key, '_cnt') !== false)
