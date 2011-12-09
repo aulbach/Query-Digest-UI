@@ -141,6 +141,30 @@ unset ($key, $val);
     <h3><a href="#">Detailed Stats</a></h3>
     <div>
         <p>Seen between <?php echo $reviewData['first_seen']; ?> and <?php echo $reviewData['last_seen']; ?>.</p>
+        <p>
+            <?php
+                $timeDiff = strtotime($reviewData['last_seen']) - strtotime($reviewData['first_seen']);
+                $qps = $reviewHistoryData['ts_cnt'] / $timeDiff;
+                $qpm = $qps * 60;
+                $qph = $qpm * 60;
+                $qpd = $qph * 24;
+                $qpw = $qpd * 7;
+                $qpM = $qpw * 30;
+                $qpq = $qpM * 3;
+                $qpy = $qpd * 265;
+                
+                    if ($qps > 2) echo round($qps, 0).' queries per second.';
+                elseif ($qpm > 2) echo round($qpm, 0).' queries per minute.';
+                elseif ($qph > 2) echo round($qph, 0).' queries per hour.';
+                elseif ($qpd > 2) echo round($qpd, 0).' queries per day.';
+                elseif ($qpw > 2) echo round($qpw, 0).' queries per week.';
+                elseif ($qpM > 2) echo round($qpM, 0).' queries per month.';
+                elseif ($qpq > 2) echo round($qpq, 0).' queries per quarter.';
+                else              echo round($qpy, 0).' queries per year.';
+
+
+            ?>
+        </p>
         <table class="dataTable">
             <thead>
                 <tr>
