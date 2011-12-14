@@ -4,13 +4,20 @@
 <script type="text/javascript">
     $(function() {
         $( ".accordionOpen" ).accordion({
-            collapsible: true
+            collapsible: 		true
         });
 
         $( ".accordion" ).accordion({
-            collapsible: true,
-            active: false
+            collapsible: 		true,
+            active: 			false
         });
+		
+		$( ".datepicker" ).datepicker({
+			showOtherMonths: 	true ,
+			selectOtherMonths: 	true,
+			maxDate: 			'+0d',
+			duration: 			'fast'
+		});
     });
 </script>
 
