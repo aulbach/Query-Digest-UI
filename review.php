@@ -91,15 +91,6 @@ unset ($key, $val);
 
 <script type="text/javascript">
     $(function() {
-        $( ".accordionOpen" ).accordion({
-            collapsible: true
-        });
-
-        $( ".accordion" ).accordion({
-            collapsible: true,
-            active: false
-        });
-
         $('.dataTable').dataTable({
             "bJQueryUI":        true,
             "bPaginate":        false,
@@ -109,7 +100,6 @@ unset ($key, $val);
             "bInfo":            false,
             "sDom":             "t"
         });
-
     });
 </script>
 
