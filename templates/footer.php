@@ -18,6 +18,9 @@
 			maxDate: 			'+0d',
 			duration: 			'fast'
 		});
+		
+		$( ".tabs" ).tabs({
+        });
     });
 </script>
 

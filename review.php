@@ -100,10 +100,6 @@ unset ($key, $val);
             "bInfo":            false,
             "sDom":             "t"
         });
-        
-        $( ".tabs" ).tabs({
-        });
-        
     });
 </script>
 
