@@ -120,11 +120,9 @@ unset ($key, $val);
 <div class="accordionOpen">
     <h3><a href="#">Review Information</a></h3>
     <div>
-        <form method="get">
-            Reviewed By: <br>
-            <input type="text" name="reviewed_by" value="<?php echo $reviewData['reviewed_by']; ?>"><br>
-            Comments: <br>
-            <textarea name="comments"><?php echo $reviewData['comments']; ?></textarea><br>
+        <form method="post">
+            <label for="reviewed_by">Reviewed by </label> <input type="text" name="reviewed_by" value="<?php echo $reviewData['reviewed_by']; ?>">
+            <label for="comments">Comments</label> <textarea name="comments" rows="1" style="vertical-align: bottom;"><?php echo $reviewData['comments']; ?></textarea>
             <input type="hidden" name="checksum" value="<?php echo $_REQUEST['checksum']; ?>">
             <input type="submit" name="Review" value="Review">
         </form>
