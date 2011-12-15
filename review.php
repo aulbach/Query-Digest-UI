@@ -100,21 +100,20 @@ unset ($key, $val);
             "bInfo":            false,
             "sDom":             "t"
         });
+        
+        $( ".tabs" ).tabs({
+        });
+        
     });
 </script>
 
-<div class="accordionOpen">
-    <h3><a href="#">Example Query</a></h3>
-    <div>
-        <?php echo str_replace(',', ', ', $reviewData['sample']); ?>
-    </div>
-</div>
-
-<div class="accordion">
-    <h3><a href="#">Query Fingerprint</a></h3>
-    <div>
-        <?php echo str_replace(',', ', ', $reviewData['fingerprint']); ?>
-    </div>
+<div class="tabs">
+    <ul>
+        <li><a href="#queryFingerprint">Fingerprint</a></li>
+        <li><a href="#querySample">Example Query</a></li>
+    </ul>
+    <div id="queryFingerprint"><?php echo str_replace(',', ', ', $reviewData['fingerprint']); ?></div>
+    <div id="querySample"><?php echo str_replace(',', ', ', $reviewData['sample']); ?></div>
 </div>
 
 <div class="accordionOpen">
@@ -132,7 +131,7 @@ unset ($key, $val);
 <div class="accordionOpen">
     <h3><a href="#">Detailed Stats</a></h3>
     <div>
-        <p>Seen between <?php echo $reviewData['first_seen']; ?> and <?php echo $reviewData['last_seen']; ?>.</p>
+        Seen between <?php echo $reviewData['first_seen']; ?> and <?php echo $reviewData['last_seen']; ?>.
         <p>
             <?php
                 $timeDiff = strtotime($reviewData['last_seen']) - strtotime($reviewData['first_seen']);
