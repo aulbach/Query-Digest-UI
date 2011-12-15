@@ -110,15 +110,12 @@ unset ($key, $val);
 <div class="tabs">
     <ul>
         <li><a href="#queryFingerprint">Fingerprint</a></li>
-        <li><a href="#querySample">Example Query</a></li>
+        <li><a href="#querySample">Example</a></li>
+        <li><a href="#queryReview">Review</a></li>
     </ul>
     <div id="queryFingerprint"><?php echo str_replace(',', ', ', $reviewData['fingerprint']); ?></div>
     <div id="querySample"><?php echo str_replace(',', ', ', $reviewData['sample']); ?></div>
-</div>
-
-<div class="accordionOpen">
-    <h3><a href="#">Review Information</a></h3>
-    <div>
+    <div id="queryReview">
         <form method="post">
             <label for="reviewed_by">Reviewed by </label> <input type="text" name="reviewed_by" value="<?php echo $reviewData['reviewed_by']; ?>">
             <label for="comments">Comments</label> <textarea name="comments" rows="1" style="vertical-align: bottom;"><?php echo $reviewData['comments']; ?></textarea>
