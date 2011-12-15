@@ -29,7 +29,7 @@
                     echo "<td class='avgTime number'>".round(($row['time'] / $row['count']) * 1000, 0)."</td>";
                     echo "<td class='lastSeen date'>".$row['last_seen']."</td>";
                     echo "<td class='sample'>".substr($row['sample'], 0, 99999)."</td>";
-                    echo '<td class="details"><a href="review.php?checksum='.$row['checksum'].'"><img src="images/details_open.png"></a></td>';
+                    echo '<td class="details"><a class="details" href="review.php?checksum='.$row['checksum'].'"><img src="images/details_open.png"></a></td>';
                     echo "</tr>";
                 }
             ?>
