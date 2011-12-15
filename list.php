@@ -1,6 +1,15 @@
 
 <?php include('templates/header.php'); ?>
 
+
+<div class="accordion">
+    <h3><a href="#">Filters</a></h3>
+    <div>
+        <p>Search Sample Query <input type="text" id="searchSampleQuery" name="searchSampleQuery"></p>
+        <p>Last seen between <input type="text" id="lastSeenStart" class="datepicker"> and <input type="text" id="lastSeenEnd" class="datepicker">
+    </div>
+</div>
+
 <div>
     <table id="Queries">
         <thead>
