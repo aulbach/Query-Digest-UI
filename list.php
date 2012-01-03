@@ -46,6 +46,23 @@ $(function() {
         "bProcessing":      true,
         "aaSort":           []
     });
+    
+    var lastSeenDates = $( "#lastSeenStart, #lastSeenEnd" ).datepicker({
+        defaultDate: "+0d",
+        maxDate: '+0d',
+        changeMonth: true,
+        numberOfMonths: 1,
+        onSelect: function( selectedDate ) {
+            var option = this.id == "lastSeenStart" ? "minDate" : "maxDate",
+                instance = $( this ).data( "datepicker" ),
+                date = $.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    $.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            lastSeenDates.not( this ).datepicker( "option", option, date );
+        }
+    });
+    
 } );
 </script>
 
