@@ -48,28 +48,9 @@ td {
     background-color: #DCEEFF;
 }
 
-#navMenu {
-    width: 100%;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-top: 0px;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 0px;
-}
-
-.sf-menu {
-    width: 100%;
-}
-
 body {
-    padding: 0px;
-    margin: 0px;
-}
-
-#content {
     padding: 8px;
-    padding-top: 48px;
+    margin: 0px;
 }
 
 .date {
