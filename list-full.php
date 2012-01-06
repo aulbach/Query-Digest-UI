@@ -9,7 +9,7 @@ $list = $dbh->prepare('SELECT review.checksum                            AS chec
                               
 							  review.first_seen                          AS first_seen,
                               review.last_seen                           AS last_seen,
-							  review.reviewed_by						 AS reviewed_by,
+							  IFNULL(review.reviewed_by, "-")      	     AS reviewed_by,
 							  review.reviewed_on						 AS reviewed_on,
 							  review.comments						     AS comments,
 							  
