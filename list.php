@@ -54,13 +54,11 @@
 
 <script type="text/javascript">
 $(function() {
-    $( "#tabs" ).tabs({
-    });
 
     $('#Queries').dataTable({
         "sDom":             '"R<"H"Cfr>t<"F"ilp>"',
         "bJQueryUI":        true,
-        "bStateSave":       false,
+        "bStateSave":       true,
         "bProcessing":      true,
         "aaSort":           [],
         "aoColumnDefs": [
@@ -74,7 +72,10 @@ $(function() {
                 { "bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
                 { "bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
                 { "bSearchable": false, "bVisible": true,  "aTargets": [ 9 ], "bSortable": false },
-            ]
+            ],
+        "oColVis": {
+            "aiExclude": [ 9 ]
+        }
     }).columnFilter({
         sPlaceHolder: 'tfoot',
         aoColumns: [
