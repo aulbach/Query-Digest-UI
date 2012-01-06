@@ -621,6 +621,8 @@
                     else
                         sRangeFormat = properties.sRangeFormat
                     switch (aoColumn.type) {
+                        case "null":
+                            break;
                         case "number":
                             fnCreateInput(oTable, true, false, true, aoColumn.iFilterLength);
                             break;
