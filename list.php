@@ -6,23 +6,24 @@
     <ul>
         <li><a href="#tabs-data">Data</a></li>
 		<li><a href="#tabs-filters">Filters</a></li>
-		<li><a href="#tabs-columns">Columns</a></li>
 	</ul>
     <div id="tabs-filters">
-        <p>Search Sample Query <input type="text" id="searchSampleQuery" name="searchSampleQuery"></p>
-        <p>Last seen between <input type="text" id="lastSeenStart" class="datepicker"> and <input type="text" id="lastSeenEnd" class="datepicker">
-    </div>
-    <div id="tabs-columns">
+        <p>Last Seen between  <input type="text" id="lastSeenStart" class="datepicker"> and <input type="text" id="lastSeenEnd" class="datepicker"></p>
     </div>
     <div id="tabs-data">
         <table id="Queries">
             <thead>
                 <tr>
-                    <th class="count">Count</th>
-                    <th class="avgTime">Avg ms</th>
-                    <th class="lastSeen">Last Seen</th>
-                    <th class="sample">Sample Query</th>
-                    <th class="details">&nbsp;</th>
+                    <th id="queriesColCount"      class="count"       > Count        </th>
+                    <th id="queriesColTime"       class="time"        > Total ms     </th>
+                    <th id="queriesColAvgTime"    class="avgTime"     > Avg ms       </th>
+                    <th id="queriesColFirstSeen"  class="firstSeen"   > First Seen   </th>
+                    <th id="queriesColLastSeen"   class="lastSeen"    > Last Seen    </th>
+                    <th id="queriesColSample"     class="sample"      > Sample Query </th>
+                    <th id="queriesColReviewedOn" class="reviewed_on" > Reviewed On  </th>
+                    <th id="queriesColReviewedBy" class="reviewed_by" > Reviewed By  </th>
+                    <th id="queriesColComments"   class="comments"    > Comments     </th>
+                    <th id="queriesColDetails"    class="details"     > &nbsp;       </th>
                 </tr>
             </thead>
             <tbody>
@@ -30,9 +31,16 @@
                     while ($row = $list->fetch(PDO::FETCH_ASSOC)) {
                         echo "<tr>";
                         echo "<td class='count number'>".$row['count']."</td>";
-                        echo "<td class='avgTime number'>".round(($row['time'] / $row['count']) * 1000, 0)."</td>";
+                        echo "<td class='time number'>".$row['time']."</td>";
+                        echo "<td class='avgTime number'>".$row['time_avg']."</td>";
+                        echo "<td class='firstSeen date'>".$row['first_seen']."</td>";
                         echo "<td class='lastSeen date'>".$row['last_seen']."</td>";
-                        echo "<td class='sample'>".substr($row['sample'], 0, 99999)."</td>";
+                        echo "<td class='sample'>".$row['sample']."</td>";
+                        
+                        echo "<td class='reviewed_on'>".$row['reviewed_on']."</td>";
+                        echo "<td class='reviewed_by'>".$row['reviewed_by']."</td>";
+                        echo "<td class='comments'>".$row['comments']."</td>";
+                        
                         echo '<td class="details"><a class="details" href="review.php?checksum='.$row['checksum'].'"><img src="images/details_open.png"></a></td>';
                         echo "</tr>";
                     }
@@ -50,10 +58,23 @@ $(function() {
     });
 
     $('#Queries').dataTable({
+        "sDom":             '"<"H"Cfr>t<"F"ilp>"',
         "bJQueryUI":        true,
         "bStateSave":       true,
         "bProcessing":      true,
-        "aaSort":           []
+        "aaSort":           [],
+        "aoColumnDefs": [
+                { "bSearchable": false, "bVisible": true,  "aTargets": [ 0 ] },
+                { "bSearchable": false, "bVisible": false, "aTargets": [ 1 ] },
+                { "bSearchable": false, "bVisible": true,  "aTargets": [ 2 ] },
+                { "bSearchable": false, "bVisible": false, "aTargets": [ 3 ] },
+                { "bSearchable": false, "bVisible": true,  "aTargets": [ 4 ] },
+                { "bSearchable": true,  "bVisible": true,  "aTargets": [ 5 ] },
+                { "bSearchable": false, "bVisible": false, "aTargets": [ 6 ] },
+                { "bSearchable": true,  "bVisible": false, "aTargets": [ 7 ] },
+                { "bSearchable": true,  "bVisible": false, "aTargets": [ 8 ] },
+                { "bSearchable": false, "bVisible": true,  "aTargets": [ 9 ], "bSortable": false },
+            ]
     });
 
     var lastSeenDates = $( "#lastSeenStart, #lastSeenEnd" ).datepicker({
@@ -71,7 +92,8 @@ $(function() {
             lastSeenDates.not( this ).datepicker( "option", option, date );
         }
     });
-} );
+});
+
 </script>
 
 <?php include('templates/footer.php');
