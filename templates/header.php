@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="css/superfish.css" media="screen" >
 		<link rel="stylesheet" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" >
 		<link rel="stylesheet" href="css/ColVis.css" media="screen" >
+		<link rel="stylesheet" href="css/ColReorder.css" media="screen" >
 
         <script src="js/jquery-1.6.2.min.js" type="text/javascript"></script>
         <script src="js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
@@ -19,6 +20,7 @@
 		<script src="js/fancybox/jquery.easing-1.3.pack.js" type="text/javascript"></script>
 		
 		<script src="js/ColVis.min.js" type="text/javascript"></script>
+		<script src="js/ColReorder.min.js" type="text/javascript"></script>
 		
 		<script>
 		   $(document).ready(function() {

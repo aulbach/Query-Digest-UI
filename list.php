@@ -58,7 +58,7 @@ $(function() {
     });
 
     $('#Queries').dataTable({
-        "sDom":             '"<"H"Cfr>t<"F"ilp>"',
+        "sDom":             '"R<"H"Cfr>t<"F"ilp>"',
         "bJQueryUI":        true,
         "bStateSave":       true,
         "bProcessing":      true,
