@@ -124,7 +124,7 @@ $list->execute();
 		   $(function() {
 		   
 			   $('#Queries').dataTable({
-				   "sDom":             '"R<"H"Cfr>t<"F"ilp>"',
+				   "sDom":             '"R<"H"Cr>t<"F"ilp>"',
 				   "bJQueryUI":        true,
 				   "bStateSave":       true,
 				   "bProcessing":      true,
