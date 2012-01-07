@@ -121,53 +121,61 @@ $list->execute();
 		   </table>
 		   
 		   <script type="text/javascript">
-		   $(function() {
-		   
-			   $('#Queries').dataTable({
-				   "sDom":             '"R<"H"rCp>t<"F"il>"',
-				   "bJQueryUI":        true,
-				   "bStateSave":       true,
-				   "bProcessing":      false,
-				   "aaSort":           [],
-				   "aoColumnDefs": [
-						   { "bSearchable": false, "bVisible": true,  "aTargets": [ 0 ] },
-						   { "bSearchable": false, "bVisible": true, "aTargets": [ 1 ] },
-						   { "bSearchable": false, "bVisible": true,  "aTargets": [ 2 ] },
-						   { "bSearchable": false, "bVisible": true, "aTargets": [ 3 ] },
-						   { "bSearchable": false, "bVisible": true,  "aTargets": [ 4 ] },
-						   { "bSearchable": true,  "bVisible": true,  "aTargets": [ 5 ] },
-						   { "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
-						   { "bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
-						   { "bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
-						   { "bSearchable": false, "bVisible": true,  "aTargets": [ 9 ], "bSortable": false },
-					   ],
-				   "oColVis": {
-					   "aiExclude": [ 9 ]
-				   },
-				   "fnInitComplete": function(oSettings, json) {
-						for (var i=0; i<oSettings.aoColumns.length; i++)
-							$('#Queries').dataTable().fnFilter( '', i);
-						$('#Queries').dataTable().columnFilter({
-							sPlaceHolder: 'tfoot',
-							aoColumns: [
-								{ type: "number-range" },
-								{ type: "number-range" },
-								{ type: "number-range" },
-								{ type: "date-range" },
-								{ type: "date-range" },
-								{ type: "text" },
-								{ type: "date-range" },
-								{ type: "select" },
-								{ type: "text" },
-								null
-							]
-						});
-					}
-			   });
-		   });
-		   
+				$(function() {
+				
+					oTable = $('#Queries').dataTable({
+						"sDom":             '"R<"H"rCp>t<"F"il>"',
+						"bJQueryUI":        true,
+						"bStateSave":       true,
+						"bProcessing":      false,
+						"aaSort":           [],
+						"aoColumnDefs": [
+								{ "bSearchable": false, "bVisible": true,  "aTargets": [ 0 ] },
+								{ "bSearchable": false, "bVisible": true, "aTargets": [ 1 ] },
+								{ "bSearchable": false, "bVisible": true,  "aTargets": [ 2 ] },
+								{ "bSearchable": false, "bVisible": true, "aTargets": [ 3 ] },
+								{ "bSearchable": false, "bVisible": true,  "aTargets": [ 4 ] },
+								{ "bSearchable": true,  "bVisible": true,  "aTargets": [ 5 ] },
+								{ "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
+								{ "bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
+								{ "bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
+								{ "bSearchable": false, "bVisible": true,  "aTargets": [ 9 ], "bSortable": false },
+							],
+						"oColVis": {
+							"aiExclude": [ 9 ]
+						},
+						"fnStateSaveParams": function(oSettings, oData) {
+							 oData.aoSearchCols = [];
+							 oData.oFilter = [];
+							 oData.oSearch = [];
+						},
+						"fnStateLoadParams": function(oSettings, oData) {
+							 oData.aoSearchCols = [];
+							 oData.oFilter = [];
+							 oData.oSearch = [];
+							 oldVis = oData.abVisCols;
+							 oData.abVisCols = [];
+						}
+					}).columnFilter({
+						 sPlaceHolder: 'tfoot',
+						 aoColumns: [
+							 { type: "number-range" },
+							 { type: "number-range" },
+							 { type: "number-range" },
+							 { type: "date-range" },
+							 { type: "date-range" },
+							 { type: "text" },
+							 { type: "date-range" },
+							 { type: "select" },
+							 { type: "text" },
+							 null
+						 ]
+					 });
+					
+					 for (var i=0; i < oTable.fnSettings().aoColumns.length; i++)
+						 oTable.fnSetColumnVis(i, oldVis[i]);
+				});
 		   </script>
-
 		</div>
     </body>
 
