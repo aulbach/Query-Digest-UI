@@ -14,6 +14,14 @@
 		
 		$( ".tabs" ).tabs({
         });
+		
+		$.datepicker.setDefaults({
+			numberOfMonths: 	2,
+			showOtherMonths:   	true ,
+			selectOtherMonths:  true,
+			maxDate:       		'+0d',
+			duration:       	'fast'
+		});
     });
 </script>
 

@@ -22,21 +22,19 @@
 		<script src="js/fancybox/jquery.easing-1.3.pack.js" type="text/javascript"></script>
 		
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="all" >
-		
-		<script>
-		   $(document).ready(function() {
-               
-				$("a.details").fancybox({
-					type: 			'iframe',
-					width:			'98%',
-					height: 		'98%',
-					centerOnScroll:	true,
-					padding:		0,
-					margin:			10
-				});
-               
+        
+        <script>
+           $(document).ready(function() {
+                $("a.details").fancybox({
+                    type:           'iframe',
+                    width:          '98%',
+                    height:         '98%',
+                    centerOnScroll: true,
+                    padding:        0,
+                    margin:         10
+                });
            });
-	   </script>
+       </script>
 
 	</head>
 	<body>
