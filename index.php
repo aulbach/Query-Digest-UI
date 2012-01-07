@@ -114,19 +114,20 @@
 				  oData.abVisCols = [];
 			 }
 		 }).columnFilter({
-			  sPlaceHolder: 'tfoot',
-			  aoColumns: [
-				  { type: "number-range" },
-				  { type: "number-range" },
-				  { type: "number-range" },
-				  { type: "date-range" },
-				  { type: "date-range" },
-				  { type: "text" },
-				  { type: "date-range" },
-				  { type: "select" },
-				  { type: "text" },
-				  null
-			  ]
+				bUseColVis: true,
+				sPlaceHolder: 'tfoot',
+				aoColumns: [
+					{ type: "number-range" },
+					{ type: "number-range" },
+					{ type: "number-range" },
+					{ type: "date-range" },
+					{ type: "date-range" },
+					{ type: "text" },
+					{ type: "date-range" },
+					{ type: "select" },
+					{ type: "text" },
+					null
+				]
 		  });
 		 
 		  for (var i=0; i < oTable.fnSettings().aoColumns.length; i++)
