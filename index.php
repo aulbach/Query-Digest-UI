@@ -124,10 +124,10 @@ $list->execute();
 		   $(function() {
 		   
 			   $('#Queries').dataTable({
-				   "sDom":             '"R<"H"Cr>t<"F"ilp>"',
+				   "sDom":             '"R<"H"rCp>t<"F"il>"',
 				   "bJQueryUI":        true,
 				   "bStateSave":       true,
-				   "bProcessing":      true,
+				   "bProcessing":      false,
 				   "aaSort":           [],
 				   "aoColumnDefs": [
 						   { "bSearchable": false, "bVisible": true,  "aTargets": [ 0 ] },
@@ -143,21 +143,26 @@ $list->execute();
 					   ],
 				   "oColVis": {
 					   "aiExclude": [ 9 ]
-				   }
-			   }).columnFilter({
-				   sPlaceHolder: 'tfoot',
-				   aoColumns: [
-					   { type: "number-range" },
-					   { type: "number-range" },
-					   { type: "number-range" },
-					   { type: "date-range" },
-					   { type: "date-range" },
-					   { type: "text" },
-					   { type: "date-range" },
-					   { type: "select" },
-					   { type: "text" },
-					   null
-				   ]
+				   },
+				   "fnInitComplete": function(oSettings, json) {
+						for (var i=0; i<oSettings.aoColumns.length; i++)
+							$('#Queries').dataTable().fnFilter( '', i);
+						$('#Queries').dataTable().columnFilter({
+							sPlaceHolder: 'tfoot',
+							aoColumns: [
+								{ type: "number-range" },
+								{ type: "number-range" },
+								{ type: "number-range" },
+								{ type: "date-range" },
+								{ type: "date-range" },
+								{ type: "text" },
+								{ type: "date-range" },
+								{ type: "select" },
+								{ type: "text" },
+								null
+							]
+						});
+					}
 			   });
 		   });
 		   

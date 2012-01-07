@@ -5,8 +5,8 @@
 }
 
 #Queries_length {
-    float: right;
-    padding-right: 1em;
+    float: left;
+    padding-left: 1em;
 }
 
 #Queries_processing {
@@ -55,4 +55,16 @@ body {
 
 .date {
     width: 8em;
+}
+
+div.ColVis {
+   margin:  0px;
+   margin-left: .25em;
+   float: left;
+}
+
+#Queries_paginate {
+    margin-top: 4px;
+    margin-right: .25em;
+    float: right;
 }
