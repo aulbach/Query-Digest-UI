@@ -12,13 +12,6 @@
             active: 			false
         });
 		
-		$( ".datepicker" ).datepicker({
-			showOtherMonths: 	true ,
-			selectOtherMonths: 	true,
-			maxDate: 			'+0d',
-			duration: 			'fast'
-		});
-		
 		$( ".tabs" ).tabs({
         });
     });
