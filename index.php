@@ -7,10 +7,10 @@
 	$list = $dbh->prepare('SELECT review.checksum                            AS checksum,
 								  SUBSTR(review.fingerprint, 1, 99999)       AS sample,
 								  
-								  review.first_seen                          AS first_seen,
-								  review.last_seen                           AS last_seen,
+								  DATE(review.first_seen)                    AS first_seen,
+								  DATE(review.last_seen)                     AS last_seen,
 								  IFNULL(review.reviewed_by, "-")      	     AS reviewed_by,
-								  review.reviewed_on						 AS reviewed_on,
+								  DATE(review.reviewed_on)				     AS reviewed_on,
 								  review.comments						     AS comments,
 								  
 								  SUM(history.ts_cnt)                        AS count,

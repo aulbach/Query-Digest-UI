@@ -20,8 +20,10 @@
 			showOtherMonths:   	true ,
 			selectOtherMonths:  true,
 			maxDate:       		'+0d',
-			duration:       	'fast'
+			duration:       	'fast',
+			dateFormat:         'yy-mm-dd'
 		});
+		$.datepicker.regional[""].dateFormat = 'yy-mm-dd';
     });
 </script>
 

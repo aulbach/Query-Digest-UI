@@ -47,9 +47,9 @@
 
             // check that we have a column id
             if (typeof iColumn == "undefined") return new Array();
-			if (iColumn == null) return new Array();
-			// Handle hidden columns
-			iColumn = oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(), iColumn);
+            if (iColumn == null) return new Array();
+            // Handle hidden columns
+            iColumn = oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(), iColumn);
 
             // by default we only wany unique data
             if (typeof bUnique == "undefined") bUnique = true;
@@ -73,7 +73,6 @@
 
             for (var i = 0, c = aiRows.length; i < c; i++) {
                 iRow = aiRows[i];
-				
                 var aData = oTable.fnGetData(iRow);
                 var sValue = aData[iColumn];
 
@@ -203,12 +202,12 @@
 	        function (oSettings, aData, iDataIndex) {
 	            if (oTable.attr("id") != oSettings.sTableId)
 	                return true;
-				if (document.getElementById(sFromId) == null)
-					return true;
+				// Try to handle missing nodes more gracefully
+	            if (document.getElementById(sFromId) == null)
+	                return true;
 	            var iMin = document.getElementById(sFromId).value * 1;
 	            var iMax = document.getElementById(sToId).value * 1;
-				dataIndex = oTable.oApi._fnColumnIndexToVisible(oTable.fnSettings(), index);
-	            var iValue = aData[_fnColumnIndex(dataIndex)] == "-" ? 0 : aData[_fnColumnIndex(dataIndex)] * 1;
+	            var iValue = aData[_fnColumnIndex(index)] == "-" ? 0 : aData[_fnColumnIndex(index)] * 1;
 	            if (iMin == "" && iMax == "") {
 	                return true;
 	            }
