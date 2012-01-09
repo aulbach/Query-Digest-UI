@@ -76,3 +76,7 @@ input.number_range_filter {
 input.date_range_filter {
     width:              70px;
 }
+
+input.text_filter {
+    width:              95%;
+}
