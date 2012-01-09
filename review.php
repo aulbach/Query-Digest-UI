@@ -89,20 +89,6 @@ unset ($key, $val);
 
 <?php include('templates/header.php'); ?>
 
-<script type="text/javascript">
-    $(function() {
-        $('.dataTable').dataTable({
-            "bJQueryUI":        true,
-            "bPaginate":        false,
-            "bLengthChange":    false,
-            "bFilter":          false,
-            "bSort":            false,
-            "bInfo":            false,
-            "sDom":             "t"
-        });
-    });
-</script>
-
 <div class="tabs">
     <ul>
         <li><a href="#queryFingerprint">Fingerprint</a></li>
@@ -315,5 +301,22 @@ unset ($key, $val);
         </pre>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function() {
+        $('.dataTable').each(function(index, table) {
+            $(table).dataTable({
+                "bStateSave":       false,
+                "bJQueryUI":        true,
+                "bPaginate":        false,
+                "bLengthChange":    false,
+                "bFilter":          false,
+                "bSort":            false,
+                "bInfo":            false,
+                "sDom":             "t"
+            });
+        });
+    });
+</script>
 
 <?php include('templates/footer.php'); ?>
