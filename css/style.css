@@ -69,14 +69,9 @@ div.ColVis {
     float:              right;
 }
 
-input.number_range_filter {
-    width:              40px;
-}
-
-input.date_range_filter {
-    width:              70px;
-}
-
+input.number_range_filter,
+input.date_range_filter,
 input.text_filter {
-    width:              95%;
+    width:              90%;
+    display:            block;
 }
