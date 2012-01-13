@@ -1,24 +1,22 @@
 <?php
 
-	require('config.php');
-	
-	$dbh = new PDO("mysql:host={$reviewhost['db_host']};dbname={$reviewhost['db_database']}", $reviewhost['db_user'], $reviewhost['db_password']);
-	
+	require('init.php');
+
 	$list = $dbh->prepare('SELECT review.checksum                            				AS checksum,
 								  SUBSTR(review.fingerprint, 1, 99999)       				AS sample,
-								  
+
 								  DATE(review.first_seen)                    				AS first_seen,
 								  DATE(review.last_seen)                     				AS last_seen,
 								  IFNULL(review.reviewed_by, "-")      	     				AS reviewed_by,
 								  DATE(review.reviewed_on)				     				AS reviewed_on,
 								  review.comments						     				AS comments,
-								  
+
 								  SUM(history.ts_cnt)                        				AS count,
 								  ROUND(SUM(history.query_time_sum), 2)      				AS time,
 								  ROUND(SUM(history.query_time_sum)/SUM(history.ts_cnt), 2) AS time_avg
-								  
+
 							 FROM '.$reviewhost['review_table'].'            				AS review
-						LEFT JOIN '.$reviewhost['review_history_table'].'    				AS history
+						LEFT JOIN '.$reviewhost['history_table'].'    				        AS history
 							   ON history.checksum = review.checksum
 						 GROUP BY review.checksum
 							   ');
@@ -51,11 +49,11 @@
 				echo "<td class='firstSeen date'>".$row['first_seen']."</td>";
 				echo "<td class='lastSeen date'>".$row['last_seen']."</td>";
 				echo "<td class='sample'>".$row['sample']."</td>";
-				
+
 				echo "<td class='reviewed_on'>".$row['reviewed_on']."</td>";
 				echo "<td class='reviewed_by'>".$row['reviewed_by']."</td>";
 				echo "<td class='comments'>".$row['comments']."</td>";
-				
+
 				echo '<td class="details"><a class="details" href="review.php?checksum='.$row['checksum'].'"><img src="images/details_open.png"></a></td>';
 				echo "</tr>";
 			}
@@ -79,7 +77,7 @@
 
 <script type="text/javascript">
 	 $(function() {
-	 
+
 		 oTable = $('#Queries').dataTable({
 			"sDom":             '"R<"H"rCp>t<"F"il>"',
 			"bJQueryUI":        true,
@@ -87,16 +85,16 @@
 			"bProcessing":      false,
 			"aaSort":           [],
 			"aoColumnDefs": [
-					{ "bSearchable": false, "bVisible": true,  "aTargets": [ 0 ] },
+					{ "bSearchable": false, "bVisible": true, "aTargets": [ 0 ] },
 					{ "bSearchable": false, "bVisible": true, "aTargets": [ 1 ] },
-					{ "bSearchable": false, "bVisible": true,  "aTargets": [ 2 ] },
+					{ "bSearchable": false, "bVisible": true, "aTargets": [ 2 ] },
 					{ "bSearchable": false, "bVisible": true, "aTargets": [ 3 ] },
-					{ "bSearchable": false, "bVisible": true,  "aTargets": [ 4 ] },
-					{ "bSearchable": true,  "bVisible": true,  "aTargets": [ 5 ] },
+					{ "bSearchable": false, "bVisible": true, "aTargets": [ 4 ] },
+					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 5 ] },
 					{ "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
 					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
 					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
-					{ "bSearchable": false, "bVisible": true,  "aTargets": [ 9 ], "bSortable": false },
+					{ "bSearchable": false, "bVisible": true, "aTargets": [ 9 ], "bSortable": false },
 				],
 			"oColVis": {
 				"aiExclude": [ 9 ]
@@ -131,7 +129,7 @@
 				null
 			]
 		});
-		
+
 		if (oldVis.length == oTable.fnSettings().aoColumns.length)
 			for (var i=0; i < oTable.fnSettings().aoColumns.length; i++)
 				oTable.fnSetColumnVis(i, oldVis[i]);

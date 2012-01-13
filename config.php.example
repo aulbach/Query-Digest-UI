@@ -1,10 +1,27 @@
 <?php
 
 $reviewhost = array(
-    'db_host'                       => 'hostname:3306',
-    'db_user'                       => 'user',
-    'db_password'                   => 'password',
-    'db_database'                   => 'database',
-    'review_table'                  => 'review',
-    'review_history_table'          => 'review_history',
+    'dsn'           => 'mysql:host=hostname:3306;dbname=database',
+    'user'          => 'user',
+    'password'      => 'password',
+    'review_table'  => 'review',
+    'history_table' => 'review_history',
+);
+
+$explainhosts = array(
+    'label1'   => array(
+        'dsn'       => 'mysql:host=hostname1:3306;dbname=database1',
+        'user'      => 'user',
+        'password'  => 'password'
+        ),
+    'label2'   => array(
+        'dsn'       => 'mysql:host=hostname2:3306;dbname=database2',
+        'user'      => 'user',
+        'password'  => 'password'
+        ),
+    'label3'   => array(
+        'dsn'       => 'mysql:host=hostname3:3306;dbname=database3',
+        'user'      => 'user',
+        'password'  => 'password'
+        )
 );
