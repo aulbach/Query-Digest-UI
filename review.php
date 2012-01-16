@@ -92,6 +92,7 @@
     <ul>
         <li><a href="#queryFingerprint">Fingerprint</a></li>
         <li><a href="#querySample">Example</a></li>
+        <li><a href="pt-query-advisor.php?checksum=<?php echo $_REQUEST['checksum']; ?>">Advisor</a></li>
         <li><a href="#queryReview">Review</a></li>
     </ul>
     <div id="queryFingerprint"><?php echo str_replace(',', ', ', $reviewData['fingerprint']); ?></div>
