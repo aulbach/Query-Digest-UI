@@ -294,16 +294,6 @@
     </div>
 </div>
 
-<div class="accordion">
-    <h3><a href="#">Raw Data</a></h3>
-    <div>
-        <pre>
-            <?php var_dump($reviewData); ?>
-            <?php var_dump($historyData); ?>
-        </pre>
-    </div>
-</div>
-
 <script type="text/javascript">
     $(function() {
         $('.dataTable').each(function(index, table) {
