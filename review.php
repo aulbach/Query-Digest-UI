@@ -35,6 +35,7 @@
     $query = $dbh->prepare('SELECT review.*
                               FROM '.$reviewhost['history_table'].' AS review
                              WHERE review.checksum = ?
+                          ORDER BY review.ts_max DESC
                               ');
     $query->execute(array($_REQUEST['checksum']));
     $historyData = $query->fetch(PDO::FETCH_ASSOC);
@@ -94,7 +95,9 @@
         <li><a href="#queryReview">Review</a></li>
     </ul>
     <div id="queryFingerprint"><?php echo str_replace(',', ', ', $reviewData['fingerprint']); ?></div>
-    <div id="querySample"><?php echo str_replace(',', ', ', $reviewData['sample']); ?></div>
+    <div id="querySample">
+        <?php echo str_replace(',', ', ', $reviewData['sample']); ?>
+    </div>
     <div id="queryReview">
         <form method="post">
             <label for="reviewed_by">Reviewed by </label> <input type="text" name="reviewed_by" value="<?php echo $reviewData['reviewed_by']; ?>">
