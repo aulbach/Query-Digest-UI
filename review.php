@@ -92,6 +92,7 @@
     <ul>
         <li><a href="#queryFingerprint">Fingerprint</a></li>
         <li><a href="#querySample">Example</a></li>
+        <li><a href="#normalizedQuery">Normalized</a></li>
         <li><a href="pt-query-advisor.php?checksum=<?php echo $_REQUEST['checksum']; ?>">Advisor</a></li>
         <li><a href="#queryReview">Review</a></li>
     </ul>
@@ -99,13 +100,61 @@
     <div id="querySample">
         <?php echo str_replace(',', ', ', $reviewData['sample']); ?>
     </div>
+    <div id="normalizedQuery">Please explain the query to view the normalized query.</div>
     <div id="queryReview">
         <form method="post">
             <label for="reviewed_by">Reviewed by </label> <input type="text" name="reviewed_by" value="<?php echo $reviewData['reviewed_by']; ?>">
             <label for="comments">Comments</label> <textarea name="comments" rows="1" style="vertical-align: bottom;"><?php echo $reviewData['comments']; ?></textarea>
-            <input type="hidden" name="checksum" value="<?php echo $_REQUEST['checksum']; ?>">
+            <input type="hidden" id="checksum" name="checksum" value="<?php echo $_REQUEST['checksum']; ?>">
             <input type="submit" name="Review" value="Review">
         </form>
+    </div>
+</div>
+
+<div class="accordion" id="explainAccordion">
+    <h3><a href="#">Explain</a></h3>
+    <div>
+
+        <div>
+            <select id="explainDb" class="explainDb">
+                <?php
+                    foreach ($explainhosts AS $label => $host) {
+                        ?>
+                        <optgroup label="<?php echo $label; ?>">
+                            <?php
+                                foreach ($host['databases'] AS $database) {
+                                    ?>
+                                        <option value="<?php echo "$label.$database"; ?>"> <?php echo "$label.$database"; ?></option>
+                                    <?php
+                                }
+                                ?>
+                        </optgroup>
+                        <?php
+                    }
+                ?>
+            </select>
+            <input type="submit" value="Explain" id="doExplain">
+        </div>
+
+        <table class="dataTable" id="explainPlan">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>select_type</th>
+                    <th>table</th>
+                    <th>type</th>
+                    <th>possible_keys</th>
+                    <th>key</th>
+                    <th>key_len</th>
+                    <th>ref</th>
+                    <th>rows</th>
+                    <th>Extra</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+        </table>
+
     </div>
 </div>
 
