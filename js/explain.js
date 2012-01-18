@@ -8,9 +8,9 @@ $(function() {
                 checksum: checksum,
                 explainDb: explainDb
             },
-            
+
             success: function(data) {
-                $('#normalizedQuery').text(data.Query);
+                $('#normalizedQuery').html(data.Query);
                 $('#explainPlan').dataTable().fnClearTable();
                 for (var i=0; i < data.Explain.length; i++) {
                     ret = $('#explainPlan').dataTable().fnAddData([
@@ -31,3 +31,15 @@ $(function() {
         });
    });
 });
+
+function lookupDatabase(label, database) {
+    return;
+}
+
+function lookupTable(label, database, table) {
+    return;
+}
+
+function lookupCol(label, database, table, column) {
+    return;
+}

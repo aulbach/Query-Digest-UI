@@ -75,3 +75,18 @@ input.text_filter {
     width:              90%;
     display:            block;
 }
+
+a.database {
+    color:              #660000;
+    cursor:             pointer;
+}
+
+a.table {
+    color:              #006600;
+    cursor:             pointer;
+}
+
+a.column {
+    color:              #000066;
+    cursor:             pointer;
+}
