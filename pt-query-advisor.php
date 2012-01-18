@@ -9,7 +9,7 @@
 						');
 	$query->execute(array($_REQUEST['checksum']));
 	$reviewData = $query->fetch(PDO::FETCH_ASSOC);
-	
+
 	$checkPaths = array(
 		"/opt/local/bin",
 		"/opt/local/sbin",
@@ -25,11 +25,11 @@
 		"/usr/X11R6/bin",
 		"/usr/libexec"
 	);
-	
+
 	$advisorRules = array(
 		'ALI.001' => 'Note: Aliasing without the AS keyword. Explicitly using the AS keyword in column or table aliases, such as Òtbl AS alias,Ó is more readable than implicit aliases such as Òtbl aliasÓ.',
-		'ALI.002' => 'Warn: Aliasing the Ô*Õ wildcard. Aliasing a column wildcard, such as ÒSELECT tbl.* col1, col2Ó probably indicates a bug in your SQL. You probably meant for the query to retrieve col1, but instead it renames the last column in the *-wildcarded list.',
-		'ALI.003' => 'Note: Aliasing without renaming. The table or columnÕs alias is the same as its real name, and the alias just makes the query harder to read.',
+		'ALI.002' => 'Warn: Aliasing the \'*\' wildcard. Aliasing a column wildcard, such as ÒSELECT tbl.* col1, col2Ó probably indicates a bug in your SQL. You probably meant for the query to retrieve col1, but instead it renames the last column in the *-wildcarded list.',
+		'ALI.003' => 'Note: Aliasing without renaming. The table or column\'s alias is the same as its real name, and the alias just makes the query harder to read.',
 		'ARG.001' => 'Warn: Argument with leading wildcard. An argument has a leading wildcard character, such as Ò%fooÓ. The predicate with this argument is not sargable and cannot use an index if one exists.',
 		'ARG.002' => 'Note: LIKE without a wildcard. A LIKE pattern that does not include a wildcard is potentially a bug in the SQL.',
 		'CLA.001' => 'Warn: SELECT without WHERE. The SELECT statement has no WHERE clause.',
@@ -39,8 +39,8 @@
 		'CLA.005' => 'Warn: ORDER BY constant column.',
 		'CLA.006' => 'Warn: GROUP BY or ORDER BY different tables will force a temp table and filesort.',
 		'CLA.007' => 'Warn: ORDER BY different directions prevents index from being used. All tables in the ORDER BY clause must be either ASC or DESC, else MySQL cannot use an index.',
-		'COL.001' => 'Note: SELECT *. Selecting all columns with the * wildcard will cause the queryÕs meaning and behavior to change if the tableÕs schema changes, and might cause the query to retrieve too much data.',
-		'COL.002' => 'Note: Blind INSERT. The INSERT or REPLACE query doesnÕt specify the columns explicitly, so the queryÕs behavior will change if the tableÕs schema changes; use ÒINSERT INTO tbl(col1, col2) VALUES...Ó instead.',
+		'COL.001' => 'Note: SELECT *. Selecting all columns with the * wildcard will cause the query\'s meaning and behavior to change if the table\'s schema changes, and might cause the query to retrieve too much data.',
+		'COL.002' => 'Note: Blind INSERT. The INSERT or REPLACE query doesn\'t specify the columns explicitly, so the query\'s behavior will change if the table\'s schema changes; use ÒINSERT INTO tbl(col1, col2) VALUES...Ó instead.',
 		'LIT.001' => 'Warn: Storing an IP address as characters. The string literal looks like an IP address, but is not an argument to INET_ATON(), indicating that the data is stored as characters instead of as integers. It is more efficient to store IP addresses as integers.',
 		'LIT.002' => 'Warn: Unquoted date/time literal. A query such as ÒWHERE col<2010-02-12Ó is valid SQL but is probably a bug; the literal should be quoted.',
 		'KWR.001' => 'Note: SQL_CALC_FOUND_ROWS is inefficient. SQL_CALC_FOUND_ROWS can cause performance problems because it does not scale well; use alternative strategies to build functionality such as paginated result screens.',
@@ -53,7 +53,7 @@
 		'STA.001' => 'Note: != is non-standard. Use the <> operator to test for inequality.',
 		'SUB.001' => 'Crit: IN() and NOT IN() subqueries are poorly optimized. MySQL executes the subquery as a dependent subquery for each row in the outer query. This is a frequent cause of serious performance problems. This might change version 6.0 of MySQL, but for versions 5.1 and older, the query should be rewritten as a JOIN or a LEFT OUTER JOIN, respectively.',
 	);
-	
+
 	$binary = false;
 	foreach ($checkPaths as $path) {
 		if (is_executable("$path/pt-query-advisor")) {
@@ -61,7 +61,7 @@
 			break;
 		}
 	}
-	
+
 	if (!$binary) {
 		echo "<p>I can't find the pt-query-advisor binary.</p>";
 		exit;
@@ -70,7 +70,7 @@
 	$command = escapeshellcmd($binary);
 	$command .= ' --query '.escapeshellarg($reviewData['fingerprint']);
 	$output = explode("\n", shell_exec($command));
-	
+
 	$rules = array();
 
 	foreach ($output as $line) {
@@ -79,7 +79,7 @@
 		list($rule, $fingerprint) = explode(" ", $line);
 		$rules[] = $rule;
 	}
-	
+
 	if (count($rules) == 0)
 		echo "<p>All good! Nothing found!</p>\n";
 	else {
