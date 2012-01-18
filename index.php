@@ -150,8 +150,12 @@
 			]
 		});
 
+    // Set visability defaults
+        if (typeof oldVis === 'undefined')
+            oldVis = [true, false, true, false, true, true, false, true, false, true];
+
 		if (oldVis.length == oTable.fnSettings().aoColumns.length)
-			for (var i=0; i < oTable.fnSettings().aoColumns.length; i++)
+			for (var i=0; i < oldVis.length; i++)
 				oTable.fnSetColumnVis(i, oldVis[i]);
 	 });
 </script>
