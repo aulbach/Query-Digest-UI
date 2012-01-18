@@ -14,7 +14,6 @@
 		"/opt/local/bin",
 		"/opt/local/sbin",
 		"/opt/local/libexec/gnubin/",
-		"/Users/kormoc/.bin",
 		"/usr/bin",
 		"/bin",
 		"/usr/sbin",
