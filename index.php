@@ -69,7 +69,6 @@
 				echo "<td class='firstSeen date'>".$row['first_seen']."</td>";
 				echo "<td class='lastSeen date'>".$row['last_seen']."</td>";
 				echo "<td class='sample'>".$row['sample']."</td>";
-
 				echo "<td class='reviewed_on'>".$row['reviewed_on']."</td>";
 				echo "<td class='reviewed_by'>".$row['reviewed_by']."</td>";
 				echo "<td class='comments'>".$row['comments']."</td>";

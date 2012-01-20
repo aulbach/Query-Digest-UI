@@ -100,9 +100,9 @@
         <li><a href="pt-query-advisor.php?checksum=<?php echo $_REQUEST['checksum']; ?>">Advisor</a></li>
         <li><a href="#queryReview">Review</a></li>
     </ul>
-    <div id="queryFingerprint"><?php echo str_replace(',', ', ', $reviewData['fingerprint']); ?></div>
+    <div id="queryFingerprint"><?php echo SqlParser::htmlPreparedStatement($reviewData['fingerprint']); ?></div>
     <div id="querySample">
-        <?php echo str_replace(',', ', ', $reviewData['sample']); ?>
+        <?php echo SqlParser::html($reviewData['sample']); ?>
     </div>
     <div id="normalizedQuery">Please explain the query to view the normalized query.</div>
     <div id="queryReview">

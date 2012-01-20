@@ -3,9 +3,9 @@
 	require('config.php');
 
 	$dbh = new PDO($reviewhost['dsn'], $reviewhost['user'], $reviewhost['password']);
-	
+
 	unset($query);
-	
+
 	foreach ($explainhosts as $label => $host) {
 		$ebh = new PDO($host['dsn'], $host['user'], $host['password']);
 		$query = $ebh->prepare('SHOW DATABASES');
@@ -15,3 +15,5 @@
 		$query->closeCursor();
 		unset($ebh);
 	}
+
+    require('libs/sqlquery/SqlParser.php');
