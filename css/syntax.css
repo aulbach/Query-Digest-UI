@@ -77,8 +77,7 @@
                                 white-space:        pre;
 }
 
-.syntax_quote_backtick      {
-}
+.syntax_quote_backtick      { }
 
 .syntax_punct_listsep:after {
                                 white-space:        pre;
