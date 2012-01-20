@@ -3,9 +3,9 @@
     <head>
         <title>Query Digest UI</title>
 
-		<script src="js/jquery-1.6.2.min.js" type="text/javascript"></script>
+		<script src="js/jquery-1.7.1.min.js" type="text/javascript"></script>
 
-        <script src="js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+        <script src="js/jquery-ui-1.8.17.custom.min.js" type="text/javascript"></script>
 		<link rel="stylesheet" href="css/cupertino/jquery-ui-1.8.16.custom.css" type="text/css" media="all" >
 
 		<script src="js/DataTables/media/js/jquery.dataTables.js" type="text/javascript"></script>

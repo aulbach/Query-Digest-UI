@@ -63,10 +63,19 @@ div.ColVis {
    float:               left;
 }
 
+
 #Queries_paginate {
     margin-top:         4px;
     margin-right:       .25em;
     float:              right;
+    height:             16px;
+    width:              36px;
+
+}
+
+#Queries_paginate a {
+    width:              16px;
+    height:             16px;
 }
 
 input.number_range_filter,
