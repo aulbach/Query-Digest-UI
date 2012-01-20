@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="css/syntax.css" type="text/css" media="all" >
 
 		<script src="js/explain.js" type="text/javascript"></script>
+        <script src="js/doc.js" type="text/javascript"></script>
 
         <script>
            $(document).ready(function() {
