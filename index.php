@@ -101,6 +101,8 @@
 			"sDom":             '"R<"H"rCp>t<"F"il>"',
 			"bJQueryUI":        true,
 			"bStateSave":       true,
+        // Store the cookie for one year
+            "iCookieDuration":  31556926,
 			"bProcessing":      false,
 			"aaSort":           [],
 			"aoColumnDefs": [
