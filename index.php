@@ -4,7 +4,7 @@
 
     if (strlen($reviewhost['history_table'])) {
         $list = $dbh->prepare('SELECT review.checksum                            				AS checksum,
-                                      SUBSTR(review.fingerprint, 1, 99999)       				AS sample,
+                                      review.fingerprint       									AS fingerprint,
 
                                       DATE(review.first_seen)                    				AS first_seen,
                                       DATE(review.last_seen)                     				AS last_seen,
@@ -24,7 +24,7 @@
     }
     else {
         $list = $dbh->prepare('SELECT review.checksum                            				AS checksum,
-                                      SUBSTR(review.fingerprint, 1, 99999)       				AS sample,
+                                      review.fingerprint       									AS fingerprint,
 
                                       DATE(review.first_seen)                    				AS first_seen,
                                       DATE(review.last_seen)                     				AS last_seen,
@@ -47,16 +47,16 @@
 <table id="Queries">
 	<thead>
 		<tr>
-			<th id="queriesColCount"      class="count"       > Count        </th>
-			<th id="queriesColTime"       class="time"        > Total ms     </th>
-			<th id="queriesColAvgTime"    class="avgTime"     > Avg ms       </th>
-			<th id="queriesColFirstSeen"  class="firstSeen"   > First Seen   </th>
-			<th id="queriesColLastSeen"   class="lastSeen"    > Last Seen    </th>
-			<th id="queriesColSample"     class="sample"      > Sample Query </th>
-			<th id="queriesColReviewedOn" class="reviewed_on" > Reviewed On  </th>
-			<th id="queriesColReviewedBy" class="reviewed_by" > Reviewed By  </th>
-			<th id="queriesColComments"   class="comments"    > Comments     </th>
-			<th id="queriesColDetails"    class="details"     > &nbsp;       </th>
+			<th id="queriesColCount"      	class="count"       > Count        </th>
+			<th id="queriesColTime"       	class="time"        > Total ms     </th>
+			<th id="queriesColAvgTime"    	class="avgTime"     > Avg ms       </th>
+			<th id="queriesColFirstSeen"  	class="firstSeen"   > First Seen   </th>
+			<th id="queriesColLastSeen"   	class="lastSeen"    > Last Seen    </th>
+			<th id="queriesColfingerprint"	class="fingerprint"	> Query Fingerprint</th>
+			<th id="queriesColReviewedOn" 	class="reviewed_on" > Reviewed On  </th>
+			<th id="queriesColReviewedBy" 	class="reviewed_by" > Reviewed By  </th>
+			<th id="queriesColComments"   	class="comments"    > Comments     </th>
+			<th id="queriesColDetails"    	class="details"     > &nbsp;       </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -68,7 +68,8 @@
 				echo "<td class='avgTime number'>".$row['time_avg']."</td>";
 				echo "<td class='firstSeen date'>".$row['first_seen']."</td>";
 				echo "<td class='lastSeen date'>".$row['last_seen']."</td>";
-				echo "<td class='sample'>".$row['sample']."</td>";
+				echo "<td class='fingerprint'>".SqlParser::htmlPreparedStatement($row['fingerprint'], true)."</td>";
+				//echo "<td class='fingerprint'>".$row['fingerprint']."</td>";
 				echo "<td class='reviewed_on'>".$row['reviewed_on']."</td>";
 				echo "<td class='reviewed_by'>".$row['reviewed_by']."</td>";
 				echo "<td class='comments'>".$row['comments']."</td>";

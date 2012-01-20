@@ -49,18 +49,28 @@ class SqlParser
    		return array_map(array("SqlParser", "trim"), $_array);
 	}
 
-    public static function htmlPreparedStatement($_sql) {
+    public static function htmlPreparedStatement($_sql, $removeNewLines = false) {
         try {
-            return PMA_SQP_formatHtml(self::parsePreparedStatement($_sql));
+			$_sql = PMA_SQP_formatHtml(self::parsePreparedStatement($_sql));
+			if ($removeNewLines) {
+				$_sql = str_replace(array('<br>', '<br/>', '<br />'), ' ', $_sql);
+				$_sql = str_replace('<div', ' <span', $_sql);
+			}
+            return $_sql;
         }
         catch (exception $e) {
             return $_sql;
         }
     }
 
-    public static function html($_sql) {
+    public static function html($_sql, $removeNewLines = false) {
         try {
-            return PMA_SQP_formatHtml(self::parsePMA($_sql));
+            $_sql = PMA_SQP_formatHtml(self::parsePMA($_sql));
+			if ($removeNewLines) {
+				$sql = str_replace(array('<br>', '<br/>', '<br />'), ' ', $_sql);
+				$sql = str_replace('<div', ' <span', $_sql);
+			}
+            return $_sql;
         }
         catch (exception $e) {
             return $_sql;
