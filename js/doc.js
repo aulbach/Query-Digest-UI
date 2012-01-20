@@ -355,7 +355,7 @@ var help_topic = {
     'coalesce'          : 'http://dev.mysql.com/doc/refman/5.1/en/comparison-operators.html',
     'version'           : 'http://dev.mysql.com/doc/refman/5.1/en/information-functions.html',
     'make_set'          : 'http://dev.mysql.com/doc/refman/5.1/en/string-functions.html',
-    'find_in_set'       : 'http://dev.mysql.com/doc/refman/5.1/en/string-functions.html',
+    'find_in_set'       : 'http://dev.mysql.com/doc/refman/5.1/en/string-functions.html'
 }
 
 function generateMysqlLinks() {

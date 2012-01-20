@@ -115,7 +115,7 @@
 					{ "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
 					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
 					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 9 ], "bSortable": false },
+					{ "bSearchable": false, "bVisible": true, "aTargets": [ 9 ], "bSortable": false }
 				],
 			"oColVis": {
 				"aiExclude": [ 9 ]
