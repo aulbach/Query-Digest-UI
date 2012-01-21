@@ -18,7 +18,7 @@
         $query .= '       ROUND(SUM(history.query_time_sum), 2)                     AS `time`,';
         $query .= '       ROUND(SUM(history.query_time_sum)/SUM(history.ts_cnt), 2) AS time_avg';
         $query .= '      FROM '.$reviewhost['review_table'].'                       AS review';
-        $query .= ' LEFT JOIN '.$reviewhost['history_table'].'                      AS history';
+        $query .= '      JOIN '.$reviewhost['history_table'].'                      AS history';
         $query .= '        ON history.checksum = review.checksum';
     }
     else {
