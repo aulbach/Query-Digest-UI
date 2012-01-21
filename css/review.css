@@ -1,0 +1,12 @@
+#explainPlan {
+    width:              100%;
+}
+
+#explainAccordion div.ui-accordion-content {
+    padding-left:       .25em;
+    padding-right:      .25em;
+}
+
+#explainDbForm {
+    text-align:         center;
+}

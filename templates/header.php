@@ -22,6 +22,7 @@
 		<script src="js/fancybox/jquery.easing-1.3.pack.js" type="text/javascript"></script>
 
 		<link rel="stylesheet" href="css/style.css" type="text/css" media="all" >
+        <link rel="stylesheet" href="css/review.css" type="text/css" media="all" >
         <link rel="stylesheet" href="css/syntax.css" type="text/css" media="all" >
 
 		<script src="js/explain.js" type="text/javascript"></script>

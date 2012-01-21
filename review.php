@@ -132,7 +132,7 @@
     <h3><a href="#">Explain</a></h3>
     <div>
 
-        <div>
+        <div id="explainDbForm">
             <select id="explainDb" class="explainDb">
                 <?php
                     foreach ($explainhosts AS $label => $host) {

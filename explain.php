@@ -25,6 +25,8 @@
 	$query->execute();
 	while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 		$row['possible_keys'] = str_replace(',', ', ', $row['possible_keys']);
+        $row['ref'] = str_replace(',', ', ', $row['ref']);
+        $row['Extra'] = str_replace(array('Using ', ';'), array('', ', '), $row['Extra']);
 		$return['Explain'][] = $row;
 	}
 	$query->closeCursor();
