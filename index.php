@@ -1,47 +1,16 @@
 <?php
+    require_once('init.php');
 
-	require('init.php');
 
-    if (strlen($reviewhost['history_table'])) {
-        $list = $dbh->prepare('SELECT review.checksum                            				AS checksum,
-                                      review.fingerprint       									AS fingerprint,
+    $users = $dbh->query('SELECT DISTINCT IFNULL(reviewed_by, "") FROM '.$reviewhost['review_table']);
+    $Reviewers = "[ 'None' ";
+    while($user = $users->fetchColumn())
+        $Reviewers .= ",'$user' ";
+    $Reviewers .= " ]";
+    unset($users);
 
-                                      DATE(review.first_seen)                    				AS first_seen,
-                                      DATE(review.last_seen)                     				AS last_seen,
-                                      IFNULL(review.reviewed_by, "-")      	     				AS reviewed_by,
-                                      DATE(review.reviewed_on)				     				AS reviewed_on,
-                                      review.comments						     				AS comments,
 
-                                      SUM(history.ts_cnt)                        				AS count,
-                                      ROUND(SUM(history.query_time_sum), 2)      				AS time,
-                                      ROUND(SUM(history.query_time_sum)/SUM(history.ts_cnt), 2) AS time_avg
-
-                                 FROM '.$reviewhost['review_table'].'            				AS review
-                            LEFT JOIN '.$reviewhost['history_table'].'    				        AS history
-                                   ON history.checksum = review.checksum
-                             GROUP BY review.checksum
-                                   ');
-    }
-    else {
-        $list = $dbh->prepare('SELECT review.checksum                            				AS checksum,
-                                      review.fingerprint       									AS fingerprint,
-
-                                      DATE(review.first_seen)                    				AS first_seen,
-                                      DATE(review.last_seen)                     				AS last_seen,
-                                      IFNULL(review.reviewed_by, "-")      	     				AS reviewed_by,
-                                      DATE(review.reviewed_on)				     				AS reviewed_on,
-                                      review.comments						     				AS comments,
-
-                                      0                        				                     AS count,
-                                      0      				                                    AS time,
-                                      0                                                         AS time_avg
-
-                                 FROM '.$reviewhost['review_table'].'            				AS review
-                             GROUP BY review.checksum
-                                   ');
-    }
-	$list->execute();
-	include('templates/header.php');
+	require_once('templates/header.php');
 ?>
 
 <table id="Queries">
@@ -60,37 +29,19 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php
-			while ($row = $list->fetch(PDO::FETCH_ASSOC)) {
-				echo "<tr>";
-				echo "<td class='count number'>".$row['count']."</td>";
-				echo "<td class='time number'>".$row['time']."</td>";
-				echo "<td class='avgTime number'>".$row['time_avg']."</td>";
-				echo "<td class='firstSeen date'>".$row['first_seen']."</td>";
-				echo "<td class='lastSeen date'>".$row['last_seen']."</td>";
-				echo "<td class='fingerprint'>".SqlParser::htmlPreparedStatement($row['fingerprint'], true)."</td>";
-				//echo "<td class='fingerprint'>".$row['fingerprint']."</td>";
-				echo "<td class='reviewed_on'>".$row['reviewed_on']."</td>";
-				echo "<td class='reviewed_by'>".$row['reviewed_by']."</td>";
-				echo "<td class='comments'>".$row['comments']."</td>";
-
-				echo '<td class="details"><a class="details" href="review.php?checksum='.$row['checksum'].'"><img src="images/details_open.png"></a></td>';
-				echo "</tr>";
-			}
-		?>
 	</tbody>
 	<tfoot>
 		<tr>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
-			<th></th>
+			<th class="number"></th>
+			<th class="number"></th>
+			<th class="number"></th>
+			<th class="date"></th>
+			<th class="date"></th>
+			<th class=""></th>
+			<th class="date"></th>
+			<th class=""></th>
+			<th class=""></th>
+			<th class=""></th>
 		</tr>
 	</tfoot>
 </table>
@@ -99,34 +50,50 @@
 	 $(function() {
 
 		 oTable = $('#Queries').dataTable({
-			"sDom":             '"R<"H"rCp>t<"F"il>"',
+            "bDeferRender":     true,
+			"bServerSide": 		true,
+			"sAjaxSource": 		"list-ajax.php",
+			"sDom":             '"R<"H"Cpr>t<"F"il>"',
 			"bJQueryUI":        true,
 			"bStateSave":       true,
         // Store the cookie for one year
             "iCookieDuration":  31556926,
-			"bProcessing":      false,
+			"bProcessing":      true,
 			"aaSort":           [],
+			"bAutoWidth": 		true,
 			"aoColumnDefs": [
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 0 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 1 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 2 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 3 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 4 ] },
-					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 5 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
-					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
-					{ "bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
-					{ "bSearchable": false, "bVisible": true, "aTargets": [ 9 ], "bSortable": false }
+					{ "sClass": "count number",		"bSearchable": false, "bVisible": true, "aTargets": [ 0 ] },
+					{ "sClass": "time number",      "bSearchable": false, "bVisible": true, "aTargets": [ 1 ] },
+					{ "sClass": "avgTime number",	"bSearchable": false, "bVisible": true, "aTargets": [ 2 ] },
+					{ "sClass": "firstSeen date",	"bSearchable": false, "bVisible": true, "aTargets": [ 3 ] },
+					{ "sClass": "lastSeen date",	"bSearchable": false, "bVisible": true, "aTargets": [ 4 ] },
+					{ "sClass": "fingerprint", 		"bSearchable": true,  "bVisible": true, "aTargets": [ 5 ] },
+					{ "sClass": "reviewed_on date", "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
+					{ "sClass": "reviewed_by", 		"bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
+					{ "sClass": "comments", 		"bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
+					{ "sClass": "details", 			"bSearchable": false, "bVisible": true, "aTargets": [ 9 ], "bSortable": false }
 				],
 			"oColVis": {
 				"aiExclude": [ 9 ]
 			},
-			"fnStateSaveParams": function(oSettings, oData) {
+            "fnDrawCallback" : function() {
+                $("a.details").fancybox({
+                    type:           'iframe',
+                    width:          '98%',
+                    height:         '98%',
+                    centerOnScroll: true,
+                    padding:        0,
+                    margin:         10
+                });
+                return true;
+            },
+			"fnStateSaveCallback": function(oSettings, oData) {
 				oData.aoSearchCols = [];
 				oData.oFilter = [];
 				oData.oSearch = [];
+				return true;
 			},
-			"fnStateLoadParams": function(oSettings, oData) {
+			"fnStateLoadCallback": function(oSettings, oData) {
 				oData.aoSearchCols = [];
 				oData.oFilter = [];
 				oData.oSearch = [];
@@ -134,6 +101,7 @@
 				if (typeof oData.abVisCols == "object")
 					oldVis = oData.abVisCols;
 				oData.abVisCols = [];
+				return true;
 			}
 		}).columnFilter({
 			bUseColVis: true,
@@ -146,7 +114,7 @@
 				{ type: "date-range" },
 				{ type: "text" },
 				{ type: "date-range" },
-				{ type: "select" },
+				{ type: "select", values: <?php echo $Reviewers; ?> },
 				{ type: "text" },
 				null
 			]
@@ -159,8 +127,12 @@
 		if (oldVis.length == oTable.fnSettings().aoColumns.length)
 			for (var i=0; i < oldVis.length; i++)
 				oTable.fnSetColumnVis(i, oldVis[i]);
+
+		$(window).bind('resize', function () {
+			oTable.fnAdjustColumnSizing();
+		} );
 	 });
 </script>
 
 <?php
-	include('templates/footer.php');
+	require_once('templates/footer.php');

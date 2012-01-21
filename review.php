@@ -1,6 +1,19 @@
 <?php
 
-    require('init.php');
+    require_once('init.php');
+
+// Scan for valid databases to explain against
+	foreach ($explainhosts as $label => $host) {
+		if (!key_exists('databases', $explainhosts[$label]) || !count($explainhosts[$label]['databases'])) {
+			$ebh = new PDO($host['dsn'], $host['user'], $host['password'], array( PDO::ATTR_PERSISTENT => true ));
+			$query = $ebh->prepare('SHOW DATABASES');
+			$query->execute();
+			while (list($database) = $query->fetch(PDO::FETCH_NUM))
+				$explainhosts[$label]['databases'][] = $database;
+			$query->closeCursor();
+			unset($ebh);
+		}
+	}
 
     if (@$_REQUEST['Review'] == 'Review' ) {
         $query = $dbh->prepare('UPDATE review SET reviewed_by = ?, reviewed_on = NOW(), comments = ? WHERE checksum = ?');
@@ -90,7 +103,7 @@
 
 ?>
 
-<?php include('templates/header.php'); ?>
+<?php require_once('templates/header.php'); ?>
 
 <div class="tabs">
     <ul>
@@ -368,4 +381,4 @@
     });
 </script>
 
-<?php include('templates/footer.php'); ?>
+<?php require_once('templates/footer.php'); ?>

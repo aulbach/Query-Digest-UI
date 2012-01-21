@@ -1,4 +1,8 @@
 <?php
+// Settings
+
+// Syntax highlight queries?
+$settings['sqlColor'] = true;
 
 $reviewhost = array(
 // Replace hostname and database in this setting
@@ -8,6 +12,7 @@ $reviewhost = array(
 // See http://www.percona.com/doc/percona-toolkit/2.0/pt-query-digest.html#cmdoption-pt-query-digest--review
     'review_table'  => 'review',
 // This table is optional. You don't need it, but you lose detailed stats
+// Set to a blank string to disable
 // See http://www.percona.com/doc/percona-toolkit/2.0/pt-query-digest.html#cmdoption-pt-query-digest--review-history
     'history_table' => 'review_history',
 );

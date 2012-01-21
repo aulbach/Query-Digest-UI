@@ -1,6 +1,6 @@
 <?php
 
-	require('init.php');
+	require_once('init.php');
 
 	$return = array();
 
@@ -16,7 +16,7 @@
 
 	list($label, $database) = explode('.', $_REQUEST['explainDb']);
 	$host = $explainhosts[$label];
-	$ebh = new PDO($host['dsn'], $host['user'], $host['password']);
+	$ebh = new PDO($host['dsn'], $host['user'], $host['password'], array( PDO::ATTR_PERSISTENT => true ));
 
 	$query = $ebh->prepare("USE $database");
 	$query->execute();

@@ -50,6 +50,9 @@ class SqlParser
 	}
 
     public static function htmlPreparedStatement($_sql, $removeNewLines = false) {
+        global $settings;
+        if (!$settings['sqlColor'])
+            return $_sql;
         try {
 			$_sql = PMA_SQP_formatHtml(self::parsePreparedStatement($_sql));
 			if ($removeNewLines) {
@@ -64,6 +67,9 @@ class SqlParser
     }
 
     public static function html($_sql, $removeNewLines = false) {
+        global $settings;
+        if (!$settings['sqlColor'])
+            return $_sql;
         try {
             $_sql = PMA_SQP_formatHtml(self::parsePMA($_sql));
 			if ($removeNewLines) {

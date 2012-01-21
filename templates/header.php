@@ -28,19 +28,6 @@
 		<script src="js/docData.js" type="text/javascript"></script>
         <script src="js/doc.js" type="text/javascript"></script>
 
-        <script>
-           $(document).ready(function() {
-                $("a.details").fancybox({
-                    type:           'iframe',
-                    width:          '98%',
-                    height:         '98%',
-                    centerOnScroll: true,
-                    padding:        0,
-                    margin:         10
-                });
-           });
-       </script>
-
 	</head>
 	<body>
 

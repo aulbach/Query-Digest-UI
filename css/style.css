@@ -10,12 +10,14 @@
 }
 
 #Queries_processing {
-    padding-left:       1em;
+    width:              8em;
+    margin-left:        auto;
+    margin-right:       auto;
 }
 
 .fg-toolbar {
-    padding-top:        .5em;
-    padding-bottom:     .5em;
+    padding-top:        .25em;
+    padding-bottom:     .25em;
 }
 
 #Queries_info {
@@ -98,4 +100,18 @@ a.table {
 a.column {
     color:              #000066;
     cursor:             pointer;
+}
+
+#Queries {
+    width:              100% !important;
+    margin-left:        -2px;
+}
+
+.details {
+    width:              20px;
+    padding:            2px;
+}
+
+.fingerprint {
+    width:              100%;
 }
