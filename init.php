@@ -7,7 +7,7 @@
 	unset($query);
 
 	foreach ($explainhosts as $label => $host) {
-		if (!key_exists('databases', $explainhosts[$label])) {
+		if (!key_exists('databases', $explainhosts[$label]) || !count($explainhosts[$label]['databases'])) {
 			$ebh = new PDO($host['dsn'], $host['user'], $host['password']);
 			$query = $ebh->prepare('SHOW DATABASES');
 			$query->execute();

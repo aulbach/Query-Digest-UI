@@ -1,27 +1,36 @@
 <?php
 
 $reviewhost = array(
+// Replace hostname and database in this setting
     'dsn'           => 'mysql:host=hostname:3306;dbname=database',
     'user'          => 'user',
     'password'      => 'password',
+// See http://www.percona.com/doc/percona-toolkit/2.0/pt-query-digest.html#cmdoption-pt-query-digest--review
     'review_table'  => 'review',
+// This table is optional. You don't need it, but you lose detailed stats
+// See http://www.percona.com/doc/percona-toolkit/2.0/pt-query-digest.html#cmdoption-pt-query-digest--review-history
     'history_table' => 'review_history',
 );
 
 $explainhosts = array(
     'label1'   => array(
-        'dsn'       => 'mysql:host=hostname1:3306;dbname=database1',
+        'dsn'       => 'mysql:host=hostname1:3306',
         'user'      => 'user',
-        'password'  => 'password'
+        'password'  => 'password',
+    // By default we scan the host to see what databases we can run a
+    // explain on. To disable this behavour, set an array here
+        'databases' => array(
+            'database1',
+            'database2',
+            'database4'
         ),
+    ),
     'label2'   => array(
-        'dsn'       => 'mysql:host=hostname2:3306;dbname=database2',
+        'dsn'       => 'mysql:host=hostname2:3306',
         'user'      => 'user',
-        'password'  => 'password'
-        ),
-    'label3'   => array(
-        'dsn'       => 'mysql:host=hostname3:3306;dbname=database3',
-        'user'      => 'user',
-        'password'  => 'password'
-        )
+        'password'  => 'password',
+    // You can also just set the field and keep it empty. We will scan for valid databases
+        'databases' => array(),
+    ),
+    // ad nauseum...
 );
