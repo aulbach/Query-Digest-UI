@@ -14,6 +14,7 @@
 		const DROP        = 6;
 		const CREATE      = 7;
 		const DELETEMULTI = 8;
+		const UNION		  = 9;
 		
 	// Valid Table Regex
 		const TABLEREF = '`?[A-Za-z0-9_]+`?(\.`?[A-Za-z0-9_]+`?)?';
@@ -30,6 +31,8 @@
 				$this->type = self::DELETEMULTI;
 			elseif (preg_match('/^INSERT\s+INTO\s/', $this->sql))
 				$this->type = self::INSERT;
+			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/', $this->sql))
+				$this->type = self::UNION;
 			else
 				$this->type = self::UNKNOWN;
 		}
@@ -37,6 +40,7 @@
 		function toSelect() {
 			switch ($this->type) {
 				case self::SELECT:
+				case self::UNION:
 					return $this->sql;
 				case self::DELETE:
 					return preg_replace('/^DELETE\s+FROM\s/', 'SELECT 0 FROM ', $this->sql);
@@ -49,6 +53,7 @@
 		function asExplain() {
 			switch ($this->type) {
 				case self::SELECT:
+				case self::UNION:
 					$sql = $this->sql;
 					break;
 				case self::DELETE:

@@ -33,6 +33,12 @@
 			$row['possible_keys'] = str_replace(',', ', ', $row['possible_keys']);
 			$row['ref'] = str_replace(',', ', ', $row['ref']);
 			$row['Extra'] = str_replace(array('Using ', ';'), array('', ', '), $row['Extra']);
+			foreach ($row as $key => $val) {
+				if (is_null($row[$key]))
+					$row[$key] = '';
+				$row[$key] = htmlentities($row[$key]);
+			}
+					
 			$return['Explain'][] = $row;
 		}
 		$query->closeCursor();
