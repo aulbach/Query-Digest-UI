@@ -32,7 +32,7 @@
     if ( @$_GET['sSearch'] != "" ) {
         $sWhere = "WHERE (";
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
-            $sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
+            $sWhere .= "`".$aColumns[$i]."` LIKE '%".$dbh->quote( $_GET['sSearch'] )."%' OR ";
         $sWhere = substr_replace( $sWhere, "", -3 );
         $sWhere .= ')';
     }
@@ -49,10 +49,10 @@
                 if ($_GET['sSearch_'.$i] == 'None')
                     $sWhere .= "(`".$aColumns[$i]."` IS NULL OR LENGTH(`".$aColumns[$i]."`) = 0 )";
                 else
-                    $sWhere .= "`".$aColumns[$i]."` = '".mysql_real_escape_string($_GET['sSearch_'.$i])."' ";
+                    $sWhere .= "`".$aColumns[$i]."` = '".$dbh->quote($_GET['sSearch_'.$i])."' ";
             }
             else
-                $sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
+                $sWhere .= "`".$aColumns[$i]."` LIKE '%".$dbh->quote($_GET['sSearch_'.$i])."%' ";
         }
         elseif (!$having[$i] && isset($_GET['sRangeSeparator']) && strpos($_GET['sSearch_'.$i], $_GET['sRangeSeparator']) !== false) {
 
@@ -71,12 +71,12 @@
             $inner = '';
 
             if (strlen($min))
-                $inner .= "`".$aColumns[$i]."` >= '".mysql_real_escape_string($min)."' ";
+                $inner .= "`".$aColumns[$i]."` >= '".$dbh->quote($min)."' ";
 
             if (strlen($max)) {
                 if (strlen($inner))
                     $inner .= ' AND ';
-                $inner .= "`".$aColumns[$i]."` <= '".mysql_real_escape_string($max)."' ";
+                $inner .= "`".$aColumns[$i]."` <= '".$dbh->quote($max)."' ";
             }
 
             $sWhere .= " ( {$inner} ) ";
@@ -108,12 +108,12 @@
             $inner = '';
 
             if (strlen($min))
-                $inner .= "`".$aColumns[$i]."` >= '".mysql_real_escape_string($min)."' ";
+                $inner .= "`".$aColumns[$i]."` >= '".$dbh->quote($min)."' ";
 
             if (strlen($max)) {
                 if (strlen($inner))
                     $inner .= ' AND ';
-                $inner .= "`".$aColumns[$i]."` <= '".mysql_real_escape_string($max)."' ";
+                $inner .= "`".$aColumns[$i]."` <= '".$dbh->quote($max)."' ";
             }
 
             $sHaving .= " ( {$inner} ) ";
@@ -128,7 +128,7 @@
         for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
             if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
                 $sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]
-                ." ".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+                ." ". $_GET['sSortDir_'.$i] .", ";
 
         $sOrder = substr_replace( $sOrder, "", -2 );
         if ( $sOrder == "ORDER BY" )
@@ -138,8 +138,8 @@
 
 
     if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
-        $query .= " LIMIT ".mysql_real_escape_string( $_GET['iDisplayStart'] )
-                .", ".mysql_real_escape_string( $_GET['iDisplayLength'] );
+        $query .= " LIMIT ".( $_GET['iDisplayStart'] )
+                .", ".( $_GET['iDisplayLength'] );
 
     $list = $dbh->prepare($query);
     $list->execute();
@@ -153,6 +153,7 @@
     unset($tc);
 
     $data = array();
+    $data['query']                  = $query;
     $data['sEcho']                  = intval(@$_GET['sEcho']);
     $data['iTotalRecords']          = $totalCount;
     $data['iTotalDisplayRecords']   = $rowCount;
