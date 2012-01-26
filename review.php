@@ -5,7 +5,7 @@
 // Scan for valid databases to explain against
 	foreach ($explainhosts as $label => $host) {
 		if (!key_exists('databases', $explainhosts[$label]) || !count($explainhosts[$label]['databases'])) {
-			$ebh = new PDO($host['dsn'], $host['user'], $host['password'], array( PDO::ATTR_PERSISTENT => true ));
+			$ebh = new PDO($host['dsn'], $host['user'], $host['password']);
 			$query = $ebh->prepare('SHOW DATABASES');
 			$query->execute();
 			while (list($database) = $query->fetch(PDO::FETCH_NUM))

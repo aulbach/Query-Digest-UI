@@ -11,12 +11,13 @@
                         ');
     $query->execute(array($_REQUEST['checksum']));
     $reviewData = $query->fetch(PDO::FETCH_ASSOC);
-
-	$sample = 'EXPLAIN EXTENDED '.$reviewData['sample'];
-
+	
+	$Query = new QueryRewrite($reviewData['sample']);
+	$sample = $Query->asExtendedExplain();
+	
 	list($label, $database) = explode('.', $_REQUEST['explainDb']);
 	$host = $explainhosts[$label];
-	$ebh = new PDO($host['dsn'], $host['user'], $host['password'], array( PDO::ATTR_PERSISTENT => true ));
+	$ebh = new PDO($host['dsn'], $host['user'], $host['password']);
 
 	$query = $ebh->prepare("USE $database");
 	$query->execute();

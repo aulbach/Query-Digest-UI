@@ -9,3 +9,4 @@
 	$dbh = new PDO($reviewhost['dsn'], $reviewhost['user'], $reviewhost['password']);
 
     require_once('libs/sqlquery/SqlParser.php');
+	require_once('classes/QueryRewrite.php');
