@@ -364,8 +364,12 @@
     </div>
 </div>
 
+<div id="dialogWarning" title="Explain Warnings"></div>
+
 <script type="text/javascript">
     $(function() {
+        $('#dialogWarning').dialog({ autoOpen: false })
+        
         $('.dataTable').each(function(index, table) {
             $(table).dataTable({
                 "bStateSave":       false,

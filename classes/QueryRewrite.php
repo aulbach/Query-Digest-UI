@@ -54,6 +54,8 @@
 		
 		function asExtendedExplain() {
 			$sql = $this->asExplain();
+			if (is_null($sql))
+				return null;
 			$sql = preg_replace('/^EXPLAIN /', 'EXPLAIN EXTENDED ', $sql);
 			return $sql;
 		}
