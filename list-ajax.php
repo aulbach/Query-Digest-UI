@@ -32,7 +32,7 @@
     if ( @$_GET['sSearch'] != "" ) {
         $sWhere = "WHERE (";
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
-            $sWhere .= "`".$aColumns[$i]."` LIKE '%".$dbh->quote( $_GET['sSearch'] )."%' OR ";
+            $sWhere .= "`".$aColumns[$i]."` LIKE '%".( $_GET['sSearch'] )."%' OR ";
         $sWhere = substr_replace( $sWhere, "", -3 );
         $sWhere .= ')';
     }
@@ -49,10 +49,10 @@
                 if ($_GET['sSearch_'.$i] == 'None')
                     $sWhere .= "(`".$aColumns[$i]."` IS NULL OR LENGTH(`".$aColumns[$i]."`) = 0 )";
                 else
-                    $sWhere .= "`".$aColumns[$i]."` = '".$dbh->quote($_GET['sSearch_'.$i])."' ";
+                    $sWhere .= "`".$aColumns[$i]."` = '".($_GET['sSearch_'.$i])."' ";
             }
             else
-                $sWhere .= "`".$aColumns[$i]."` LIKE '%".$dbh->quote($_GET['sSearch_'.$i])."%' ";
+                $sWhere .= "`".$aColumns[$i]."` LIKE '%".($_GET['sSearch_'.$i])."%' ";
         }
         elseif (!$having[$i] && isset($_GET['sRangeSeparator']) && strpos($_GET['sSearch_'.$i], $_GET['sRangeSeparator']) !== false) {
 
@@ -71,12 +71,12 @@
             $inner = '';
 
             if (strlen($min))
-                $inner .= "`".$aColumns[$i]."` >= '".$dbh->quote($min)."' ";
+                $inner .= "`".$aColumns[$i]."` >= '".($min)."' ";
 
             if (strlen($max)) {
                 if (strlen($inner))
                     $inner .= ' AND ';
-                $inner .= "`".$aColumns[$i]."` <= '".$dbh->quote($max)."' ";
+                $inner .= "`".$aColumns[$i]."` <= '".($max)."' ";
             }
 
             $sWhere .= " ( {$inner} ) ";
@@ -108,12 +108,12 @@
             $inner = '';
 
             if (strlen($min))
-                $inner .= "`".$aColumns[$i]."` >= '".$dbh->quote($min)."' ";
+                $inner .= "`".$aColumns[$i]."` >= '".($min)."' ";
 
             if (strlen($max)) {
                 if (strlen($inner))
                     $inner .= ' AND ';
-                $inner .= "`".$aColumns[$i]."` <= '".$dbh->quote($max)."' ";
+                $inner .= "`".$aColumns[$i]."` <= '".($max)."' ";
             }
 
             $sHaving .= " ( {$inner} ) ";
