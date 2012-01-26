@@ -25,7 +25,9 @@
 		}
 		
 		function figureOutType(){
-			if (preg_match('/^DELETE\s+FROM\s/', $this->sql))
+			if (preg_match('/^SELECT\s/', $this->sql))
+				$this->type = self::SELECT;
+			elseif (preg_match('/^DELETE\s+FROM\s/', $this->sql))
 				$this->type = self::DELETE;
 			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/', $this->sql))
 				$this->type = self::DELETEMULTI;
