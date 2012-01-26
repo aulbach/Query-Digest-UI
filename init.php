@@ -6,6 +6,6 @@
 
 	require_once('config.php');
 
-	$dbh = new PDO($reviewhost['dsn'], $reviewhost['user'], $reviewhost['password'], array( PDO::ATTR_PERSISTENT => true ));
+	$dbh = new PDO($reviewhost['dsn'], $reviewhost['user'], $reviewhost['password']);
 
     require_once('libs/sqlquery/SqlParser.php');
