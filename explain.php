@@ -1,5 +1,6 @@
 <?php
 
+	ini_set('html_errors', 0);
 	require_once('init.php');
 
 	$return = array();
