@@ -1,14 +1,12 @@
 <?php
     require_once('init.php');
 
-
-    $users = $dbh->query('SELECT DISTINCT IFNULL(reviewed_by, "") FROM '.$reviewhost['review_table']);
+	$users = Database::find('review')->query('SELECT DISTINCT IFNULL(reviewed_by, "") FROM '.Database::escapeField($reviewhost['review_table']));
     $Reviewers = "[ 'None' ";
-    while($user = $users->fetchColumn())
+    while($user = $users->fetch_col())
         $Reviewers .= ",'$user' ";
     $Reviewers .= " ]";
     unset($users);
-
 
 	require_once('templates/header.php');
 ?>

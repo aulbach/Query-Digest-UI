@@ -5,10 +5,7 @@
 	$cnt = 0;
 	
 	try {
-		$query = $dbh->prepare('SELECT COUNT(0) FROM mysql.help_topic');
-		$query->execute();
-		list($cnt) = $query->fetch(PDO::FETCH_NUM);
-		unset($query);
+		$cnt = Database::find('review')->query_col('SELECT COUNT(0) FROM mysql.help_topic');
 	}
 	catch (exception $e) {}
 	
@@ -23,10 +20,8 @@
 	
 	$fp = fopen('js/docData.js', 'w+');
 	fputs($fp, "var help_topic = {\n");
-	
-	$query = $dbh->prepare("SELECT LOWER(name), url FROM mysql.help_topic WHERE name NOT LIKE '% %' AND LENGTH(url) > 0");
-	$query->execute();
-	while ($row = $query->fetch(PDO::FETCH_NUM)) {
+	$res = Database::find('review')->query("SELECT LOWER(name), url FROM mysql.help_topic WHERE name NOT LIKE '% %' AND LENGTH(url) > 0");
+	while ($row = $res->fetch_row()) {
 		list($name, $url) = $row;
 		fputs($fp, "    '{$name}' : '{$url}', \n");
 	}

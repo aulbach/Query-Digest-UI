@@ -17,8 +17,8 @@
         $query .= '       SUM(history.ts_cnt)                                       AS `count`,';
         $query .= '       ROUND(SUM(history.query_time_sum), 2)*1000                AS `time`,';
         $query .= '       ROUND(SUM(history.query_time_sum)*1000/SUM(history.ts_cnt), 2) AS time_avg';
-        $query .= '      FROM '.$reviewhost['review_table'].'                       AS review';
-        $query .= '      JOIN '.$reviewhost['history_table'].'                      AS history';
+        $query .= '      FROM '.Database::escapeField($reviewhost['review_table']).'                       AS review';
+        $query .= '      JOIN '.Database::escapeField($reviewhost['history_table']).'                      AS history';
         $query .= '        ON history.checksum = review.checksum';
     }
     else {
@@ -32,7 +32,7 @@
     if ( @$_GET['sSearch'] != "" ) {
         $sWhere = "WHERE (";
         for ( $i=0 ; $i<count($aColumns) ; $i++ )
-            $sWhere .= "`".$aColumns[$i]."` LIKE '%".( $_GET['sSearch'] )."%' OR ";
+            $sWhere .= Database::escapeField($aColumns[$i])." LIKE '%".Database::find('review')->escape_string( $_GET['sSearch'] )."%' OR ";
         $sWhere = substr_replace( $sWhere, "", -3 );
         $sWhere .= ')';
     }
@@ -47,9 +47,9 @@
 
             if ($aColumns[$i] == 'reviewed_by') {
                 if ($_GET['sSearch_'.$i] == 'None')
-                    $sWhere .= "(`".$aColumns[$i]."` IS NULL OR LENGTH(`".$aColumns[$i]."`) = 0 )";
+                    $sWhere .= "(".Database::escapeField($aColumns[$i])." IS NULL OR LENGTH(`".$aColumns[$i]."`) = 0 )";
                 else
-                    $sWhere .= "`".$aColumns[$i]."` = '".($_GET['sSearch_'.$i])."' ";
+                    $sWhere .= Database::escapeField($aColumns[$i])." = '".($_GET['sSearch_'.$i])."' ";
             }
             else
                 $sWhere .= "`".$aColumns[$i]."` LIKE '%".($_GET['sSearch_'.$i])."%' ";
@@ -141,16 +141,9 @@
         $query .= " LIMIT ".( $_GET['iDisplayStart'] )
                 .", ".( $_GET['iDisplayLength'] );
 
-    $list = $dbh->prepare($query);
-    $list->execute();
-
-    $rc = $dbh->query('SELECT FOUND_ROWS()');
-    $rowCount = (int) $rc->fetchColumn();
-    unset($rc);
-
-    $tc = $dbh->query('SELECT COUNT(review.checksum) FROM '.$reviewhost['review_table'].' AS review');
-    $totalCount = (int) $tc->fetchColumn();
-    unset($tc);
+    $list        = Database::find('review')->query($query);
+    $rowCount   = (int)Database::find('review')->query_col('SELECT FOUND_ROWS()');
+    $totalCount = (int)Database::find('review')->query_col('SELECT COUNT(review.checksum) FROM '.Database::escapeField($reviewhost['review_table']).' AS review');
 
     $data = array();
     $data['query']                  = $query;
@@ -160,7 +153,7 @@
     $data['aaData']                 = array();
     //$data['query']                  = $query;
 
-    while ($row = $list->fetch(PDO::FETCH_ASSOC)) {
+    while ($row = $list->fetch_assoc()) {
         $row['fingerprint'] = SqlParser::htmlPreparedStatement($row['fingerprint'], true);
         $dr = array();
         foreach ($aColumns as $col)

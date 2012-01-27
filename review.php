@@ -5,30 +5,34 @@
 // Scan for valid databases to explain against
 	foreach ($explainhosts as $label => $host) {
 		if (!key_exists('databases', $explainhosts[$label]) || !count($explainhosts[$label]['databases'])) {
-			$ebh = new PDO($host['dsn'], $host['user'], $host['password']);
-			$query = $ebh->prepare('SHOW DATABASES');
-			$query->execute();
-			while (list($database) = $query->fetch(PDO::FETCH_NUM))
+            Database::connect(null, $host['user'], $host['password'], null, null, 'pdo', array('dsn' => $host['dsn']), $label);
+			$res = Database::find($label)->query('SHOW DATABASES');
+			while ($database = $res->fetch_col())
 				$explainhosts[$label]['databases'][] = $database;
-			$query->closeCursor();
-			unset($ebh);
 		}
 	}
 
     if (@$_REQUEST['Review'] == 'Review' ) {
-        $query = $dbh->prepare('UPDATE review SET reviewed_by = ?, reviewed_on = NOW(), comments = ? WHERE checksum = ?');
-        $query->execute(array($_REQUEST['reviewed_by'], $_REQUEST['comments'], $_REQUEST['checksum']));
+        Database::find('review')->query(
+            'UPDATE review
+                SET reviewed_by = ?,
+                    reviewed_on = NOW(),
+                    comments    = ?
+              WHERE checksum    = ?',
+              $_REQUEST['reviewed_by'],
+              $_REQUEST['comments'],
+              $_REQUEST['checksum']
+        );
         header( "Location: review.php?checksum={$_REQUEST['checksum']}" ) ;
         exit;
     }
 
-    $query = $dbh->prepare('SELECT review.*
+    $reviewData = Database::find('review')->query_assoc('SELECT review.*
                               FROM '.$reviewhost['review_table'].' AS review
                              WHERE review.checksum = ?
-                          GROUP BY review.checksum
-                        ');
-    $query->execute(array($_REQUEST['checksum']));
-    $reviewData = $query->fetch(PDO::FETCH_ASSOC);
+                          GROUP BY review.checksum',
+                          $_REQUEST['checksum']
+                        );
 
     foreach ($reviewData as $key=>&$val) {
         if (in_array($key, array('checksum')))
@@ -48,15 +52,16 @@
     $historyData = array();
 
     if (strlen($reviewhost['history_table'])) {
-        $query = $dbh->prepare('SELECT review.*
+        $res = Database::find('review')->query('SELECT review.*
                                   FROM '.$reviewhost['history_table'].' AS review
                                  WHERE review.checksum = ?
                               ORDER BY review.ts_max DESC
-                                  ');
-        $query->execute(array($_REQUEST['checksum']));
-        $historyData = $query->fetch(PDO::FETCH_ASSOC);
+                                  ',
+                                  $_REQUEST['checksum']
+                                  );
+        $historyData = $res->fetch_assoc();
 
-        while ($newData = $query->fetch(PDO::FETCH_ASSOC)) {
+        while ($newData = $res->fetch_assoc()) {
             foreach ($newData as $key=>$value) {
                 if (!$value)
                     continue;

@@ -2,13 +2,12 @@
 
     require('init.php');
 
-	$query = $dbh->prepare('SELECT review.fingerprint
-							  FROM '.$reviewhost['review_table'].' AS review
-							 WHERE review.checksum = ?
-						  GROUP BY review.checksum
-						');
-	$query->execute(array($_REQUEST['checksum']));
-	$reviewData = $query->fetch(PDO::FETCH_ASSOC);
+	$fingerprint = Database::find('review')->query_col('SELECT review.fingerprint
+                              FROM '.Database::escapeField($reviewhost['review_table']).' AS review
+                             WHERE review.checksum = ?
+                          GROUP BY review.checksum',
+						  $_REQUEST['checksum']
+						  );
 
 	$checkPaths = array(
 		"/opt/local/bin",
@@ -67,7 +66,7 @@
 	}
 
 	$command = escapeshellcmd($binary);
-	$command .= ' --query '.escapeshellarg($reviewData['fingerprint']);
+	$command .= ' --query '.escapeshellarg($fingerprint);
 	$output = explode("\n", shell_exec($command));
 
 	$rules = array();
