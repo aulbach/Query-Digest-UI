@@ -48,6 +48,7 @@
 	 $(function() {
 
 		 oTable = $('#Queries').dataTable({
+			"sPaginationType": 	"full_numbers",
             "bDeferRender":     true,
 			"bServerSide": 		true,
 			"sAjaxSource": 		"list-ajax.php",
