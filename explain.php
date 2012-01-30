@@ -15,6 +15,9 @@
 	$Query = new QueryRewrite($query);
 	$sample = $Query->asExtendedExplain();
 	
+	$return['oQuery'] = $query;
+	$return['eQuery'] = $sample;
+	
 	if (is_null($sample)) {
 		$return['Warnings'][] = array('Code' => '0', 'Level' => 'Error', 'Message' => "I can't explain this type of query yet");
 	}

@@ -35,6 +35,8 @@
 				$this->type = self::INSERT;
 			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/', $this->sql))
 				$this->type = self::UNION;
+			elseif (preg_match('/^UPDATE\s/', $this->sql))
+				$this->type = self::UPDATE;
 			else
 				$this->type = self::UNKNOWN;
 		}
@@ -48,6 +50,9 @@
 					return preg_replace('/^DELETE\s+FROM\s/', 'SELECT 0 FROM ', $this->sql);
 				case self::DELETEMULTI:
 					return preg_replace('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/', 'SELECT 0 FROM ', $this->sql);
+				case self::UPDATE:
+					preg_match('/^UPDATE\s+(.*)\s+SET\s+(.*)\s+WHERE\s+(.*)$/', $this->sql, $subpatterns);
+					return "SELECT {$subpatterns[2]} FROM {$subpatterns[1]} WHERE {$subpatterns[3]}";
 			}
 			return null;
 		}
@@ -60,6 +65,7 @@
 					break;
 				case self::DELETE:
 				case self::DELETEMULTI:
+				case self::UPDATE:
 					$sql = $this->toSelect();
 					break;
 				default:
