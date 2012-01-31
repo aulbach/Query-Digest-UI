@@ -25,17 +25,17 @@
 		}
 		
 		function figureOutType(){
-			if (preg_match('/^SELECT\s/', $this->sql))
+			if (preg_match('/^SELECT\s/i', $this->sql))
 				$this->type = self::SELECT;
-			elseif (preg_match('/^DELETE\s+FROM\s/', $this->sql))
+			elseif (preg_match('/^DELETE\s+FROM\s/i', $this->sql))
 				$this->type = self::DELETE;
-			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/', $this->sql))
+			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', $this->sql))
 				$this->type = self::DELETEMULTI;
-			elseif (preg_match('/^INSERT\s+INTO\s/', $this->sql))
+			elseif (preg_match('/^INSERT\s+INTO\s/i', $this->sql))
 				$this->type = self::INSERT;
-			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/', $this->sql))
+			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/i', $this->sql))
 				$this->type = self::UNION;
-			elseif (preg_match('/^UPDATE\s/', $this->sql))
+			elseif (preg_match('/^UPDATE\s/i', $this->sql))
 				$this->type = self::UPDATE;
 			else
 				$this->type = self::UNKNOWN;
@@ -47,11 +47,11 @@
 				case self::UNION:
 					return $this->sql;
 				case self::DELETE:
-					return preg_replace('/^DELETE\s+FROM\s/', 'SELECT 0 FROM ', $this->sql);
+					return preg_replace('/^DELETE\s+FROM\s/i', 'SELECT 0 FROM ', $this->sql);
 				case self::DELETEMULTI:
-					return preg_replace('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/', 'SELECT 0 FROM ', $this->sql);
+					return preg_replace('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', 'SELECT 0 FROM ', $this->sql);
 				case self::UPDATE:
-					preg_match('/^UPDATE\s+(.*)\s+SET\s+(.*)\s+WHERE\s+(.*)$/', $this->sql, $subpatterns);
+					preg_match('/^UPDATE\s+(.*)\s+SET\s+(.*)\s+WHERE\s+(.*)$/i', $this->sql, $subpatterns);
 					return "SELECT {$subpatterns[2]} FROM {$subpatterns[1]} WHERE {$subpatterns[3]}";
 			}
 			return null;
@@ -78,7 +78,7 @@
 			$sql = $this->asExplain();
 			if (is_null($sql))
 				return null;
-			$sql = preg_replace('/^EXPLAIN /', 'EXPLAIN EXTENDED ', $sql);
+			$sql = preg_replace('/^EXPLAIN /i', 'EXPLAIN EXTENDED ', $sql);
 			return $sql;
 		}
 	}
