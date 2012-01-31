@@ -1,10 +1,11 @@
 <?php
     require_once('init.php');
 
-	$users = Database::find('review')->query('SELECT DISTINCT IFNULL(reviewed_by, "") FROM '.Database::escapeField($reviewhost['review_table']));
+	$users = Database::find('review')->query('SELECT DISTINCT reviewed_by FROM '.Database::escapeField($reviewhost['review_table']).' WHERE reviewed_by IS NOT NULL');
     $Reviewers = "[ 'None' ";
-    while($user = $users->fetch_col())
-        $Reviewers .= ",'$user' ";
+    while(($user = $users->fetch_col()) !== false)
+		if (strlen($user))
+			$Reviewers .= ",'$user' ";
     $Reviewers .= " ]";
     unset($users);
 
