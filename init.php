@@ -3,6 +3,7 @@
 // Set default settings here. Can be overridden in config.php.
     $settings = array();
     $settings['sqlColor'] = true;
+	$settings['title'] = null;
 
 	require_once('config.php');
 	require_once('libs/Database/Database.php');

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Query Digest UI</title>
+        <title><?php if(!is_null($settings['title'])) echo $settings['title'].' - '; ?>Query Digest UI</title>
 
 		<script src="js/jquery-1.7.1.min.js" type="text/javascript"></script>
 

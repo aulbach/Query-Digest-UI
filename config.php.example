@@ -1,6 +1,9 @@
 <?php
 // Settings
 
+// Change to a string for a customized title for this instance
+$settings['title'] = null;
+
 // Syntax highlight queries?
 $settings['sqlColor'] = true;
 
