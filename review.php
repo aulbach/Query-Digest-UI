@@ -105,7 +105,22 @@
         }
         unset ($key, $val);
     }
-
+    
+    $samples = array();
+    if (strlen($reviewhost['history_table'])) {
+        $res = Database::find('review')->query('SELECT review.sample
+                                                  FROM '.$reviewhost['history_table'].' AS review
+                                                 WHERE review.checksum = ?
+                                              ORDER BY review.ts_max DESC
+                                                 LIMIT '.$settings['sampleLimit'],
+                                                       $_REQUEST['checksum']
+        );
+        while ($sample = $res->fetch_col())
+            $samples[] = $sample;
+        unset($res);
+    }
+    else
+        $samples[] = $reviewData['sample'];
 ?>
 
 <?php require_once('templates/header.php'); ?>
@@ -120,7 +135,7 @@
     </ul>
     <div id="queryFingerprint"><?php echo SqlParser::htmlPreparedStatement($reviewData['fingerprint']); ?></div>
     <div id="querySample">
-        <?php echo SqlParser::html($reviewData['sample']); ?>
+        <?php echo SqlParser::html($samples[0]); ?>
     </div>
     <div id="normalizedQuery">Please explain the query to view the normalized query.</div>
     <div id="queryReview">

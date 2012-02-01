@@ -4,6 +4,7 @@
     $settings = array();
     $settings['sqlColor'] = true;
 	$settings['title'] = null;
+	$settings['sampleLimit'] = 1;
 
 	require_once('config.php');
 	require_once('libs/Database/Database.php');
