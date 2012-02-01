@@ -4,13 +4,22 @@
 	require_once('init.php');
 
 	$return = array();
-	
-	$query = Database::find('review')->query_col('SELECT review.sample
-                              FROM '.Database::escapeField($reviewhost['review_table']).' AS review
-                             WHERE review.checksum = ?
-                          GROUP BY review.checksum',
-						  $_REQUEST['checksum']
-						  );
+	if (strlen($reviewhost['history_table'])) {
+		$query = Database::find('review')->query_col('SELECT review.sample
+								  FROM '.Database::escapeField($reviewhost['history_table']).' AS review
+								 WHERE review.checksum = ?
+							  ORDER BY review.ts_max DESC
+							     LIMIT 1',
+							  $_REQUEST['checksum']
+							  );
+	}
+	else {
+		$query = Database::find('review')->query_col('SELECT review.sample
+								  FROM '.Database::escapeField($reviewhost['review_table']).' AS review
+								 WHERE review.checksum = ?',
+							  $_REQUEST['checksum']
+							  );
+	}
 
 	$Query = new QueryRewrite($query);
 	$sample = $Query->asExtendedExplain();
