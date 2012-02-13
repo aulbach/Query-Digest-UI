@@ -29,7 +29,16 @@
 .syntax_indent5             {   margin-left:        5em; }
 .syntax_indent6             {   margin-left:        6em; }
 .syntax_indent7             {   margin-left:        7em; }
-.syntax {
+.syntax,
+.syntax_indent0,
+.syntax_indent1,
+.syntax_indent2,
+.syntax_indent3,
+.syntax_indent4,
+.syntax_indent5,
+.syntax_indent6,
+.syntax_indent7
+{
                                 font-family:        Verdan, Arial, Tahoma;
                                 font-size:          80%;
 }
@@ -62,3 +71,13 @@
 .syntax_quote               {   white-space:        pre; }
 */
 .syntax_quote_backtick      { }
+
+.dialog .syntax             {   font-size:          80%; }
+.dialog .syntax_indent0     {   font-size:          80%; } 
+.dialog .syntax_indent1     {   font-size:          80%; }
+.dialog .syntax_indent2     {   font-size:          80%; }
+.dialog .syntax_indent3     {   font-size:          80%; }
+.dialog .syntax_indent4     {   font-size:          80%; }
+.dialog .syntax_indent5     {   font-size:          80%; }
+.dialog .syntax_indent6     {   font-size:          80%; }
+.dialog .syntax_indent7     {   font-size:          80%; }
