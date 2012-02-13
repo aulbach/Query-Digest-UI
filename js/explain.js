@@ -25,7 +25,7 @@ $(function() {
                       ret = $('#explainPlan').dataTable().fnAddData([
                           data.Explain[i].id,
                           data.Explain[i].select_type,
-                          data.Explain[i].table,
+                          $(data.Explain[i].table),
                           data.Explain[i].type,
                           data.Explain[i].possible_keys,
                           data.Explain[i].key,
@@ -47,6 +47,47 @@ function lookupDatabase(label, database) {
 }
 
 function lookupTable(label, database, table) {
+   $.ajax({
+            url: 'descTable.php',
+            data : {
+                checksum: checksum,
+                label: label,
+                db: database,
+                table: table
+            },
+
+            success: function(data) {
+               var dlog = $('<div class="dialog">');
+               
+               var str = '<div class="tabs">';
+               str += '<ul><li><a href="#dialogDescCreate">Create</a></li>';
+               str += '<li><a href="#dialogDescDesc">Desc</a></li>';
+               str += '<li><a href="#dialogDescIndexes">Indexes</a></li></ul>';
+               
+               str += '<div id="dialogDescCreate">';
+               str += data.create;
+               str += '</div>';
+               
+               str += '<div id="dialogDescDesc" style="font-size: 80%;">';
+               str += data.desc;
+               str += '</div>';
+               
+               str += '<div id="dialogDescIndexes" style="font-size: 80%;">';
+               str += data.indexes;
+               str += '</div>';
+               
+               
+               str += '</div>';
+               $(dlog).html(str);
+               
+               $(dlog).dialog({
+                  title:    data.title,
+                  minWidth: 400
+               });
+               $("div.dialog div.tabs").tabs();
+            }
+   });
+            
     return;
 }
 
