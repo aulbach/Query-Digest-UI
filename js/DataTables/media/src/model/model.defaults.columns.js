@@ -11,6 +11,7 @@ DataTable.defaults.columns = {
 	 * do a multi-column sort over the two columns.
 	 *  @type array
 	 *  @default null <i>Takes the value of the column index automatically</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -47,6 +48,7 @@ DataTable.defaults.columns = {
 	 * parameter.
 	 *  @type array
 	 *  @default [ 'asc', 'desc' ]
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -81,6 +83,7 @@ DataTable.defaults.columns = {
 	 * Enable or disable filtering on the data in this column.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -111,6 +114,7 @@ DataTable.defaults.columns = {
 	 * Enable or disable sorting on this column.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -141,8 +145,13 @@ DataTable.defaults.columns = {
 	 * When using fnRender() for a column, you may wish to use the original data
 	 * (before rendering) for sorting and filtering (the default is to used the
 	 * rendered data that the user can see). This may be useful for dates etc.
+	 * 
+	 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
+	 * use of the 'type' that it gives, allowing (potentially) different data to
+	 * be used for sorting, filtering, display and type detection.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -186,6 +195,7 @@ DataTable.defaults.columns = {
 	 * Enable or disable the display of this column.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -223,6 +233,7 @@ DataTable.defaults.columns = {
 	 *  @param {array|object} oData The data for the whole row
 	 *  @param {int} iRow The row index for the aoData data store
 	 *  @param {int} iCol The column index for aoColumns
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    $(document).ready(function() {
@@ -248,11 +259,12 @@ DataTable.defaults.columns = {
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
 	 *  @param {int}    o.iDataColumn The column in question
-	 *  @param {array   o.aData The data for the row in question
+	 *  @param {array}  o.aData The data for the row in question
 	 *  @param {object} o.oSettings The settings object for this DataTables instance
 	 *  @param {object} o.mDataProp The data property used for this column
 	 *  @param {*}      val The current cell value
 	 *  @returns {string} The string you which to use in the display
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -294,6 +306,7 @@ DataTable.defaults.columns = {
 	 * on hidden columns for example.
 	 *  @type int
 	 *  @default -1 <i>Use automatically calculated column index</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -324,17 +337,37 @@ DataTable.defaults.columns = {
 
 	/**
 	 * This property can be used to read data from any JSON data source property,
-	 * including deeply nested objects / properties. By default DataTables will
-	 * use an array index (incrementally increased for each column) as the data
-	 * source, but a string can be used for this property which will read an
-	 * object property from the data source, a function which will be given the
-	 * data source object to render into a string or null where the cell will be
-	 * treated as empty. For more information see
-	 * http://datatables.net/blog/Extended_data_source_options_with_DataTables
+	 * including deeply nested objects / properties. mDataProp can be given in a
+	 * number of different ways which effect its behaviour:
+	 *   <ul>
+	 *     <li>integer - treated as an array index for the data source. This is the
+	 *       default that DataTables uses (incrementally increased for each column).</li>
+	 *     <li>string - read an object property from the data source. Note that you can
+	 *       use Javascript dotted notation to read deep properties/arrays from the
+	 *       data source.</li>
+	 *     <li>null -  the sDafaultContent option will use used for the cell (empty
+	 *       string by default. This can be useful on generated columns such as
+	 *       edit / delete action columns.</li>
+	 *     <li>function - the function given will be executed whenever DataTables 
+	 *       needs to set or get the data for a cell in the column. The function 
+	 *       takes three parameters:
+	 *       <ul>
+	 *         <li>{array|object} The data source for the row</li>
+	 *         <li>{string} The type call data requested - this will be 'set' when
+	 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
+	 *           data.</li>
+	 *         <li>{*} Data to set when the second parameter is 'set'.</li>
+	 *       </ul>
+	 *       The return value from the function is not required when 'set' is the type
+	 *       of call, but otherwise the return is what will be used for the data
+	 *       requested.</li>
+	 *    </ul>
 	 *  @type string|int|function|null
 	 *  @default null <i>Use automatically calculated column index</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
+	 *    // Read table data from objects
 	 *    $(document).ready(function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/deep.txt",
@@ -347,6 +380,35 @@ DataTable.defaults.columns = {
 	 *        ]
 	 *      } );
 	 *    } );
+	 * 
+	 *  @example
+	 *    // Using mDataProp as a function to provide different information for
+	 *    // sorting, filtering and display. In this case, currency (price)
+	 *    $(document).ready(function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "aoColumnDefs": [
+	 *        {
+	 *          "aTargets": [ 0 ],
+	 *          "mDataProp": function ( source, type, val ) {
+	 *            if (type === 'set') {
+	 *              source.price = val;
+	 *              // Store the computed dislay and filter values for efficiency
+	 *              source.price_display = val=="" ? "" : "$"+numberFormat(val);
+	 *              source.price_filter  = val=="" ? "" : "$"+numberFormat(val)+" "+val;
+	 *              return;
+	 *            }
+	 *            else if (type === 'display') {
+	 *              return source.price_display;
+	 *            }
+	 *            else if (type === 'filter') {
+	 *              return source.price_filter;
+	 *            }
+	 *            // 'sort' and 'type' both just use the integer
+	 *            return source.price;
+	 *          }
+	 *        ]
+	 *      } );
+	 *    } );
 	 */
 	"mDataProp": null,
 
@@ -355,6 +417,7 @@ DataTable.defaults.columns = {
 	 * Class to give to each cell in this column.
 	 *  @type string
 	 *  @default <i>Empty string</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -395,6 +458,7 @@ DataTable.defaults.columns = {
 	 * general DataTables.net documentation
 	 *  @type string
 	 *  @default <i>Empty string<i>
+	 *  @dtopt Columns
 	 *    
 	 *  @example
 	 *    // Using aoColumns
@@ -420,6 +484,7 @@ DataTable.defaults.columns = {
 	 * is set to null, or because the data source itself is null).
 	 *  @type string
 	 *  @default null
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -463,6 +528,7 @@ DataTable.defaults.columns = {
 	 * client-side, your server-side code does not also need updating).
 	 *  @type string
 	 *  @default <i>Empty string</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -502,6 +568,7 @@ DataTable.defaults.columns = {
 	 * elements such as form inputs.
 	 *  @type string
 	 *  @default std
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -539,6 +606,7 @@ DataTable.defaults.columns = {
 	 *  @type string
 	 *  @default null <i>Derived from the 'TH' value for this column in the 
 	 *    original HTML table.</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -577,6 +645,7 @@ DataTable.defaults.columns = {
 	 * plug-ins.
 	 *  @type string
 	 *  @default null <i>Auto-detected from raw data</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -612,6 +681,7 @@ DataTable.defaults.columns = {
 	 * remains readable.
 	 *  @type string
 	 *  @default null <i>Automatic</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs

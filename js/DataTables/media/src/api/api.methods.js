@@ -3,7 +3,7 @@
 /**
  * Perform a jQuery selector action on the table's TR elements (from the tbody) and
  * return the resulting jQuery object.
- *  @param {string} sSelector jQuery selector
+ *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
  *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
  *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
  *    criterion ("applied") or all TR elements (i.e. no filter).
@@ -14,6 +14,7 @@
  *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
  *    'current' and filter is 'applied', regardless of what they might be given as.
  *  @returns {object} jQuery object, filtered by the given selector.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -108,6 +109,68 @@ this.$ = function ( sSelector, oOpts )
 
 
 /**
+ * Almost identical to $ in operation, but in this case returns the data for the matched
+ * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
+ * rather than any decendents, so the data can be obtained for the row/cell. If matching
+ * rows are found, the data returned is the original data array/object that was used to  
+ * create the row (or a generated array if from a DOM source).
+ *
+ * This method is often useful incombination with $ where both functions are given the
+ * same parameters and the array indexes will match identically.
+ *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
+ *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
+ *  @param {string} [oOpts.filter=none] Select elements that meet the current filter
+ *    criterion ("applied") or all elements (i.e. no filter).
+ *  @param {string} [oOpts.order=current] Order of the data in the processed array.
+ *    Can be either 'current', whereby the current sorting of the table is used, or
+ *    'original' whereby the original order the data was read into the table is used.
+ *  @param {string} [oOpts.page=all] Limit the selection to the currently displayed page
+ *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
+ *    'current' and filter is 'applied', regardless of what they might be given as.
+ *  @returns {array} Data for the matched elements. If any elements, as a result of the
+ *    selector, were not TR, TD or TH elements in the DataTable, they will have a null 
+ *    entry in the array.
+ *  @dtopt API
+ *
+ *  @example
+ *    $(document).ready(function() {
+ *      var oTable = $('#example').dataTable();
+ *
+ *      // Get the data from the first row in the table
+ *      var data = oTable._('tr:first');
+ *
+ *      // Do something useful with the data
+ *      alert( "First cell is: "+data[0] );
+ *    } );
+ *
+ *  @example
+ *    $(document).ready(function() {
+ *      var oTable = $('#example').dataTable();
+ *
+ *      // Filter to 'Webkit' and get all data for 
+ *      oTable.fnFilter('Webkit');
+ *      var data = oTable._('tr', {"filter": "applied"});
+ *      
+ *      // Do something with the data
+ *      alert( data.length+" rows matched the filter" );
+ *    } );
+ */
+this._ = function ( sSelector, oOpts )
+{
+	var aOut = [];
+	var i, iLen, iIndex;
+	var aTrs = this.$( sSelector, oOpts );
+
+	for ( i=0, iLen=aTrs.length ; i<iLen ; i++ )
+	{
+		aOut.push( this.fnGetData(aTrs[i]) );
+	}
+
+	return aOut;
+};
+
+
+/**
  * Add a single new row or multiple rows of data to the table. Please note
  * that this is suitable for client-side processing only - if you are using 
  * server-side processing (i.e. "bServerSide": true), then to add data, you
@@ -123,6 +186,7 @@ this.$ = function ( sSelector, oOpts )
  *  @returns {array} An array of integers, representing the list of indexes in 
  *    <i>aoData</i> ({@link DataTable.models.oSettings}) that have been added to 
  *    the table.
+ *  @dtopt API
  *
  *  @example
  *    // Global var for counter
@@ -157,7 +221,7 @@ this.fnAddData = function( mData, bRedraw )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	/* Check if we want to add multiple rows or not */
-	if ( typeof mData[0] === "object" )
+	if ( typeof mData[0] === "object" && mData[0] !== null )
 	{
 		for ( var i=0 ; i<mData.length ; i++ )
 		{
@@ -195,6 +259,7 @@ this.fnAddData = function( mData, bRedraw )
  * through the sWidth parameter). This can be useful when the width of the table's 
  * parent element changes (for example a window resize).
  *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -228,6 +293,7 @@ this.fnAdjustColumnSizing = function ( bRedraw )
 /**
  * Quickly and simply clear a table
  *  @param {bool} [bRedraw=true] redraw the table or not
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -255,6 +321,7 @@ this.fnClearTable = function( bRedraw )
  * are currently 'open'.
  *  @param {node} nTr the table row to 'close'
  *  @returns {int} 0 on success, or 1 if failed (can't find the row)
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -302,6 +369,7 @@ this.fnClose = function( nTr )
  *  @param {function|null} [fnCallBack] Callback function
  *  @param {bool} [bRedraw=true] Redraw the table or not
  *  @returns {array} The row that was deleted
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -315,13 +383,22 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 {
 	/* Find settings from table node */
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	var i, iAODataIndex;
+	var i, iLen, iAODataIndex;
 	
 	iAODataIndex = (typeof mTarget === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mTarget) : mTarget;
 	
 	/* Return the data array from this row */
 	var oData = oSettings.aoData.splice( iAODataIndex, 1 );
+
+	/* Update the _DT_RowIndex parameter */
+	for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+	{
+		if ( oSettings.aoData[i].nTr !== null )
+		{
+			oSettings.aoData[i].nTr._DT_RowIndex = i;
+		}
+	}
 	
 	/* Remove the target row from the search array */
 	var iDisplayIndex = $.inArray( iAODataIndex, oSettings.aiDisplay );
@@ -361,6 +438,7 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
  * Restore the table to it's original state in the DOM by removing all of DataTables 
  * enhancements, alterations to the DOM structure of the table and event listeners.
  *  @param {boolean} [bRemove=false] Completely remove the table from the DOM
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -491,6 +569,7 @@ this.fnDestroy = function ( bRemove )
 /**
  * Redraw the table
  *  @param {bool} [bComplete=true] Re-filter and resort (if enabled) the table before the draw.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -523,6 +602,7 @@ this.fnDraw = function( bComplete )
  *  @param {bool} [bSmart=true] Perform smart filtering or not
  *  @param {bool} [bShowGlobal=true] Show the input global filter in it's input box(es)
  *  @param {bool} [bCaseInsensitive=true] Do case-insensitive matching (true) or not (false)
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -561,7 +641,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 		bCaseInsensitive = true;
 	}
 	
-	if ( !iColumn )
+	if ( iColumn === undefined || iColumn === null )
 	{
 		/* Global filter */
 		_fnFilterComplete( oSettings, {
@@ -595,47 +675,68 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 
 
 /**
- * Return an array with the data which is used to make up the table
- * or string if both row and column are given
- *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
- *    internal index (mapped to the TR element)
- *  @param {int} [iCol] Optional column index that you want the data of
- *  @returns {array|string} If mRow is undefined, then the data for all rows is
+ * Get the data for the whole table, an individual row or an individual cell based on the 
+ * provided parameters.
+ *  @param {int|node} [mRow] A TR row node, TD/TH cell node or an integer. If given as
+ *    a TR node then the data source for the whole row will be returned. If given as a
+ *    TD/TH cell node then iCol will be automatically calculated and the data for the
+ *    cell returned. If given as an integer, then this is treated as the aoData internal
+ *    data index for the row (see fnGetPosition) and the data for that row used.
+ *  @param {int} [iCol] Optional column index that you want the data of.
+ *  @returns {array|object|string} If mRow is undefined, then the data for all rows is
  *    returned. If mRow is defined, just data for that row, and is iCol is
  *    defined, only data for the designated cell is returned.
+ *  @dtopt API
  *
  *  @example
+ *    // Row data
  *    $(document).ready(function() {
- *      $('#example tbody td').click( function () {
- *        // Get the position of the current data from the node
- *        var aPos = oTable.fnGetPosition( this );
- *        
- *        // Get the data array for this row
- *        var aData = oTable.fnGetData( this.parentNode );
- *        
- *        // Update the data array and return the value
- *        aData[ aPos[1] ] = 'clicked';
- *        this.innerHTML = 'clicked';
- *      } );
- *      
- *      // Init DataTables
  *      oTable = $('#example').dataTable();
+ *
+ *      oTable.$('tr').click( function () {
+ *        var data = oTable.fnGetData( this );
+ *        // ... do something with the array / object of data for the row
+ *      } );
+ *    } );
+ *
+ *  @example
+ *    // Individual cell data
+ *    $(document).ready(function() {
+ *      oTable = $('#example').dataTable();
+ *
+ *      oTable.$('td').click( function () {
+ *        var sData = oTable.fnGetData( this );
+ *        alert( 'The cell clicked on had the value of '+sData );
+ *      } );
  *    } );
  */
 this.fnGetData = function( mRow, iCol )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
-	if ( mRow )
+	if ( mRow !== undefined )
 	{
-		var iRow = (typeof mRow === 'object') ? 
-			_fnNodeToDataIndex(oSettings, mRow) : mRow;
-		
-		if ( iCol )
+		var iRow = mRow;
+		if ( typeof mRow === 'object' )
+		{
+			var sNode = mRow.nodeName.toLowerCase();
+			if (sNode === "tr" )
+			{
+				iRow = _fnNodeToDataIndex(oSettings, mRow);
+			}
+			else if ( sNode === "td" )
+			{
+				iRow = _fnNodeToDataIndex(oSettings, mRow.parentNode);
+				iCol = _fnNodeToColumnIndex( oSettings, iRow, mRow );
+			}
+		}
+
+		if ( iCol !== undefined )
 		{
 			return _fnGetCellData( oSettings, iRow, iCol, '' );
 		}
-		return oSettings.aoData[iRow]._aData;
+		return (oSettings.aoData[iRow]!==undefined) ?
+			oSettings.aoData[iRow]._aData : null;
 	}
 	return _fnGetDataMaster( oSettings );
 };
@@ -648,6 +749,7 @@ this.fnGetData = function( mRow, iCol )
  *  @param {int} [iRow] Optional row index for the TR element you want
  *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
  *    in the table's body, or iRow is defined, just the TR element requested.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -661,9 +763,11 @@ this.fnGetNodes = function( iRow )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
-	return (iRow) ?
-		oSettings.aoData[iRow].nTr :
-		_fnGetTrNodes( oSettings );
+	if ( iRow !== undefined ) {
+		return (oSettings.aoData[iRow]!==undefined) ?
+			oSettings.aoData[iRow].nTr : null;
+	}
+	return _fnGetTrNodes( oSettings );
 };
 
 
@@ -673,6 +777,7 @@ this.fnGetNodes = function( iRow )
  *  @param {node} nNode this can either be a TR, TD or TH in the table's body
  *  @returns {int} If nNode is given as a TR, then a single index is returned, or
  *    if given as a cell, an array of [row index, column index (visible)] is given.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -703,16 +808,9 @@ this.fnGetPosition = function( nNode )
 	}
 	else if ( sNodeName == "TD" || sNodeName == "TH" )
 	{
-		var iDataIndex = _fnNodeToDataIndex(oSettings, nNode.parentNode);
-		var anCells = _fnGetTdNodes( oSettings, iDataIndex );
-
-		for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
-		{
-			if ( anCells[i] == nNode )
-			{
-				return [ iDataIndex, _fnColumnIndexToVisible(oSettings, i ), i ];
-			}
-		}
+		var iDataIndex = _fnNodeToDataIndex( oSettings, nNode.parentNode );
+		var iColumnIndex = _fnNodeToColumnIndex( oSettings, iDataIndex, nNode );
+		return [ iDataIndex, _fnColumnIndexToVisible(oSettings, iColumnIndex ), iColumnIndex ];
 	}
 	return null;
 };
@@ -722,6 +820,7 @@ this.fnGetPosition = function( nNode )
  * Check to see if a row is 'open' or not.
  *  @param {node} nTr the table row to check
  *  @returns {boolean} true if the row is currently open, false otherwise
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -742,6 +841,7 @@ this.fnGetPosition = function( nNode )
 this.fnIsOpen = function( nTr )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+	var aoOpenRows = oSettings.aoOpenRows;
 	
 	for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
 	{
@@ -762,7 +862,10 @@ this.fnIsOpen = function( nTr )
  *  @param {node} nTr The table row to 'open'
  *  @param {string|node|jQuery} mHtml The HTML to put into the row
  *  @param {string} sClass Class to give the new TD cell
- *  @returns {node} The row opened
+ *  @returns {node} The row opened. Note that if the table row passed in as the
+ *    first parameter, is not found in the table, this method will silently
+ *    return.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -784,6 +887,13 @@ this.fnOpen = function( nTr, mHtml, sClass )
 {
 	/* Find settings from table node */
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+
+	/* Check that the row given is in the table */
+	var nTableRows = _fnGetTrNodes( oSettings );
+	if ( $.inArray(nTr, nTableRows) === -1 )
+	{
+		return;
+	}
 	
 	/* the old open one if there is one */
 	this.fnClose( nTr );
@@ -794,18 +904,18 @@ this.fnOpen = function( nTr, mHtml, sClass )
 	nNewCell.className = sClass;
 	nNewCell.colSpan = _fnVisbleColumns( oSettings );
 
-	if( mHtml.jquery !== undefined || typeof mHtml === "object" )
+	if (typeof mHtml === "string")
 	{
-		nNewCell.appendChild( mHtml );
+		nNewCell.innerHTML = mHtml;
 	}
 	else
 	{
-		nNewCell.innerHTML = mHtml;
+		$(nNewCell).html( mHtml );
 	}
 
 	/* If the nTr isn't on the page at the moment - then we don't insert at the moment */
 	var nTrs = $('tr', oSettings.nTBody);
-	if ( $.inArray(nTr, nTrs) != -1 )
+	if ( $.inArray(nTr, nTrs) != -1  )
 	{
 		$(nNewRow).insertAfter(nTr);
 	}
@@ -826,6 +936,7 @@ this.fnOpen = function( nTr, mHtml, sClass )
  *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
  *    or page number to jump to (integer), note that page 0 is the first page.
  *  @param {bool} [bRedraw=true] Redraw the table or not
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -851,6 +962,7 @@ this.fnPageChange = function ( mAction, bRedraw )
  *  @param {int} iCol The column whose display should be changed
  *  @param {bool} bShow Show (true) or hide (false) the column
  *  @param {bool} [bRedraw=true] Redraw the table or not
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -864,11 +976,12 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var i, iLen;
-	var iColumns = oSettings.aoColumns.length;
+	var aoColumns = oSettings.aoColumns;
+	var aoData = oSettings.aoData;
 	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
 	
 	/* No point in doing anything if we are requesting what is already true */
-	if ( oSettings.aoColumns[iCol].bVisible == bShow )
+	if ( aoColumns[iCol].bVisible == bShow )
 	{
 		return;
 	}
@@ -879,7 +992,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		var iInsert = 0;
 		for ( i=0 ; i<iCol ; i++ )
 		{
-			if ( oSettings.aoColumns[i].bVisible )
+			if ( aoColumns[i].bVisible )
 			{
 				iInsert++;
 			}
@@ -891,9 +1004,9 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		/* Which coloumn should we be inserting before? */
 		if ( !bAppend )
 		{
-			for ( i=iCol ; i<iColumns ; i++ )
+			for ( i=iCol ; i<aoColumns.length ; i++ )
 			{
-				if ( oSettings.aoColumns[i].bVisible )
+				if ( aoColumns[i].bVisible )
 				{
 					iBefore = i;
 					break;
@@ -901,20 +1014,20 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 			}
 		}
 
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
-			if ( oSettings.aoData[i].nTr !== null )
+			if ( aoData[i].nTr !== null )
 			{
 				if ( bAppend )
 				{
-					oSettings.aoData[i].nTr.appendChild( 
-						oSettings.aoData[i]._anHidden[iCol]
+					aoData[i].nTr.appendChild( 
+						aoData[i]._anHidden[iCol]
 					);
 				}
 				else
 				{
-					oSettings.aoData[i].nTr.insertBefore(
-						oSettings.aoData[i]._anHidden[iCol], 
+					aoData[i].nTr.insertBefore(
+						aoData[i]._anHidden[iCol], 
 						_fnGetTdNodes( oSettings, i )[iBefore] );
 				}
 			}
@@ -923,19 +1036,19 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	else
 	{
 		/* Remove a column from display */
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
-			if ( oSettings.aoData[i].nTr !== null )
+			if ( aoData[i].nTr !== null )
 			{
 				nTd = _fnGetTdNodes( oSettings, i )[iCol];
-				oSettings.aoData[i]._anHidden[iCol] = nTd;
+				aoData[i]._anHidden[iCol] = nTd;
 				nTd.parentNode.removeChild( nTd );
 			}
 		}
 	}
 
 	/* Clear to set the visible flag */
-	oSettings.aoColumns[iCol].bVisible = bShow;
+	aoColumns[iCol].bVisible = bShow;
 
 	/* Redraw the header and footer based on the new column visibility */
 	_fnDrawHead( oSettings, oSettings.aoHeader );
@@ -967,6 +1080,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
  * Get the settings for a particular table for external manipulation
  *  @returns {object} DataTables settings object. See 
  *    {@link DataTable.models.oSettings}
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -987,6 +1101,7 @@ this.fnSettings = function()
  * Sort the table by a particular row
  *  @param {int} iCol the data index to sort on. Note that this will not match the 
  *    'display index' if you have hidden data entries
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1009,6 +1124,7 @@ this.fnSort = function( aaSort )
  *  @param {node} nNode the element to attach the sort listener to
  *  @param {int} iColumn the column that a click on this node will sort on
  *  @param {function} [fnCallback] callback function when sort is run
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1036,6 +1152,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
  *  @param {bool} [bRedraw=true] Redraw the table or not
  *  @param {bool} [bAction=true] Perform predraw actions or not
  *  @returns {int} 0 on success, 1 on error
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1079,20 +1196,13 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	else
 	{
 		/* Individual cell update */
-		sDisplay = mData;
-		_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+		_fnSetCellData( oSettings, iRow, iColumn, mData );
+		sDisplay = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 		
 		var oCol = oSettings.aoColumns[iColumn];
 		if ( oCol.fnRender !== null )
 		{
-			sDisplay = oCol.fnRender( {
-				"iDataRow": iRow,
-				"iDataColumn": iColumn,
-				"aData": oSettings.aoData[iRow]._aData,
-				"oSettings": oSettings,
-				"mDataProp": oCol.mDataProp
-			}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
-			
+			sDisplay = _fnRender( oSettings, iRow, iColumn );
 			if ( oCol.bUseRendered )
 			{
 				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
@@ -1136,6 +1246,7 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
  *  @returns {boolean} true if this version of DataTables is greater or equal to the required
  *    version, or false if this version of DataTales is not suitable
  *  @method
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {

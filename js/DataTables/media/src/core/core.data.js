@@ -34,13 +34,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 		/* Use rendered data for filtering/sorting */
 		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
 		{
-			_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
-				"iDataRow": iRow,
-				"iDataColumn": i,
-				"aData": oData._aData,
-				"oSettings": oSettings,
-				"mDataProp": oCol.mDataProp
-			}, _fnGetCellData(oSettings, iRow, i, 'display') ) );
+			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
 		}
 		
 		/* See if we should auto-detect the column type */
@@ -102,6 +96,7 @@ function _fnGatherData( oSettings )
 			if ( nTrs[i].nodeName.toUpperCase() == "TR" )
 			{
 				iThisIndex = oSettings.aoData.length;
+				nTrs[i]._DT_RowIndex = iThisIndex;
 				oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
 					"nTr": nTrs[i]
 				} ) );
@@ -187,17 +182,16 @@ function _fnGatherData( oSettings )
 						}
 					}
 				}
+
+				if ( typeof oCol.mDataProp === 'function' )
+				{
+					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
+				}
 				
 				/* Rendering */
 				if ( bRender )
 				{
-					sRendered = oCol.fnRender( {
-							"iDataRow": iRow,
-							"iDataColumn": iColumn,
-							"aData": oData._aData,
-							"oSettings": oSettings,
-							"mDataProp": oCol.mDataProp
-						}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
+					sRendered = _fnRender( oSettings, iRow, iColumn );
 					nCell.innerHTML = sRendered;
 					if ( oCol.bUseRendered )
 					{
@@ -247,35 +241,37 @@ function _fnGatherData( oSettings )
 
 /**
  * Take a TR element and convert it to an index in aoData
- *  @param {object} s dataTables settings object
+ *  @param {object} oSettings dataTables settings object
  *  @param {node} n the TR element to find
- *  @returns {int} index if found, null if not
+ *  @returns {int} index if the node is found, null if not
  *  @memberof DataTable#oApi
  */
-function _fnNodeToDataIndex( s, n )
+function _fnNodeToDataIndex( oSettings, n )
 {
-	var i, iLen;
-	
-	/* Optimisation - see if the nodes which are currently visible match, since that is
-	 * the most likely node to be asked for (a selector or event for example)
-	 */
-	for ( i=s._iDisplayStart, iLen=s._iDisplayEnd ; i<iLen ; i++ )
+	return (n._DT_RowIndex!==undefined) ? n._DT_RowIndex : null;
+}
+
+
+/**
+ * Take a TD element and convert it into a column data index (not the visible index)
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow The row number the TD/TH can be found in
+ *  @param {node} n The TD/TH element to find
+ *  @returns {int} index if the node is found, -1 if not
+ *  @memberof DataTable#oApi
+ */
+function _fnNodeToColumnIndex( oSettings, iRow, n )
+{
+	var anCells = _fnGetTdNodes( oSettings, iRow );
+
+	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
-		if ( s.aoData[ s.aiDisplay[i] ].nTr == n )
-		{
-			return s.aiDisplay[i];
-		}
-	}
-	
-	/* Otherwise we are in for a slog through the whole data cache */
-	for ( i=0, iLen=s.aoData.length ; i<iLen ; i++ )
-	{
-		if ( s.aoData[i].nTr == n )
+		if ( anCells[i] === n )
 		{
 			return i;
 		}
 	}
-	return null;
+	return -1;
 }
 
 
@@ -378,39 +374,30 @@ function _fnGetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'function' )
 	{
-	    return function (data, type) {
-	        return mSource( data, type );
-	    };
+		return function (data, type) {
+			return mSource( data, type );
+		};
 	}
 	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
-		/* If there is a . in the source string then the data source is in a nested object
-		 * we provide two 'quick' functions for the look up to speed up the most common
-		 * operation, and a generalised one for when it is needed
+		/* If there is a . in the source string then the data source is in a 
+		 * nested object so we loop over the data for each level to get the next
+		 * level down. On each loop we test for undefined, and if found immediatly
+		 * return. This allows entire objects to be missing and sDefaultContent to
+		 * be used if defined, rather than throwing an error
 		 */
 		var a = mSource.split('.');
-		if ( a.length == 2 )
-		{
-			return function (data, type) {
-				return data[ a[0] ][ a[1] ];
-			};
-		}
-		else if ( a.length == 3 )
-		{
-			return function (data, type) {
-				return data[ a[0] ][ a[1] ][ a[2] ];
-			};
-		}
-		else
-		{
-			return function (data, type) {
-				for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+		return function (data, type) {
+			for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+			{
+				data = data[ a[i] ];
+				if ( data === undefined )
 				{
-					data = data[ a[i] ];
+					return undefined;
 				}
-				return data;
-			};
-		}
+			}
+			return data;
+		};
 	}
 	else
 	{
@@ -438,38 +425,21 @@ function _fnSetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'function' )
 	{
-	    return function (data, val) {
-	        return mSource( data, val );
-	    };
+		return function (data, val) {
+			mSource( data, 'set', val );
+		};
 	}
 	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
-		/* Like the get, we need to get data from a nested object. Again two fast lookup
-		 * functions are provided, and a generalised one.
-		 */
+		/* Like the get, we need to get data from a nested object.  */
 		var a = mSource.split('.');
-		if ( a.length == 2 )
-		{
-			return function (data, val) {
-				data[ a[0] ][ a[1] ] = val;
-			};
-		}
-		else if ( a.length == 3 )
-		{
-			return function (data, val) {
-				data[ a[0] ][ a[1] ][ a[2] ] = val;
-			};
-		}
-		else
-		{
-			return function (data, val) {
-				for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
-				{
-					data = data[ a[i] ];
-				}
-				data[ a[a.length-1] ] = val;
-			};
-		}
+		return function (data, val) {
+			for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
+			{
+				data = data[ a[i] ];
+			}
+			data[ a[a.length-1] ] = val;
+		};
 	}
 	else
 	{
@@ -542,3 +512,25 @@ function _fnDeleteIndex( a, iTarget )
 	}
 }
 
+
+ /**
+ * Call the developer defined fnRender function for a given cell (row/column) with
+ * the required parameters and return the result.
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow aoData index for the row
+ *  @param {int} iCol aoColumns index for the column
+ *  @returns {*} Return of the developer's fnRender function
+ *  @memberof DataTable#oApi
+ */
+function _fnRender( oSettings, iRow, iCol )
+{
+	var oCol = oSettings.aoColumns[iCol];
+
+	return oCol.fnRender( {
+		"iDataRow":    iRow,
+		"iDataColumn": iCol,
+		"oSettings":   oSettings,
+		"aData":       oSettings.aoData[iRow]._aData,
+		"mDataProp":   oCol.mDataProp
+	}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
+}

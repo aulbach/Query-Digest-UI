@@ -29,11 +29,12 @@ function _fnSettingsFromNode ( nTable )
 function _fnGetTrNodes ( oSettings )
 {
 	var aNodes = [];
-	for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+	var aoData = oSettings.aoData;
+	for ( var i=0, iLen=aoData.length ; i<iLen ; i++ )
 	{
-		if ( oSettings.aoData[i].nTr !== null )
+		if ( aoData[i].nTr !== null )
 		{
-			aNodes.push( oSettings.aoData[i].nTr );
+			aNodes.push( aoData[i].nTr );
 		}
 	}
 	return aNodes;
@@ -57,7 +58,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 		iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 	
 	/* Allow the collection to be limited to just one row */
-	if ( iIndividualRow )
+	if ( iIndividualRow !== undefined )
 	{
 		iStart = iIndividualRow;
 		iEnd = iIndividualRow+1;
@@ -273,7 +274,7 @@ function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
  *  @returns {string} JSON string
  *  @memberof DataTable#oApi
  */
-var _fnJsonString = (JSON.stringify) ? JSON.stringify : function( o )
+var _fnJsonString = (window.JSON) ? JSON.stringify : function( o )
 {
 	/* Not an object or array */
 	var sType = typeof o;

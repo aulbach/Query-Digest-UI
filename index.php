@@ -2,11 +2,11 @@
     require_once('init.php');
 
 	$users = Database::find('review')->query('SELECT DISTINCT reviewed_by FROM '.Database::escapeField($reviewhost['review_table']).' WHERE reviewed_by IS NOT NULL');
-    $Reviewers = "[ 'None' ";
+    $Reviewers = " 'None' ";
     while(($user = $users->fetch_col()) !== false)
 		if (strlen($user))
 			$Reviewers .= ",'$user' ";
-    $Reviewers .= " ]";
+    $Reviewers .= " ";
     unset($users);
 
 	require_once('templates/header.php');
@@ -86,23 +86,7 @@
                     margin:         10
                 });
                 return true;
-            },
-			"fnStateSaveCallback": function(oSettings, oData) {
-				oData.aoSearchCols = [];
-				oData.oFilter = [];
-				oData.oSearch = [];
-				return true;
-			},
-			"fnStateLoadCallback": function(oSettings, oData) {
-				oData.aoSearchCols = [];
-				oData.oFilter = [];
-				oData.oSearch = [];
-				oldVis = [];
-				if (typeof oData.abVisCols == "object")
-					oldVis = oData.abVisCols;
-				oData.abVisCols = [];
-				return true;
-			}
+            }
 		}).columnFilter({
 			bUseColVis: true,
 			sPlaceHolder: 'tfoot',
@@ -114,7 +98,7 @@
 				{ type: "date-range" },
 				{ type: "text" },
 				{ type: "date-range" },
-				{ type: "select", values: <?php echo $Reviewers; ?> },
+				{ type: "select", values: [<?php echo $Reviewers; ?>] },
 				{ type: "text" },
 				null
 			]

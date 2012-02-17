@@ -11,11 +11,11 @@
 		<script src="js/DataTables/media/js/jquery.dataTables.js" type="text/javascript"></script>
 		<script src="js/DataTables/extras/jquery-datatables-column-filter/media/js/jquery.dataTables.columnFilter.js" type="text/javascript"></script>
 
-		<script src="js/DataTables/extras/ColVis-1.0.6/media/js/ColVis.min.js" type="text/javascript"></script>
-		<link rel="stylesheet" href="js/DataTables/extras/ColVis-1.0.6/media/css/ColVis.css" media="screen" >
+		<script src="js/DataTables/extras/ColVis/media/js/ColVis.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="js/DataTables/extras/ColVis/media/css/ColVis.css" media="screen" >
 
-		<script src="js/DataTables/extras/ColReorder-1.0.4/media/js/ColReorder.min.js" type="text/javascript"></script>
-		<link rel="stylesheet" href="js/DataTables/extras/ColReorder-1.0.4/media/css/ColReorder.css" media="screen" >
+		<script src="js/DataTables/extras/ColReorder/media/js/ColReorder.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="js/DataTables/extras/ColReorder/media/css/ColReorder.css" media="screen" >
 
 		<link rel="stylesheet" href="js/fancybox/jquery.fancybox-1.3.4.css" media="screen" >
 		<script src="js/fancybox/jquery.fancybox-1.3.4.pack.js" type="text/javascript"></script>
