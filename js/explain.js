@@ -25,7 +25,7 @@ $(function() {
                       ret = $('#explainPlan').dataTable().fnAddData([
                           data.Explain[i].id,
                           data.Explain[i].select_type,
-                          $(data.Explain[i].table),
+                          data.Explain[i].table,
                           data.Explain[i].type,
                           data.Explain[i].possible_keys,
                           data.Explain[i].key,
