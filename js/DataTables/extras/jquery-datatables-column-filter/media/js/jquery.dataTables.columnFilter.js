@@ -1,9 +1,9 @@
 ﻿/*
 * File:        jquery.dataTables.columnFilter.js
-* Version:     1.4.1.
+* Version:     1.4.7.
 * Author:      Jovan Popovic 
 * 
-* Copyright 2011 Jovan Popovic, all rights reserved.
+* Copyright 2011-2012 Jovan Popovic, all rights reserved.
 *
 * This source file is free software, under either the GPL v2 license or a
 * BSD style license, as supplied with this software.
@@ -47,9 +47,6 @@
 
             // check that we have a column id
             if (typeof iColumn == "undefined") return new Array();
-            if (iColumn == null) return new Array();
-            // Handle hidden columns
-            iColumn = oTable.oApi._fnVisibleToColumnIndex(oTable.fnSettings(), iColumn);
 
             // by default we only wany unique data
             if (typeof bUnique == "undefined") bUnique = true;
@@ -86,7 +83,7 @@
                 else asResultData.push(sValue);
             }
 
-            return asResultData;
+            return asResultData.sort();
         }
 
         function _fnColumnIndex(iColumnIndex) {
@@ -98,7 +95,7 @@
             //return oTable.fnSettings().oApi._fnColumnIndexToVisible(oTable.fnSettings(), iColumnIndex);
         }
 
-        function fnCreateInput(oTable, regex, smart, bIsNumber, iFilterLength) {
+        function fnCreateInput(oTable, regex, smart, bIsNumber, iFilterLength, iMaxLenght) {
             var sCSSClass = "text_filter";
             if (bIsNumber)
                 sCSSClass = "number_filter";
@@ -107,55 +104,57 @@
             var currentFilter = oTable.fnSettings().aoPreSearchCols[i].sSearch;
             var search_init = 'search_init ';
             var inputvalue = label;
-            if(currentFilter != '' && currentFilter != '^') {
-	    	if(bIsNumber && currentFilter.charAt(0) == '^')
-	    		inputvalue = currentFilter.substr(1); //ignore trailing ^
-		else
-            		inputvalue = currentFilter;
-            	search_init = '';
+            if (currentFilter != '' && currentFilter != '^') {
+                if (bIsNumber && currentFilter.charAt(0) == '^')
+                    inputvalue = currentFilter.substr(1); //ignore trailing ^
+                else
+                    inputvalue = currentFilter;
+                search_init = '';
             }
-            
+
             var input = $('<input type="text" class="' + search_init + sCSSClass + '" value="' + inputvalue + '"/>');
+            if (iMaxLenght != undefined && iMaxLenght != -1) {
+                input.attr('maxlength', iMaxLenght);
+            }
             th.html(input);
             if (bIsNumber)
                 th.wrapInner('<span class="filter_column filter_number" />');
             else
                 th.wrapInner('<span class="filter_column filter_text" />');
+
             asInitVals[i] = label;
             var index = i;
 
             if (bIsNumber && !oTable.fnSettings().oFeatures.bServerSide) {
                 input.keyup(function () {
                     /* Filter on the column all numbers that starts with the entered value */
-                    oTable.fnFilter('^' + this.value, _fnColumnIndex(index), true, false);//Issue 37
+                    oTable.fnFilter('^' + this.value, _fnColumnIndex(index), true, false); //Issue 37
                     fnOnFiltered();
                 });
             } else {
                 input.keyup(function () {
-                	if(oTable.fnSettings().oFeatures.bServerSide && iFilterLength!=0) {
-				//If filter length is set in the server-side processing mode
-				//Check has the user entered at least iFilterLength new characters
-				
-                		var currentFilter = oTable.fnSettings().aoPreSearchCols[index].sSearch;
-                		var iLastFilterLength = $(this).data("dt-iLastFilterLength");
-				if(typeof iLastFilterLength == "undefined")
-					iLastFilterLength = 0;
-				var iCurrentFilterLength = this.value.length;
-				if(	Math.abs(iCurrentFilterLength - iLastFilterLength) < iFilterLength
-					//&& currentFilter.length == 0 //Why this?
-					)
-				{
-					//Cancel the filtering
-					return;
-				}
-				else
-				{
-					//Remember the current filter length
-					$(this).data("dt-iLastFilterLength", iCurrentFilterLength );	
-				}
-                	}
-            		/* Filter on the column (the index) of this element */
-                    oTable.fnFilter(this.value, _fnColumnIndex(index), regex, smart);//Issue 37
+                    if (oTable.fnSettings().oFeatures.bServerSide && iFilterLength != 0) {
+                        //If filter length is set in the server-side processing mode
+                        //Check has the user entered at least iFilterLength new characters
+
+                        var currentFilter = oTable.fnSettings().aoPreSearchCols[index].sSearch;
+                        var iLastFilterLength = $(this).data("dt-iLastFilterLength");
+                        if (typeof iLastFilterLength == "undefined")
+                            iLastFilterLength = 0;
+                        var iCurrentFilterLength = this.value.length;
+                        if (Math.abs(iCurrentFilterLength - iLastFilterLength) < iFilterLength
+                        //&& currentFilter.length == 0 //Why this?
+					        ) {
+                            //Cancel the filtering
+                            return;
+                        }
+                        else {
+                            //Remember the current filter length
+                            $(this).data("dt-iLastFilterLength", iCurrentFilterLength);
+                        }
+                    }
+                    /* Filter on the column (the index) of this element */
+                    oTable.fnFilter(this.value, _fnColumnIndex(index), regex, smart); //Issue 37
                     fnOnFiltered();
                 });
             }
@@ -202,7 +201,7 @@
 	        function (oSettings, aData, iDataIndex) {
 	            if (oTable.attr("id") != oSettings.sTableId)
 	                return true;
-				// Try to handle missing nodes more gracefully
+	            // Try to handle missing nodes more gracefully
 	            if (document.getElementById(sFromId) == null)
 	                return true;
 	            var iMin = document.getElementById(sFromId).value * 1;
@@ -309,7 +308,7 @@
 
         }
 
-        function fnCreateColumnSelect(oTable, aData, iColumn, nTh, sLabel) {
+        function fnCreateColumnSelect(oTable, aData, iColumn, nTh, sLabel, bRegex) {
             if (aData == null)
                 aData = _fnGetColumnValues(oTable.fnSettings(), iColumn, true, false, true);
             var index = iColumn;
@@ -320,14 +319,20 @@
             var iLen = aData.length;
             for (j = 0; j < iLen; j++) {
                 if (typeof (aData[j]) != 'object') {
-                	var selected = '';
-                	if(escape(aData[j]) == currentFilter) selected = 'selected '
+                    var selected = '';
+                    if (escape(aData[j]) == currentFilter) selected = 'selected '
                     r += '<option ' + selected + ' value="' + escape(aData[j]) + '">' + aData[j] + '</option>';
                 }
                 else {
-                	var selected = '';
-                	if(escape(aData[j].value) == currentFilter) selected = 'selected '
-                    r += '<option ' + selected + 'value="' + escape(aData[j].value) + '">' + aData[j].label + '</option>';
+                    var selected = '';
+                    if (bRegex) {
+                        //Do not escape values if they are explicitely set to avoid escaping special characters in the regexp
+                        if (aData[j].value == currentFilter) selected = 'selected ';
+                        r += '<option ' + selected + 'value="' + aData[j].value + '">' + aData[j].label + '</option>';
+                    } else {
+                        if (escape(aData[j].value) == currentFilter) selected = 'selected ';
+                        r += '<option ' + selected + 'value="' + escape(aData[j].value) + '">' + aData[j].label + '</option>';
+                    }
                 }
             }
 
@@ -341,12 +346,15 @@
                 } else {
                     $(this).addClass("search_init");
                 }
-                oTable.fnFilter(unescape($(this).val()), iColumn); //Issue 37
+                if (bRegex)
+                    oTable.fnFilter($(this).val(), iColumn, bRegex); //Issue 41
+                else
+                    oTable.fnFilter(unescape($(this).val()), iColumn); //Issue 25
                 fnOnFiltered();
             });
         }
 
-        function fnCreateSelect(oTable, aData) {
+        function fnCreateSelect(oTable, aData, bRegex) {
             var oSettings = oTable.fnSettings();
             if (aData == null && oSettings.sAjaxSource != "" && !oSettings.oFeatures.bServerSide) {
                 // Add a function to the draw callback, which will check for the Ajax data having 
@@ -358,7 +366,7 @@
                             // Only rebuild the select on the second draw - i.e. when the Ajax
                             // data has been loaded.
                             if (oSettings.iDraw == 2 && oSettings.sAjaxSource != null && oSettings.sAjaxSource != "" && !oSettings.oFeatures.bServerSide) {
-                                return fnCreateColumnSelect(oTable, null, _fnColumnIndex(iColumn), nTh, sLabel); //Issue 37
+                                return fnCreateColumnSelect(oTable, null, _fnColumnIndex(iColumn), nTh, sLabel, bRegex); //Issue 37
                             }
                         };
                     })(i, th, label),
@@ -366,14 +374,7 @@
                 });
             }
             // Regardless of the Ajax state, build the select on first pass
-            fnCreateColumnSelect(oTable, aData, _fnColumnIndex(i), th, label); //Issue 37
-
-            /*
-            var fnOnFilteredCurrent = fnOnFiltered;
-            fnOnFiltered = function(){
-            fnCreateColumnSelect(oTable, aData, i, th, label);
-            fnOnFilteredCurrent();
-            };*/
+            fnCreateColumnSelect(oTable, aData, _fnColumnIndex(i), th, label, bRegex); //Issue 37
 
         }
 
@@ -574,142 +575,111 @@
             if (!oTable.fnSettings().oFeatures.bFilter)
                 return;
             asInitVals = new Array();
-            var sFilterRow = "tfoot tr";
-            if (properties.sPlaceHolder == "head:after") {
-                var tr = $("thead tr:last", oTable).detach();
-		if(oTable.fnSettings().bSortCellsTop)
-		{
-                	tr.appendTo($("thead", oTable));
-		}
-		else
-	    	{
-	    		tr.prependTo($("thead", oTable));
-	    	}
-                sFilterRow = "thead tr:last";
-            } else if (properties.sPlaceHolder == "head:before") {
-                var tr = $("thead tr:first", oTable).detach();
-                //tr.attr("id", 1);
-				if(oTable.fnSettings().bSortCellsTop)
-				{
-                	tr.appendTo($("thead", oTable));
-				}
-				else
-				{
-                tr.prependTo($("thead", oTable));
-				}
-                sFilterRow = "thead tr:first";
-            }
-			
-			if (sFilterRow == "tfoot tr") {
-				var cols = oTable.fnSettings().aoColumns;
-				jQuery.each(cols, function(index, value) {
-					i = index;
-					var aoColumn = { type: "text",
-						bRegex: false,
-						bSmart: true,
-						iFilterLength: 0
-					};
-					if (properties.aoColumns != null) {
-						if (properties.aoColumns.length < i || properties.aoColumns[i] == null)
-							return;
-						aoColumn = properties.aoColumns[i];
-					}
-					label = "";
-					
-					th = $(value.nTf);
 
-					if (aoColumn != null) {
-						if (aoColumn.sRangeFormat != null)
-							sRangeFormat = aoColumn.sRangeFormat;
-						else
-							sRangeFormat = properties.sRangeFormat
-						switch (aoColumn.type) {
-							case "null":
-								break;
-							case "number":
-								fnCreateInput(oTable, true, false, true, aoColumn.iFilterLength);
-								break;
-							case "select":
-								fnCreateSelect(oTable, aoColumn.values);
-								break;
-							case "number-range":
-								fnCreateRangeInput(oTable);
-								break;
-							case "date-range":
-								fnCreateDateRangeInput(oTable);
-								break;
-							case "checkbox":
-								fnCreateCheckbox(oTable, aoColumn.values);
-								break;
-							case "text":
-							default:
-								bRegex = (aoColumn.bRegex == null ? false : aoColumn.bRegex);
-								bSmart = (aoColumn.bSmart == null ? false : aoColumn.bSmart);
-								fnCreateInput(oTable, bRegex, bSmart, false, aoColumn.iFilterLength);
-								break;
-	
-						}
-					}
-					
-				});
-			}
-			else {
-				$(sFilterRow + " th", oTable).each(function (index) {
-					i = index;
-					var aoColumn = { type: "text",
-						bRegex: false,
-						bSmart: true,
-						iFilterLength: 0
-					};
-					if (properties.aoColumns != null) {
-						if (properties.aoColumns.length < i || properties.aoColumns[i] == null)
-							return;
-						aoColumn = properties.aoColumns[i];
-					}
-					label = $(this).text(); //"Search by " + $(this).text();
-					if (aoColumn.sSelector == null)
-						th = $($(this)[0]);
-					else {
-						th = $(aoColumn.sSelector);
-						if (th.length == 0)
-							th = $($(this)[0]);
-					}
-	
-					if (aoColumn != null) {
-						if (aoColumn.sRangeFormat != null)
-							sRangeFormat = aoColumn.sRangeFormat;
-						else
-							sRangeFormat = properties.sRangeFormat
-						switch (aoColumn.type) {
-							case "null":
-								break;
-							case "number":
-								fnCreateInput(oTable, true, false, true, aoColumn.iFilterLength);
-								break;
-	
-							case "select":
-								fnCreateSelect(oTable, aoColumn.values);
-								break;
-							case "number-range":
-								fnCreateRangeInput(oTable);
-								break;
-							case "date-range":
-								fnCreateDateRangeInput(oTable);
-								break;
-							case "checkbox":
-								fnCreateCheckbox(oTable, aoColumn.values);
-								break;
-							case "text":
-							default:
-								bRegex = (aoColumn.bRegex == null ? false : aoColumn.bRegex);
-								bSmart = (aoColumn.bSmart == null ? false : aoColumn.bSmart);
-								fnCreateInput(oTable, bRegex, bSmart, false, aoColumn.iFilterLength);
-								break;
-	
-						}
-					}
-				});
-			}
+            aoFilterCells = oTable.fnSettings().aoFooter[0];
+
+            var oHost = oTable.fnSettings().nTFoot; //Before fix for ColVis
+            var sFilterRow = "tr"; //Before fix for ColVis
+
+            if (properties.sPlaceHolder == "head:after") {
+                var tr = $("tr:first", oTable.fnSettings().nTHead).detach();
+                //tr.appendTo($(oTable.fnSettings().nTHead));
+                if (oTable.fnSettings().bSortCellsTop) {
+                    tr.prependTo($(oTable.fnSettings().nTHead));
+                    //tr.appendTo($("thead", oTable));
+                    aoFilterCells = oTable.fnSettings().aoHeader[1];
+                }
+                else {
+                    tr.appendTo($(oTable.fnSettings().nTHead));
+                    //tr.prependTo($("thead", oTable));
+                    aoFilterCells = oTable.fnSettings().aoHeader[0];
+                }
+
+                sFilterRow = "tr:last";
+                oHost = oTable.fnSettings().nTHead;
+
+            } else if (properties.sPlaceHolder == "head:before") {
+
+                if (oTable.fnSettings().bSortCellsTop) {
+                    var tr = $("tr:first", oTable.fnSettings().nTHead).detach();
+                    tr.appendTo($(oTable.fnSettings().nTHead));
+                    aoFilterCells = oTable.fnSettings().aoHeader[1];
+                } else {
+                    aoFilterCells = oTable.fnSettings().aoHeader[0];
+                }
+                /*else {
+                //tr.prependTo($("thead", oTable));
+                sFilterRow = "tr:first";
+                }*/
+
+                sFilterRow = "tr:first";
+
+                oHost = oTable.fnSettings().nTHead;
+
+                
+            }
+
+            //$(sFilterRow + " th", oHost).each(function (index) {//bug with ColVis
+            $(aoFilterCells).each(function (index) {//fix for ColVis
+                i = index;
+                var aoColumn = { type: "text",
+                    bRegex: false,
+                    bSmart: true,
+                    iMaxLenght: -1,
+                    iFilterLength: 0
+                };
+                if (properties.aoColumns != null) {
+                    if (properties.aoColumns.length < i || properties.aoColumns[i] == null)
+                        return;
+                    aoColumn = properties.aoColumns[i];
+                }
+                //label = $(this).text(); //Before fix for ColVis
+                label = $($(this)[0].cell).text(); //Fix for ColVis
+                if (aoColumn.sSelector == null) {
+                    //th = $($(this)[0]);//Before fix for ColVis
+                    th = $($(this)[0].cell); //Fix for ColVis
+                }
+                else {
+                    th = $(aoColumn.sSelector);
+                    if (th.length == 0)
+                        th = $($(this)[0].cell);
+                }
+
+                if (aoColumn != null) {
+                    if (aoColumn.sRangeFormat != null)
+                        sRangeFormat = aoColumn.sRangeFormat;
+                    else
+                        sRangeFormat = properties.sRangeFormat;
+                    switch (aoColumn.type) {
+                        case "null":
+                            break;
+                        case "number":
+                            fnCreateInput(oTable, true, false, true, aoColumn.iFilterLength, aoColumn.iMaxLenght);
+                            break;
+                        case "select":
+                            if (aoColumn.bRegex != true)
+                                aoColumn.bRegex = false;
+                            fnCreateSelect(oTable, aoColumn.values, aoColumn.bRegex);
+                            break;
+                        case "number-range":
+                            fnCreateRangeInput(oTable);
+                            break;
+                        case "date-range":
+                            fnCreateDateRangeInput(oTable);
+                            break;
+                        case "checkbox":
+                            fnCreateCheckbox(oTable, aoColumn.values);
+                            break;
+                        case "text":
+                        default:
+                            bRegex = (aoColumn.bRegex == null ? false : aoColumn.bRegex);
+                            bSmart = (aoColumn.bSmart == null ? false : aoColumn.bSmart);
+                            fnCreateInput(oTable, bRegex, bSmart, false, aoColumn.iFilterLength, aoColumn.iMaxLenght);
+                            break;
+
+                    }
+                }
+            });
 
             for (j = 0; j < aiCustomSearch_Indexes.length; j++) {
                 //var index = aiCustomSearch_Indexes[j];
@@ -748,24 +718,6 @@
                             fnCallback(json)
                         });
                     }
-
-                    /*
-                    if (fnServerDataOriginal != null) {
-                    if (properties.iDelay != 0) {
-                    if (oFunctionTimeout != null)
-                    window.clearTimeout(oFunctionTimeout);
-                    oFunctionTimeout = window.setTimeout(function () {
-                    fnServerDataOriginal(sSource, aoData, fnCallback);
-                    }, properties.iDelay);
-                    } else {
-                    fnServerDataOriginal(sSource, aoData, fnCallback);
-                    }
-                    }
-                    else
-                    $.getJSON(sSource, aoData, function (json) {
-                    fnCallback(json)
-                    });
-                    */
                 };
 
             }
