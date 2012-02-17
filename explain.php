@@ -43,7 +43,6 @@
 			$row['possible_keys'] = str_replace(',', ', ', $row['possible_keys']);
 			$row['ref'] = str_replace(',', ', ', $row['ref']);
 			$row['Extra'] = str_replace(array('Using ', ';'), array('', ', '), $row['Extra']);
-			$row['table'] = linkTable($label, $database, $row['table']);
 			foreach ($row as $key => $val) {
 				if (is_null($row[$key]))
 					$row[$key] = '';
