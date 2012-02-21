@@ -18,9 +18,19 @@
 		
 	// Valid Table Regex
 		const TABLEREF = '`?[A-Za-z0-9_]+`?(\.`?[A-Za-z0-9_]+`?)?';
+    // Comment Regexs
+        const COMMENTS_C = '/\s*\/\*.*?\*\/\s*/';
+        const COMMENTS_HASH = '/#.*$/';
+        const COMMENTS_SQL = '/--\s+.*$/';
 		
 		public function __construct($sql) {
-			$this->sql = trim($sql);
+            $this->sql = $sql;
+        // Remove comments
+            $this->sql = preg_replace($this::COMMENTS_C, '', $this->sql);
+            $this->sql = preg_replace($this::COMMENTS_HASH, '', $this->sql);
+            $this->sql = preg_replace($this::COMMENTS_SQL, '', $this->sql);
+        // Remove whitespace
+			$this->sql = trim($this->sql);
 			$this->figureOutType();
 		}
 		
