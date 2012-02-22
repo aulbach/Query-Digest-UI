@@ -1,9 +1,8 @@
 <?php
 
-
-	class QueryRewrite{
-		private $sql = null;
-		private $type = 0;
+    class QueryRewrite{
+		private $sql 	  = null;
+		private $type 	  = 0;
 		
 		const UNKNOWN     = 0;
 		const SELECT      = 1;
@@ -14,43 +13,43 @@
 		const DROP        = 6;
 		const CREATE      = 7;
 		const DELETEMULTI = 8;
-		const UNION		  = 9;
+		const UNION       = 9;
 		
-	// Valid Table Regex
-		const TABLEREF = '`?[A-Za-z0-9_]+`?(\.`?[A-Za-z0-9_]+`?)?';
-    // Comment Regexs
-        const COMMENTS_C = '/\s*\/\*.*?\*\/\s*/';
-        const COMMENTS_HASH = '/#.*$/';
-        const COMMENTS_SQL = '/--\s+.*$/';
-		
-		public function __construct($sql) {
+// Valid Table Regex
+		const TABLEREF      = '`?[A-Za-z0-9_]+`?(\.`?[A-Za-z0-9_]+`?)?';
+// Comment Regexs
+		const COMMENTS_C    = '/\s*\/\*.*?\*\/\s*/';
+		const COMMENTS_HASH = '/#.*$/';
+		const COMMENTS_SQL  = '/--\s+.*$/';
+                
+        public function __construct($sql) {
             $this->sql = $sql;
         // Remove comments
-            $this->sql = preg_replace($this::COMMENTS_C, '', $this->sql);
-            $this->sql = preg_replace($this::COMMENTS_HASH, '', $this->sql);
-            $this->sql = preg_replace($this::COMMENTS_SQL, '', $this->sql);
+            $this->sql = preg_replace(self::COMMENTS_C, '', $this->sql);
+            $this->sql = preg_replace(self::COMMENTS_HASH, '', $this->sql);
+            $this->sql = preg_replace(self::COMMENTS_SQL, '', $this->sql);
         // Remove whitespace
 			$this->sql = trim($this->sql);
 			$this->figureOutType();
-		}
-		
+        }
+                
 		function figureOutType(){
 			if (preg_match('/^SELECT\s/i', $this->sql))
-				$this->type = self::SELECT;
+					$this->type = self::SELECT;
 			elseif (preg_match('/^DELETE\s+FROM\s/i', $this->sql))
-				$this->type = self::DELETE;
+					$this->type = self::DELETE;
 			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', $this->sql))
-				$this->type = self::DELETEMULTI;
+					$this->type = self::DELETEMULTI;
 			elseif (preg_match('/^INSERT\s+INTO\s/i', $this->sql))
-				$this->type = self::INSERT;
+					$this->type = self::INSERT;
 			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/i', $this->sql))
-				$this->type = self::UNION;
+					$this->type = self::UNION;
 			elseif (preg_match('/^UPDATE\s/i', $this->sql))
-				$this->type = self::UPDATE;
+					$this->type = self::UPDATE;
 			else
-				$this->type = self::UNKNOWN;
+					$this->type = self::UNKNOWN;
 		}
-		
+			
 		function toSelect() {
 			switch ($this->type) {
 				case self::SELECT:
@@ -66,7 +65,7 @@
 			}
 			return null;
 		}
-		
+                
 		function asExplain() {
 			switch ($this->type) {
 				case self::SELECT:
@@ -83,7 +82,7 @@
 			}
 			return "EXPLAIN $sql";
 		}
-		
+                
 		function asExtendedExplain() {
 			$sql = $this->asExplain();
 			if (is_null($sql))
