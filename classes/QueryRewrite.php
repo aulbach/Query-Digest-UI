@@ -22,35 +22,51 @@
 		const COMMENTS_HASH = '/#.*$/';
 		const COMMENTS_SQL  = '/--\s+.*$/';
                 
-        public function __construct($sql) {
-            $this->sql = $sql;
-        // Remove comments
-            $this->sql = preg_replace(self::COMMENTS_C, '', $this->sql);
-            $this->sql = preg_replace(self::COMMENTS_HASH, '', $this->sql);
-            $this->sql = preg_replace(self::COMMENTS_SQL, '', $this->sql);
-        // Remove whitespace
-			$this->sql = trim($this->sql);
-			$this->figureOutType();
+        public function __construct($sql = null) {
+			if ($this->sql)
+				$this->setQuery($sql);
         }
-                
-		function figureOutType(){
-			if (preg_match('/^SELECT\s/i', $this->sql))
-					$this->type = self::SELECT;
-			elseif (preg_match('/^DELETE\s+FROM\s/i', $this->sql))
-					$this->type = self::DELETE;
-			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', $this->sql))
-					$this->type = self::DELETEMULTI;
-			elseif (preg_match('/^INSERT\s+INTO\s/i', $this->sql))
-					$this->type = self::INSERT;
-			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/i', $this->sql))
-					$this->type = self::UNION;
-			elseif (preg_match('/^UPDATE\s/i', $this->sql))
-					$this->type = self::UPDATE;
-			else
-					$this->type = self::UNKNOWN;
+		
+		public function setQuery($sql) {
+			$this->type = self::UNKNOWN;
+			$this->sql  = $sql;
+        // Remove comments
+            $this->sql  = preg_replace(self::COMMENTS_C,    '', $this->sql);
+            $this->sql  = preg_replace(self::COMMENTS_HASH, '', $this->sql);
+            $this->sql  = preg_replace(self::COMMENTS_SQL,  '', $this->sql);
+        // Remove whitespace
+			$this->sql  = trim($this->sql);
+			$this->figureOutType();    
 		}
-			
-		function toSelect() {
+
+		private function figureOutType(){
+			if (preg_match('/^SELECT\s/i', $this->sql))
+				$this->type = self::SELECT;
+			elseif (preg_match('/^DELETE\s+FROM\s/i', $this->sql))
+				$this->type = self::DELETE;
+			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', $this->sql))
+				$this->type = self::DELETEMULTI;
+			elseif (preg_match('/^INSERT\s+INTO\s/i', $this->sql))
+				$this->type = self::INSERT;
+			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/i', $this->sql))
+				$this->type = self::UNION;
+			elseif (preg_match('/^UPDATE\s/i', $this->sql))
+				$this->type = self::UPDATE;
+			elseif (preg_match('/^ALTER\s/i', $this->sql))
+				$this->type = self::ALTER;
+			elseif (preg_match('/^CREATE\s/i', $this->sql))
+				$this->type = self::CREATE;
+			elseif (preg_match('/^DROP\s/i', $this->sql))
+				$this->type = self::DROP;
+			else
+				$this->type = self::UNKNOWN;
+		}
+		
+		public function getType() {
+			return $this->type;
+		}
+		
+		public function toSelect() {
 			switch ($this->type) {
 				case self::SELECT:
 				case self::UNION:
@@ -66,7 +82,7 @@
 			return null;
 		}
                 
-		function asExplain() {
+		public function asExplain() {
 			switch ($this->type) {
 				case self::SELECT:
 				case self::UNION:
@@ -83,7 +99,7 @@
 			return "EXPLAIN $sql";
 		}
                 
-		function asExtendedExplain() {
+		public function asExtendedExplain() {
 			$sql = $this->asExplain();
 			if (is_null($sql))
 				return null;
