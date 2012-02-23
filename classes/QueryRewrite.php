@@ -36,6 +36,7 @@
             $this->sql  = preg_replace(self::COMMENTS_SQL,  '', $this->sql);
         // Remove whitespace
 			$this->sql  = trim($this->sql);
+            $this->sql  = str_replace("\n", " ", $this->sql);
 			$this->figureOutType();    
 		}
 

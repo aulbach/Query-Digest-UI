@@ -51,6 +51,23 @@
 			$this->assertEquals($expectedExplain, 			$this->_QueryRewrite->asExplain());
 			$this->assertEquals($expectedExtendedExplain, 	$this->_QueryRewrite->asExtendedExplain());
 		}
+        
+		public function testSelectBug1() {
+			$sql 		  	 		 = "/* Script : /home/site/XXXXXXXXXX.php Utilisateur : prod_outils */ SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT
+FROM DB.CLIENT CL
+WHERE CL.TELEPHONE = '0000000000'
+LIMIT 1
+";
+			$expectedType 	 		 = QueryRewrite::SELECT;
+			$expectedSelect  	     = "SELECT SQL_SMALL_RESULT DISTINCT ID_CLIENT FROM DB.CLIENT CL WHERE CL.TELEPHONE = '0000000000' LIMIT 1";
+			$expectedExplain 		 = "EXPLAIN $expectedSelect";
+			$expectedExtendedExplain = "EXPLAIN EXTENDED $expectedSelect";
+			$this->_QueryRewrite->setQuery($sql);
+			$this->assertEquals($expectedType, 				$this->_QueryRewrite->getType());
+			$this->assertEquals($expectedSelect, 			$this->_QueryRewrite->toSelect());
+			$this->assertEquals($expectedExplain, 			$this->_QueryRewrite->asExplain());
+			$this->assertEquals($expectedExtendedExplain, 	$this->_QueryRewrite->asExtendedExplain());
+		}        
 
 		public function testDelete() {
 			$sql 		  	 		 = 'DELETE FROM table WHERE id = 123';
