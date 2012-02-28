@@ -82,6 +82,20 @@ LIMIT 1
 			$this->assertEquals($expectedExtendedExplain, 	$this->_QueryRewrite->asExtendedExplain());
 		}    
 
+		public function testConstructor() {
+			$sql 		  	 		 = "SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1";
+			$expectedType 	 		 = QueryRewrite::SELECT;
+			$expectedSelect  	     = "SELECT id FROM ips WHERE ip='192.168.0.1' AND type=1 LIMIT 1";
+			$expectedExplain 		 = "EXPLAIN $expectedSelect";
+			$expectedExtendedExplain = "EXPLAIN EXTENDED $expectedSelect";
+            $QRW = new QueryRewrite($sql);
+			$this->assertEquals($expectedType, 				$QRW->getType());
+			$this->assertEquals($expectedSelect, 			$QRW->toSelect());
+			$this->assertEquals($expectedExplain, 			$QRW->asExplain());
+			$this->assertEquals($expectedExtendedExplain, 	$QRW->asExtendedExplain());
+            unset($QRW);
+		}          
+        
 		public function testDelete() {
 			$sql 		  	 		 = 'DELETE FROM table WHERE id = 123';
 			$expectedType 	 		 = QueryRewrite::DELETE;
