@@ -23,7 +23,7 @@
 	$Query = new QueryRewrite($query);
 	$sample = $Query->asExtendedExplain();
 	
-    $return['QueryRewrite'] = $Query;
+    $return['QueryRewrite'] = (array) $Query;
 	$return['oQuery'] = $query;
 	$return['eQuery'] = $sample;
 	
