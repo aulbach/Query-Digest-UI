@@ -23,13 +23,14 @@
 		const COMMENTS_SQL  = '/--\s+.*$/';
                 
         public function __construct($sql = null) {
-			if ($this->sql)
-				$this->setQuery($sql);
+			$this->setQuery($sql);
         }
 		
-		public function setQuery($sql) {
+		public function setQuery($sql = null) {
 			$this->type = self::UNKNOWN;
 			$this->sql  = $sql;
+            if (is_null($this->sql))
+                return;
         // Remove comments
             $this->sql  = preg_replace(self::COMMENTS_C,    '', $this->sql);
             $this->sql  = preg_replace(self::COMMENTS_HASH, '', $this->sql);

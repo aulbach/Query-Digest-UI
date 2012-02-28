@@ -20,7 +20,8 @@
 							  );
 	}
 
-	$Query = new QueryRewrite($query);
+	$Query = new QueryRewrite();
+    $Query->setQuery($query);
 	$sample = $Query->asExtendedExplain();
 	
     $return['QueryRewrite'] = (array) $Query;
