@@ -1,8 +1,8 @@
 <?php
 
     class QueryRewrite{
-		public $sql 	  = null;
-		public $type 	  = 0;
+		private $sql 	  = null;
+		private $type 	  = 0;
 		
 		const UNKNOWN     = 0;
 		const SELECT      = 1;
