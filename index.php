@@ -64,16 +64,16 @@
 			"aaSort":           [],
 			"bAutoWidth": 		true,
 			"aoColumnDefs": [
-					{ "sClass": "checksum",		    "bSearchable": true,  "bVisible": false, "aTargets": [  0 ] },
+					{ "sClass": "checksum",		    "bSearchable": true,  "bVisible": true, "aTargets": [  0 ] },
 					{ "sClass": "count number",		"bSearchable": false, "bVisible": true,  "aTargets": [  1 ] },
-					{ "sClass": "time number",      "bSearchable": false, "bVisible": false, "aTargets": [  2 ] },
+					{ "sClass": "time number",      "bSearchable": false, "bVisible": true, "aTargets": [  2 ] },
 					{ "sClass": "avgTime number",	"bSearchable": false, "bVisible": true,  "aTargets": [  3 ] },
-					{ "sClass": "firstSeen date",	"bSearchable": false, "bVisible": false, "aTargets": [  4 ] },
+					{ "sClass": "firstSeen date",	"bSearchable": false, "bVisible": true, "aTargets": [  4 ] },
 					{ "sClass": "lastSeen date",	"bSearchable": false, "bVisible": true,  "aTargets": [  5 ] },
 					{ "sClass": "fingerprint", 		"bSearchable": true,  "bVisible": true,  "aTargets": [  6 ] },
-					{ "sClass": "reviewed_on date", "bSearchable": false, "bVisible": false, "aTargets": [  7 ] },
+					{ "sClass": "reviewed_on date", "bSearchable": false, "bVisible": true, "aTargets": [  7 ] },
 					{ "sClass": "reviewed_by", 		"bSearchable": true,  "bVisible": true,  "aTargets": [  8 ] },
-					{ "sClass": "comments", 		"bSearchable": true,  "bVisible": false, "aTargets": [  9 ] },
+					{ "sClass": "comments", 		"bSearchable": true,  "bVisible": true, "aTargets": [  9 ] },
 					{ "sClass": "details", 			"bSearchable": false, "bVisible": true,  "aTargets": [ 10 ], "bSortable": false }
 				],
 			"oColVis": {
