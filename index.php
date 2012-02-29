@@ -15,6 +15,7 @@
 <table id="Queries">
 	<thead>
 		<tr>
+			<th id="queriesChecksum"      	class="checksum"    > Checksum     </th>
 			<th id="queriesColCount"      	class="count"       > Count        </th>
 			<th id="queriesColTime"       	class="time"        > Total ms     </th>
 			<th id="queriesColAvgTime"    	class="avgTime"     > Avg ms       </th>
@@ -31,6 +32,7 @@
 	</tbody>
 	<tfoot>
 		<tr>
+			<th class=""></th>
 			<th class="number"></th>
 			<th class="number"></th>
 			<th class="number"></th>
@@ -62,19 +64,20 @@
 			"aaSort":           [],
 			"bAutoWidth": 		true,
 			"aoColumnDefs": [
-					{ "sClass": "count number",		"bSearchable": false, "bVisible": true, "aTargets": [ 0 ] },
-					{ "sClass": "time number",      "bSearchable": false, "bVisible": true, "aTargets": [ 1 ] },
-					{ "sClass": "avgTime number",	"bSearchable": false, "bVisible": true, "aTargets": [ 2 ] },
-					{ "sClass": "firstSeen date",	"bSearchable": false, "bVisible": true, "aTargets": [ 3 ] },
-					{ "sClass": "lastSeen date",	"bSearchable": false, "bVisible": true, "aTargets": [ 4 ] },
-					{ "sClass": "fingerprint", 		"bSearchable": true,  "bVisible": true, "aTargets": [ 5 ] },
-					{ "sClass": "reviewed_on date", "bSearchable": false, "bVisible": true, "aTargets": [ 6 ] },
-					{ "sClass": "reviewed_by", 		"bSearchable": true,  "bVisible": true, "aTargets": [ 7 ] },
-					{ "sClass": "comments", 		"bSearchable": true,  "bVisible": true, "aTargets": [ 8 ] },
-					{ "sClass": "details", 			"bSearchable": false, "bVisible": true, "aTargets": [ 9 ], "bSortable": false }
+					{ "sClass": "checksum",		    "bSearchable": true,  "bVisible": false, "aTargets": [  0 ] },
+					{ "sClass": "count number",		"bSearchable": false, "bVisible": true,  "aTargets": [  1 ] },
+					{ "sClass": "time number",      "bSearchable": false, "bVisible": false, "aTargets": [  2 ] },
+					{ "sClass": "avgTime number",	"bSearchable": false, "bVisible": true,  "aTargets": [  3 ] },
+					{ "sClass": "firstSeen date",	"bSearchable": false, "bVisible": false, "aTargets": [  4 ] },
+					{ "sClass": "lastSeen date",	"bSearchable": false, "bVisible": true,  "aTargets": [  5 ] },
+					{ "sClass": "fingerprint", 		"bSearchable": true,  "bVisible": true,  "aTargets": [  6 ] },
+					{ "sClass": "reviewed_on date", "bSearchable": false, "bVisible": false, "aTargets": [  7 ] },
+					{ "sClass": "reviewed_by", 		"bSearchable": true,  "bVisible": true,  "aTargets": [  8 ] },
+					{ "sClass": "comments", 		"bSearchable": true,  "bVisible": false, "aTargets": [  9 ] },
+					{ "sClass": "details", 			"bSearchable": false, "bVisible": true,  "aTargets": [ 10 ], "bSortable": false }
 				],
 			"oColVis": {
-				"aiExclude": [ 9 ]
+				"aiExclude": [ 10 ]
 			},
             "fnDrawCallback" : function() {
                 $("a.details").fancybox({
@@ -91,6 +94,7 @@
 			bUseColVis: true,
 			sPlaceHolder: 'tfoot',
 			aoColumns: [
+				{ type: "text" },
 				{ type: "number-range" },
 				{ type: "number-range" },
 				{ type: "number-range" },
