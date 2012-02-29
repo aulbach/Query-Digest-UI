@@ -4,7 +4,7 @@
 
     $aColumns = array( 'checksum', 'count',  'time',   'time_avg', 'first_seen', 'last_seen', 'fingerprint', 'reviewed_on', 'reviewed_by', 'comments' );
 // Controls if we use a HAVING clause vs a WHERE clause
-    $having   = array(       true,    true,    true,         true,        false,       false,         false,         false,         false,      false );
+    $having   = array(      false,    true,    true,         true,        false,       false,         false,         false,         false,      false );
 
     $query  = 'SELECT SQL_CALC_FOUND_ROWS ';
     $query .= '       review.checksum                                                       AS checksum,';
@@ -54,6 +54,8 @@
                 else
                     $sWhere .= Database::escapeField($aColumns[$i])." = '".($_GET['sSearch_'.$i])."' ";
             }
+			elseif ($aColumns[$i] == 'checksum')
+				$sWhere .= "`review`.`".$aColumns[$i]."` LIKE '%".($_GET['sSearch_'.$i])."%' ";
             else
                 $sWhere .= "`".$aColumns[$i]."` LIKE '%".($_GET['sSearch_'.$i])."%' ";
         }
