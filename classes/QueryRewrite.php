@@ -72,25 +72,33 @@
 		}
 		
 		public function toSelect() {
+			$select = '';
 			switch ($this->type) {
 				case self::SELECT:
 				case self::UNION:
-					return $this->sql;
+					$select = $this->sql;
+					break;
 				case self::DELETE:
-					return preg_replace('/^DELETE\s+FROM\s/i', 'SELECT 0 FROM ', $this->sql);
+					$select = preg_replace('/^DELETE\s+FROM\s/i', 'SELECT 0 FROM ', $this->sql);
+					break;
 				case self::DELETEMULTI:
-					return preg_replace('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', 'SELECT 0 FROM ', $this->sql);
+					$select = preg_replace('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', 'SELECT 0 FROM ', $this->sql);
+					break;
 				case self::UPDATE:
 					preg_match('/^UPDATE\s+(.*)\s+SET\s+(.*)\s+WHERE\s+(.*)$/i', $this->sql, $subpatterns);
-					return "SELECT {$subpatterns[2]} FROM {$subpatterns[1]} WHERE {$subpatterns[3]}";
+					$select = "SELECT {$subpatterns[2]} FROM {$subpatterns[1]} WHERE {$subpatterns[3]}";
+					break;
 				case self::INSERTSELECT:
 					if (preg_match('/\(\s*(SELECT\s+.*)\)/', $this->sql, $subpatterns))
-						return trim("{$subpatterns[1]}");
+						$select = trim("{$subpatterns[1]}");
 					else
 						preg_match('/^INSERT\s+INTO\s+(SELECT.*)/i', $subpatterns);
-						return trim("{$subpatterns[1]}");
+						$select = trim("{$subpatterns[1]}");
+					break;
+				default:
+					return null;
 			}
-			return null;
+			return trim($select);
 		}
                 
 		public function asExplain() {
