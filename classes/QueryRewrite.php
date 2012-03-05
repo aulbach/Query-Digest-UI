@@ -1,19 +1,20 @@
 <?php
 
     class QueryRewrite{
-		private $sql 	  = null;
-		private $type 	  = 0;
+		public $sql 	  	= null;
+		public $type 	  	= 0;
 		
-		const UNKNOWN     = 0;
-		const SELECT      = 1;
-		const DELETE      = 2;
-		const INSERT      = 3;
-		const UPDATE      = 4;
-		const ALTER       = 5;
-		const DROP        = 6;
-		const CREATE      = 7;
-		const DELETEMULTI = 8;
-		const UNION       = 9;
+		const UNKNOWN     	= 0;
+		const SELECT      	= 1;
+		const DELETE      	= 2;
+		const INSERT      	= 3;
+		const UPDATE      	= 4;
+		const ALTER       	= 5;
+		const DROP        	= 6;
+		const CREATE      	= 7;
+		const DELETEMULTI 	= 8;
+		const UNION       	= 9;
+		const INSERTSELECT	= 10;
 		
 // Valid Table Regex
 		const TABLEREF      = '`?[A-Za-z0-9_]+`?(\.`?[A-Za-z0-9_]+`?)?';
@@ -48,6 +49,8 @@
 				$this->type = self::DELETE;
 			elseif (preg_match('/^DELETE\s+'.self::TABLEREF.'\s+FROM\s/i', $this->sql))
 				$this->type = self::DELETEMULTI;
+			elseif (preg_match('/^INSERT\s+INTO\s'.self::TABLEREF.'[\s\(]*SELECT\s+/i', $this->sql))
+				$this->type = self::INSERTSELECT;
 			elseif (preg_match('/^INSERT\s+INTO\s/i', $this->sql))
 				$this->type = self::INSERT;
 			elseif (preg_match('/^(.*)\s+UNION\s+(.*)$/i', $this->sql))
@@ -80,6 +83,12 @@
 				case self::UPDATE:
 					preg_match('/^UPDATE\s+(.*)\s+SET\s+(.*)\s+WHERE\s+(.*)$/i', $this->sql, $subpatterns);
 					return "SELECT {$subpatterns[2]} FROM {$subpatterns[1]} WHERE {$subpatterns[3]}";
+				case self::INSERTSELECT:
+					if (preg_match('/\(\s*(SELECT\s+.*)\)/', $this->sql, $subpatterns))
+						return trim("{$subpatterns[1]}");
+					else
+						preg_match('/^INSERT\s+INTO\s+(SELECT.*)/i', $subpatterns);
+						return trim("{$subpatterns[1]}");
 			}
 			return null;
 		}
@@ -93,6 +102,7 @@
 				case self::DELETE:
 				case self::DELETEMULTI:
 				case self::UPDATE:
+				case self::INSERTSELECT:
 					$sql = $this->toSelect();
 					break;
 				default:
