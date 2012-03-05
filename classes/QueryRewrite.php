@@ -94,28 +94,16 @@
 		}
                 
 		public function asExplain() {
-			switch ($this->type) {
-				case self::SELECT:
-				case self::UNION:
-					$sql = $this->sql;
-					break;
-				case self::DELETE:
-				case self::DELETEMULTI:
-				case self::UPDATE:
-				case self::INSERTSELECT:
-					$sql = $this->toSelect();
-					break;
-				default:
-					return null;
-			}
+			$sql = $this->toSelect();
+			if (is_null($sql))
+				return null;
 			return "EXPLAIN $sql";
 		}
                 
 		public function asExtendedExplain() {
-			$sql = $this->asExplain();
+			$sql = $this->toSelect();
 			if (is_null($sql))
 				return null;
-			$sql = preg_replace('/^EXPLAIN /i', 'EXPLAIN EXTENDED ', $sql);
-			return $sql;
+			return "EXPLAIN EXTENDED $sql";
 		}
 	}
