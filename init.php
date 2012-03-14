@@ -12,10 +12,15 @@
 	require_once('config.php');
 	require_once('util.php');
 	require_once('libs/Database/Database.php');
-	Database::connect(null, $reviewhost['user'], $reviewhost['password'], null, null, 'pdo', array('dsn' => $reviewhost['dsn']), 'review');
+    
+    $options = array('dsn'                              => $reviewhost['dsn'],
+                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                     );
+    
+	Database::connect(null, $reviewhost['user'], $reviewhost['password'], null, null, 'pdo', $options, 'review');
 
 // Needed for SqlParser
-	$dbh = new PDO($reviewhost['dsn'], $reviewhost['user'], $reviewhost['password']);
+	$dbh = new PDO($reviewhost['dsn'], $reviewhost['user'], $reviewhost['password'], $options);
 
     require_once('libs/sqlquery/SqlParser.php');
 	require_once('classes/QueryRewrite.php');

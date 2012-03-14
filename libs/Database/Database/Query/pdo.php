@@ -66,8 +66,15 @@ class Database_Query_pdo extends Database_Query {
         // working on prepared statements that return multiple result sets
         // combined with multiple concurrent statement handles.  See the
         // comments on the PDOStatement::closeCursor() manual page.
-            $this->sh = $this->dbh->prepare($this->last_query);
-            $this->sh->execute($nargs);
+        
+        // Skip preparing the query if there are no args in the query.
+            if ($nargn == 0) {
+                $this->sh = $this->dbh->query($this->last_query);
+            }
+            else {
+                $this->sh = $this->dbh->prepare($this->last_query);
+                $this->sh->execute($nargs);
+            }
         } catch(PDOException $e) {
             $this->last_exception = $e;
             $this->db->error('SQL Error:');
