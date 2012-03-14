@@ -78,6 +78,7 @@ class Database_Query_pdo extends Database_Query {
         } catch(PDOException $e) {
             $this->last_exception = $e;
             $this->db->error('SQL Error:');
+            return false;
         } // end try
         $after = microtime(true);
         $this->db->mysql_time += $after - $before;
