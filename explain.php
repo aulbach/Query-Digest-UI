@@ -41,10 +41,7 @@
 		$query = Database::find($label)->query($sample);
 		Database::find($label)->enable_fatal_errors();
         
-        if (is_null($query)) {
-            $return['Warnings'][] = array('Code' => Database::find($label)->_errno(), 'Level' => 'Error', 'Message' => Database::find($label)->_errstr());
-        }
-        else {
+        if (!is_null($query)) {
             while ($row = $query->fetch_assoc()) {
                 $row['possible_keys'] = str_replace(',', ', ', $row['possible_keys']);
                 $row['ref'] = str_replace(',', ', ', $row['ref']);
