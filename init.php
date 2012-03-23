@@ -20,8 +20,15 @@
     $settings['defaultColumnVis']['ReviewedBy']    = true;
     $settings['defaultColumnVis']['Comments']      = true;
     
-
 	require_once('config.php');
+    
+// If the history_table is blank, hide a few extra columns
+    if (!strlen($reviewhost['history_table'])) {
+        $settings['defaultColumnVis']['Count']         = false;
+        $settings['defaultColumnVis']['TotalMS']       = false;
+        $settings['defaultColumnVis']['AvgMS']         = false;
+    }
+    
 	require_once('util.php');
 	require_once('libs/Database/Database.php');
     

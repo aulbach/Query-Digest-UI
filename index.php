@@ -102,7 +102,6 @@
                     oTable.fnSetColumnVis(  7, <?php echo ($settings['defaultColumnVis']['ReviewedOn']  ? 'true' : 'false'); ?>, false);
                     oTable.fnSetColumnVis(  8, <?php echo ($settings['defaultColumnVis']['ReviewedBy']  ? 'true' : 'false'); ?>, false);
                     oTable.fnSetColumnVis(  9, <?php echo ($settings['defaultColumnVis']['Comments']    ? 'true' : 'false'); ?>, true);
-                    
                 }
             },
 		}).columnFilter({
