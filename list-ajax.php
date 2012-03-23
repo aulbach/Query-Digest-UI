@@ -2,22 +2,26 @@
 
     require('init.php');
 
-    $aColumns = array( 'checksum', 'count',  'time',   'time_avg', 'first_seen', 'last_seen', 'fingerprint', 'reviewed_on', 'reviewed_by', 'comments' );
+    $aColumns = array( 'checksum', 'count',  'time',   'time_avg', 'disk_tmp_table', 'tmp_table', 'first_seen', 'last_seen', 'fingerprint', 'reviewed_on', 'reviewed_by', 'comments' );
 // Controls if we use a HAVING clause vs a WHERE clause
-    $having   = array(      false,    true,    true,         true,        false,       false,         false,         false,         false,      false );
+    $having   = array(      false,    true,    true,         true,             true,        true,        false,       false,         false,         false,         false,      false );
 
     $query  = 'SELECT SQL_CALC_FOUND_ROWS ';
     $query .= '       review.checksum                                                       AS checksum,';
     $query .= '       review.fingerprint                                                    AS fingerprint,';
-    $query .= "       IFNULL(review.reviewed_by, '')                                        AS reviewed_by,";
+    $query .= '       IFNULL(review.reviewed_by, "")                                        AS reviewed_by,';
     $query .= '       DATE(review.reviewed_on)                                              AS reviewed_on,';
-    $query .= '       review.comments                                                       AS comments,';
+    $query .= '       IFNULL(review.comments, "")                                           AS comments,';
     if (strlen($reviewhost['history_table'])) {
         $query .= '       DATE(MIN(history.ts_min))                                         AS first_seen,';
         $query .= '       DATE(MAX(history.ts_max))                                         AS last_seen,';
         $query .= '       SUM(history.ts_cnt)                                               AS `count`,';
         $query .= '       ROUND(SUM(history.query_time_sum), 2)*1000                        AS `time`,';
-        $query .= '       ROUND(SUM(history.query_time_sum)*1000/SUM(history.ts_cnt), 2)    AS time_avg';
+        $query .= '       ROUND(SUM(history.query_time_sum)*1000/SUM(history.ts_cnt), 2)    AS time_avg,';
+        
+        $query .= '       IFNULL(SUM(history.Disk_tmp_table_sum), 0)                        AS disk_tmp_table,';
+        $query .= '       IFNULL(SUM(history.Tmp_table_sum), 0)                             AS tmp_table';
+        
         $query .= '  FROM '.Database::escapeField($reviewhost['review_table']).'            AS review';
         $query .= '  JOIN '.Database::escapeField($reviewhost['history_table']).'           AS history';
         $query .= '        ON history.checksum = review.checksum';
@@ -27,7 +31,9 @@
         $query .= '       DATE(review.last_seen)                                            AS last_seen,';
         $query .= '       0                                                                 AS `count`,';
         $query .= '       0                                                                 AS `time`,';
-        $query .= '       0                                                                 AS time_avg';
+        $query .= '       0                                                                 AS time_avg,';
+        $query .= '       0                                                                 AS disk_tmp_table,';
+        $query .= '       0                                                                 AS tmp_table';
         $query .= '  FROM '.$reviewhost['review_table'].'                                   AS review';
     }
 

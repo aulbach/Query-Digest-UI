@@ -19,6 +19,8 @@
 			<th id="queriesColCount"      	class="count"       > Count        </th>
 			<th id="queriesColTime"       	class="time"        > Total ms     </th>
 			<th id="queriesColAvgTime"    	class="avgTime"     > Avg ms       </th>
+            <th id="queriesColtmpDisk"    	class="tmpDisk"     > Tmp Disk     </th>
+            <th id="queriesColtmpTbl"    	class="tmpTbl"      > Tmp Tbl       </th>
 			<th id="queriesColFirstSeen"  	class="firstSeen"   > First Seen   </th>
 			<th id="queriesColLastSeen"   	class="lastSeen"    > Last Seen    </th>
 			<th id="queriesColfingerprint"	class="fingerprint"	> Query Fingerprint</th>
@@ -36,6 +38,8 @@
 			<th class="number"></th>
 			<th class="number"></th>
 			<th class="number"></th>
+            <th class="number"></th>
+            <th class="number"></th>
 			<th class="date"></th>
 			<th class="date"></th>
 			<th class=""></th>
@@ -68,13 +72,15 @@
 					{ "sClass": "count number",		"bSearchable": false, "aTargets": [  1 ] },
 					{ "sClass": "time number",      "bSearchable": false, "aTargets": [  2 ] },
 					{ "sClass": "avgTime number",	"bSearchable": false, "aTargets": [  3 ] },
-					{ "sClass": "firstSeen date",	"bSearchable": false, "aTargets": [  4 ] },
-					{ "sClass": "lastSeen date",	"bSearchable": false, "aTargets": [  5 ] },
-					{ "sClass": "fingerprint", 		"bSearchable": true,  "aTargets": [  6 ] },
-					{ "sClass": "reviewed_on date", "bSearchable": false, "aTargets": [  7 ] },
-					{ "sClass": "reviewed_by", 		"bSearchable": true,  "aTargets": [  8 ] },
-					{ "sClass": "comments", 		"bSearchable": true,  "aTargets": [  9 ] },
-					{ "sClass": "details", 			"bSearchable": false, "aTargets": [ 10 ], "bSortable": false }
+                    { "sClass": "tmpDisk number",	"bSearchable": false, "aTargets": [  4 ] },
+                    { "sClass": "tmpTbl number",	"bSearchable": false, "aTargets": [  5 ] },
+					{ "sClass": "firstSeen date",	"bSearchable": false, "aTargets": [  6 ] },
+					{ "sClass": "lastSeen date",	"bSearchable": false, "aTargets": [  7 ] },
+					{ "sClass": "fingerprint", 		"bSearchable": true,  "aTargets": [  8 ] },
+					{ "sClass": "reviewed_on date", "bSearchable": false, "aTargets": [  9 ] },
+					{ "sClass": "reviewed_by", 		"bSearchable": true,  "aTargets": [ 10 ] },
+					{ "sClass": "comments", 		"bSearchable": true,  "aTargets": [ 11 ] },
+					{ "sClass": "details", 			"bSearchable": false, "aTargets": [ 12 ], "bSortable": false }
 				],
 			"oColVis": {
 				"aiExclude": [ 10 ]
@@ -96,12 +102,16 @@
                     oTable.fnSetColumnVis(  1, <?php echo ($settings['defaultColumnVis']['Count']       ? 'true' : 'false'); ?>, false);
                     oTable.fnSetColumnVis(  2, <?php echo ($settings['defaultColumnVis']['TotalMS']     ? 'true' : 'false'); ?>, false);
                     oTable.fnSetColumnVis(  3, <?php echo ($settings['defaultColumnVis']['AvgMS']       ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis(  4, <?php echo ($settings['defaultColumnVis']['FirstSeen']   ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis(  5, <?php echo ($settings['defaultColumnVis']['LastSeen']    ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis(  6, <?php echo ($settings['defaultColumnVis']['Fingerprint'] ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis(  7, <?php echo ($settings['defaultColumnVis']['ReviewedOn']  ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis(  8, <?php echo ($settings['defaultColumnVis']['ReviewedBy']  ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis(  9, <?php echo ($settings['defaultColumnVis']['Comments']    ? 'true' : 'false'); ?>, true);
+                    
+                    oTable.fnSetColumnVis(  4, <?php echo ($settings['defaultColumnVis']['tmpDisk']     ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  5, <?php echo ($settings['defaultColumnVis']['tmpTbl']      ? 'true' : 'false'); ?>, false);
+                    
+                    oTable.fnSetColumnVis(  6, <?php echo ($settings['defaultColumnVis']['FirstSeen']   ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  7, <?php echo ($settings['defaultColumnVis']['LastSeen']    ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  8, <?php echo ($settings['defaultColumnVis']['Fingerprint'] ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  9, <?php echo ($settings['defaultColumnVis']['ReviewedOn']  ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis( 10, <?php echo ($settings['defaultColumnVis']['ReviewedBy']  ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis( 11, <?php echo ($settings['defaultColumnVis']['Comments']    ? 'true' : 'false'); ?>, true);
                 }
             },
 		}).columnFilter({
@@ -112,6 +122,8 @@
 				{ type: "number-range" },
 				{ type: "number-range" },
 				{ type: "number-range" },
+                { type: "number-range" },
+                { type: "number-range" },
 				{ type: "date-range" },
 				{ type: "date-range" },
 				{ type: "text" },
