@@ -8,6 +8,18 @@
     $settings['sqlColor'] = true;
 	$settings['title'] = null;
 	$settings['sampleLimit'] = 1;
+    
+    $settings['defaultColumnVis']['Checksum']      = true;
+    $settings['defaultColumnVis']['Count']         = true;
+    $settings['defaultColumnVis']['TotalMS']       = true;
+    $settings['defaultColumnVis']['AvgMS']         = true;
+    $settings['defaultColumnVis']['FirstSeen']     = true;
+    $settings['defaultColumnVis']['LastSeen']      = true;
+    $settings['defaultColumnVis']['Fingerprint']   = true;
+    $settings['defaultColumnVis']['ReviewedOn']    = true;
+    $settings['defaultColumnVis']['ReviewedBy']    = true;
+    $settings['defaultColumnVis']['Comments']      = true;
+    
 
 	require_once('config.php');
 	require_once('util.php');

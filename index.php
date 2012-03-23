@@ -64,17 +64,17 @@
 			"aaSort":           [],
 			"bAutoWidth": 		true,
 			"aoColumnDefs": [
-					{ "sClass": "checksum",		    "bSearchable": true,  "bVisible": true, "aTargets": [  0 ] },
-					{ "sClass": "count number",		"bSearchable": false, "bVisible": true,  "aTargets": [  1 ] },
-					{ "sClass": "time number",      "bSearchable": false, "bVisible": true, "aTargets": [  2 ] },
-					{ "sClass": "avgTime number",	"bSearchable": false, "bVisible": true,  "aTargets": [  3 ] },
-					{ "sClass": "firstSeen date",	"bSearchable": false, "bVisible": true, "aTargets": [  4 ] },
-					{ "sClass": "lastSeen date",	"bSearchable": false, "bVisible": true,  "aTargets": [  5 ] },
-					{ "sClass": "fingerprint", 		"bSearchable": true,  "bVisible": true,  "aTargets": [  6 ] },
-					{ "sClass": "reviewed_on date", "bSearchable": false, "bVisible": true, "aTargets": [  7 ] },
-					{ "sClass": "reviewed_by", 		"bSearchable": true,  "bVisible": true,  "aTargets": [  8 ] },
-					{ "sClass": "comments", 		"bSearchable": true,  "bVisible": true, "aTargets": [  9 ] },
-					{ "sClass": "details", 			"bSearchable": false, "bVisible": true,  "aTargets": [ 10 ], "bSortable": false }
+					{ "sClass": "checksum",		    "bSearchable": true,  "aTargets": [  0 ] },
+					{ "sClass": "count number",		"bSearchable": false, "aTargets": [  1 ] },
+					{ "sClass": "time number",      "bSearchable": false, "aTargets": [  2 ] },
+					{ "sClass": "avgTime number",	"bSearchable": false, "aTargets": [  3 ] },
+					{ "sClass": "firstSeen date",	"bSearchable": false, "aTargets": [  4 ] },
+					{ "sClass": "lastSeen date",	"bSearchable": false, "aTargets": [  5 ] },
+					{ "sClass": "fingerprint", 		"bSearchable": true,  "aTargets": [  6 ] },
+					{ "sClass": "reviewed_on date", "bSearchable": false, "aTargets": [  7 ] },
+					{ "sClass": "reviewed_by", 		"bSearchable": true,  "aTargets": [  8 ] },
+					{ "sClass": "comments", 		"bSearchable": true,  "aTargets": [  9 ] },
+					{ "sClass": "details", 			"bSearchable": false, "aTargets": [ 10 ], "bSortable": false }
 				],
 			"oColVis": {
 				"aiExclude": [ 10 ]
@@ -89,7 +89,22 @@
                     margin:         10
                 });
                 return true;
-            }
+            },
+            "fnInitComplete": function(oSettings, json) {
+                if (typeof oSettings.saved_aaSorting != 'object') {
+                    oTable.fnSetColumnVis(  0, <?php echo ($settings['defaultColumnVis']['Checksum']    ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  1, <?php echo ($settings['defaultColumnVis']['Count']       ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  2, <?php echo ($settings['defaultColumnVis']['TotalMS']     ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  3, <?php echo ($settings['defaultColumnVis']['AvgMS']       ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  4, <?php echo ($settings['defaultColumnVis']['FirstSeen']   ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  5, <?php echo ($settings['defaultColumnVis']['LastSeen']    ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  6, <?php echo ($settings['defaultColumnVis']['Fingerprint'] ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  7, <?php echo ($settings['defaultColumnVis']['ReviewedOn']  ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  8, <?php echo ($settings['defaultColumnVis']['ReviewedBy']  ? 'true' : 'false'); ?>, false);
+                    oTable.fnSetColumnVis(  9, <?php echo ($settings['defaultColumnVis']['Comments']    ? 'true' : 'false'); ?>, true);
+                    
+                }
+            },
 		}).columnFilter({
 			bUseColVis: true,
 			sPlaceHolder: 'tfoot',

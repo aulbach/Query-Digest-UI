@@ -7,9 +7,24 @@ $settings['title'] = null;
 // Syntax highlight queries?
 $settings['sqlColor'] = true;
 
+// What columns are visible by default
+/*
+$settings['defaultColumnVis']['Checksum']      = true;
+$settings['defaultColumnVis']['Count']         = true;
+$settings['defaultColumnVis']['TotalMS']       = true;
+$settings['defaultColumnVis']['AvgMS']         = true;
+$settings['defaultColumnVis']['FirstSeen']     = true;
+$settings['defaultColumnVis']['LastSeen']      = true;
+$settings['defaultColumnVis']['Fingerprint']   = true;
+$settings['defaultColumnVis']['ReviewedOn']    = true;
+$settings['defaultColumnVis']['ReviewedBy']    = true;
+$settings['defaultColumnVis']['Comments']      = true;
+*/
+
 $reviewhost = array(
 // Replace hostname and database in this setting
-    'dsn'           => 'mysql:host=hostname:3306;dbname=database',
+// use host=hostname:port if not the default port
+    'dsn'           => 'mysql:host=hostname;dbname=percona',
     'user'          => 'user',
     'password'      => 'password',
 // See http://www.percona.com/doc/percona-toolkit/2.0/pt-query-digest.html#cmdoption-pt-query-digest--review
