@@ -83,7 +83,7 @@
 					{ "sClass": "details", 			"bSearchable": false, "aTargets": [ 12 ], "bSortable": false }
 				],
 			"oColVis": {
-				"aiExclude": [ 10 ]
+				"aiExclude": [ 12 ]
 			},
             "fnDrawCallback" : function() {
                 $("a.details").fancybox({
@@ -111,7 +111,8 @@
                     oTable.fnSetColumnVis(  8, <?php echo ($settings['defaultColumnVis']['Fingerprint'] ? 'true' : 'false'); ?>, false);
                     oTable.fnSetColumnVis(  9, <?php echo ($settings['defaultColumnVis']['ReviewedOn']  ? 'true' : 'false'); ?>, false);
                     oTable.fnSetColumnVis( 10, <?php echo ($settings['defaultColumnVis']['ReviewedBy']  ? 'true' : 'false'); ?>, false);
-                    oTable.fnSetColumnVis( 11, <?php echo ($settings['defaultColumnVis']['Comments']    ? 'true' : 'false'); ?>, true);
+                    oTable.fnSetColumnVis( 11, <?php echo ($settings['defaultColumnVis']['Comments']    ? 'true' : 'false'); ?>, false);
+					oTable.fnSetColumnVis( 12, true, true);
                 }
             },
 		}).columnFilter({
