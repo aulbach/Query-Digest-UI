@@ -8,6 +8,7 @@
     $settings['sqlColor'] = true;
 	$settings['title'] = null;
 	$settings['sampleLimit'] = 1;
+	$settings['oldSlowQueryFormat'] = false;
     
     $settings['defaultColumnVis']['Checksum']      = true;
     $settings['defaultColumnVis']['Count']         = true;
@@ -29,6 +30,19 @@
         $settings['defaultColumnVis']['AvgMS']         = false;
     }
     
+	if ($settings['oldSlowQueryFormat']) {
+		define('Tmp_table_on_disk_cnt', 'Disk_tmp_table_cnt');
+		define('Tmp_table_on_disk_sum', 'Disk_tmp_table_sum');
+		define('Filesort_on_disk_cnt',  'Disk_filesort_cnt');
+		define('Filesort_on_disk_sum',  'Disk_filesort_sum');
+	}
+	else {
+		define('Tmp_table_on_disk_cnt', 'Tmp_table_on_disk_cnt');
+		define('Tmp_table_on_disk_sum', 'Tmp_table_on_disk_sum');
+		define('Filesort_on_disk_cnt',  'Filesort_on_disk_cnt');
+		define('Filesort_on_disk_sum',  'Filesort_on_disk_sum');
+	}
+	
 	require_once('util.php');
 	require_once('libs/Database/Database.php');
     

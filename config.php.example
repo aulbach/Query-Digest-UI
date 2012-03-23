@@ -7,6 +7,22 @@ $settings['title'] = null;
 // Syntax highlight queries?
 $settings['sqlColor'] = true;
 
+// Sometime in the past, percona changed the format
+// that slow queries dumped out
+// This causes the tmp disk table/disk filesort
+// fields to be named incorrectly. The old names were
+
+// Disk_tmp_table_cnt Disk_tmp_table_sum
+// Disk_filesort_cnt Disk_filesort_sum
+
+// and the new names are
+
+// Tmp_table_on_disk_cnt Tmp_table_on_disk_sum
+// Filesort_on_disk_cnt Filesort_on_disk_sum
+
+// You can use this setting to swap between the column names
+$settings['oldSlowQueryFormat'] = false;
+
 // What columns are visible by default
 /*
 $settings['defaultColumnVis']['Checksum']      = true;

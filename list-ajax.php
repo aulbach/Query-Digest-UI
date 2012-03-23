@@ -56,7 +56,7 @@
         $query .= '       ROUND(SUM(history.query_time_sum), 2)*1000                        AS `time`,';
         $query .= '       ROUND(SUM(history.query_time_sum)*1000/SUM(history.ts_cnt), 2)    AS time_avg,';
         
-        $query .= '       IFNULL(SUM(history.Disk_tmp_table_sum), 0)                        AS disk_tmp_table,';
+        $query .= '       IFNULL(SUM(history.'.Tmp_table_on_disk_sum.'), 0)                 AS disk_tmp_table,';
         $query .= '       IFNULL(SUM(history.Tmp_table_sum), 0)                             AS tmp_table';
         
         $query .= '  FROM '.Database::escapeField($reviewhost['review_table']).'            AS review';

@@ -258,17 +258,17 @@
                         <td class="number"><?php echo $historyData['Tmp_table_sum']; ?></td>
                         <td class="number"><?php if ($historyData['Tmp_table_cnt']) echo round($historyData['Tmp_table_sum']/$historyData['Tmp_table_cnt']*100, 0); ?></td></tr>
                     <tr><td>On Disk Temporary Tables</td>
-                        <td class="number"><?php echo $historyData['Disk_tmp_table_cnt']; ?></td>
-                        <td class="number"><?php echo $historyData['Disk_tmp_table_sum']; ?></td>
-                        <td class="number"><?php if ($historyData['Disk_tmp_table_cnt']) echo round($historyData['Disk_tmp_table_sum']/$historyData['Disk_tmp_table_cnt']*100, 0); ?></td></tr>
+                        <td class="number"><?php echo $historyData[Tmp_table_on_disk_cnt]; ?></td>
+                        <td class="number"><?php echo $historyData[Tmp_table_on_disk_sum]; ?></td>
+                        <td class="number"><?php if ($historyData[Tmp_table_on_disk_cnt]) echo round($historyData[Tmp_table_on_disk_sum]/$historyData[Tmp_table_on_disk_cnt]*100, 0); ?></td></tr>
                     <tr><td>File Sorts</td>
                         <td class="number"><?php echo $historyData['Filesort_cnt']; ?></td>
                         <td class="number"><?php echo $historyData['Filesort_sum']; ?></td>
                         <td class="number"><?php if ($historyData['Filesort_cnt']) echo round($historyData['Filesort_sum']/$historyData['Filesort_cnt']*100, 0); ?></td></tr>
                     <tr><td>On Disk File Sorts</td>
-                        <td class="number"><?php echo $historyData['Disk_filesort_cnt']; ?></td>
-                        <td class="number"><?php echo $historyData['Disk_filesort_sum']; ?></td>
-                        <td class="number"><?php if ($historyData['Disk_filesort_cnt']) echo round($historyData['Disk_filesort_sum']/$historyData['Disk_filesort_cnt']*100, 0); ?></td></tr>
+                        <td class="number"><?php echo $historyData[Filesort_on_disk_cnt]; ?></td>
+                        <td class="number"><?php echo $historyData[Filesort_on_disk_sum]; ?></td>
+                        <td class="number"><?php if ($historyData[Filesort_on_disk_cnt]) echo round($historyData[Filesort_on_disk_sum]/$historyData[Filesort_on_disk_cnt]*100, 0); ?></td></tr>
                 </tbody>
             </table>
             <br>
