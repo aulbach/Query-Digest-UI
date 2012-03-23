@@ -14,6 +14,8 @@
     $settings['defaultColumnVis']['Count']         = true;
     $settings['defaultColumnVis']['TotalMS']       = true;
     $settings['defaultColumnVis']['AvgMS']         = true;
+	$settings['defaultColumnVis']['tmpDisk']       = false;
+	$settings['defaultColumnVis']['tmpTbl']		   = false;
     $settings['defaultColumnVis']['FirstSeen']     = true;
     $settings['defaultColumnVis']['LastSeen']      = true;
     $settings['defaultColumnVis']['Fingerprint']   = true;
