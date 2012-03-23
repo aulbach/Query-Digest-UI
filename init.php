@@ -5,31 +5,32 @@
 
 // Set default settings here. Can be overridden in config.php.
     $settings = array();
-    $settings['sqlColor'] = true;
-	$settings['title'] = null;
-	$settings['sampleLimit'] = 1;
-	$settings['oldSlowQueryFormat'] = false;
+    $settings['sqlColor'] 							= true;
+	$settings['title'] 								= null;
+	$settings['sampleLimit'] 						= 1;
+	$settings['oldSlowQueryFormat'] 				= false;
     
-    $settings['defaultColumnVis']['Checksum']      = true;
-    $settings['defaultColumnVis']['Count']         = true;
-    $settings['defaultColumnVis']['TotalMS']       = true;
-    $settings['defaultColumnVis']['AvgMS']         = true;
-	$settings['defaultColumnVis']['tmpDisk']       = false;
-	$settings['defaultColumnVis']['tmpTbl']		   = false;
-    $settings['defaultColumnVis']['FirstSeen']     = true;
-    $settings['defaultColumnVis']['LastSeen']      = true;
-    $settings['defaultColumnVis']['Fingerprint']   = true;
-    $settings['defaultColumnVis']['ReviewedOn']    = true;
-    $settings['defaultColumnVis']['ReviewedBy']    = true;
-    $settings['defaultColumnVis']['Comments']      = true;
+	$settings['defaultColumnVis']					= array();
+    $settings['defaultColumnVis']['Checksum']       = true;
+    $settings['defaultColumnVis']['Count']          = true;
+    $settings['defaultColumnVis']['TotalMS']        = true;
+    $settings['defaultColumnVis']['AvgMS']          = true;
+	$settings['defaultColumnVis']['tmpDisk']        = false;
+	$settings['defaultColumnVis']['tmpTbl']		    = false;
+    $settings['defaultColumnVis']['FirstSeen']      = true;
+    $settings['defaultColumnVis']['LastSeen']       = true;
+    $settings['defaultColumnVis']['Fingerprint']    = true;
+    $settings['defaultColumnVis']['ReviewedOn']     = true;
+    $settings['defaultColumnVis']['ReviewedBy']     = true;
+    $settings['defaultColumnVis']['Comments']       = true;
     
 	require_once('config.php');
     
 // If the history_table is blank, hide a few extra columns
     if (!strlen($reviewhost['history_table'])) {
-        $settings['defaultColumnVis']['Count']         = false;
-        $settings['defaultColumnVis']['TotalMS']       = false;
-        $settings['defaultColumnVis']['AvgMS']         = false;
+        $settings['defaultColumnVis']['Count']      = false;
+        $settings['defaultColumnVis']['TotalMS']    = false;
+        $settings['defaultColumnVis']['AvgMS']      = false;
     }
     
 	if ($settings['oldSlowQueryFormat']) {
