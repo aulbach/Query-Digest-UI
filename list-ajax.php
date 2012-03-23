@@ -2,10 +2,47 @@
 
     require('init.php');
 
-    $aColumns = array( 'checksum', 'count',  'time',   'time_avg', 'disk_tmp_table', 'tmp_table', 'first_seen', 'last_seen', 'fingerprint', 'reviewed_on', 'reviewed_by', 'comments' );
+    $aColumns = array();
 // Controls if we use a HAVING clause vs a WHERE clause
-    $having   = array(      false,    true,    true,         true,             true,        true,        false,       false,         false,         false,         false,      false );
+    $having = array();
 
+    $aColumns[] = 'checksum';
+    $having[] = false;
+
+    $aColumns[] = 'count';
+    $having[] = true;
+    
+    $aColumns[] = 'time';
+    $having[] = true;
+    
+    $aColumns[] = 'time_avg';
+    $having[] = true;
+    
+    $aColumns[] = 'disk_tmp_table';
+    $having[] = true;
+    
+    $aColumns[] = 'tmp_table';
+    $having[] = true;
+    
+    $aColumns[] = 'first_seen';
+    $having[] = false;
+    
+    $aColumns[] = 'last_seen';
+    $having[] = false;
+    
+    $aColumns[] = 'fingerprint';
+    $having[] = false;
+    
+    $aColumns[] = 'reviewed_on';
+    $having[] = false;
+    
+    $aColumns[] = 'reviewed_by';
+    $having[] = false;
+    
+    $aColumns[] = 'comments';
+    $having[] = false;
+
+    
     $query  = 'SELECT SQL_CALC_FOUND_ROWS ';
     $query .= '       review.checksum                                                       AS checksum,';
     $query .= '       review.fingerprint                                                    AS fingerprint,';
