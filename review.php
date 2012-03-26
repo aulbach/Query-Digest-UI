@@ -220,6 +220,8 @@
 					
                     if ($timeDiff > 0 ) {
 						$locale = localeconv();
+						if ($locale['thousands_sep'] == '')
+							$locale['thousands_sep'] = ',';
 						$count = (int) str_replace($locale['thousands_sep'], '', $historyData['ts_cnt']);
 						
                         $qps = $count / $timeDiff;
