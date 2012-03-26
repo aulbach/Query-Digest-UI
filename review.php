@@ -207,14 +207,14 @@
                     $timeDiff = strtotime($reviewData['last_seen']) - strtotime($reviewData['first_seen']);
                     if ($timeDiff > 0 ) {
                         $qps = $historyData['ts_cnt'] / $timeDiff;
-                        $qpm = $qps * 60;
-                        $qph = $qpm * 60;
-                        $qpd = $qph * 24;
-                        $qpw = $qpd * 7;
-                        $qpM = $qpw * 30;
-                        $qpq = $qpM * 3;
-                        $qpy = $qpd * 265;
-
+						$qpm = $historyData['ts_cnt'] / ($timeDiff/60);
+						$qph = $historyData['ts_cnt'] / ($timeDiff/60/60);
+						$qpd = $historyData['ts_cnt'] / ($timeDiff/60/60/24);
+						$qpw = $historyData['ts_cnt'] / ($timeDiff/60/60/24/7);
+						$qpM = $historyData['ts_cnt'] / ($timeDiff/60/60/24/30);
+						$qpq = $historyData['ts_cnt'] / ($timeDiff/60/60/24/91);
+						$qpy = $historyData['ts_cnt'] / ($timeDiff/60/60/24/365);
+						
                             if ($qps > 2) echo round($qps, 0).' queries per second.';
                         elseif ($qpm > 2) echo round($qpm, 0).' queries per minute.';
                         elseif ($qph > 2) echo round($qph, 0).' queries per hour.';
