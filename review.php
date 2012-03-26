@@ -44,7 +44,6 @@
             }
             else
                 $val = round($val, 2);
-            $val = number_format($val);
         }
     }
     unset ($key, $val);
@@ -100,7 +99,6 @@
                 }
                 else
                     $val = round($val, 2);
-                $val = number_format($val);
             }
         }
         unset ($key, $val);
@@ -121,6 +119,20 @@
     }
     else
         $samples[] = $reviewData['sample'];
+		
+    foreach ($reviewData as $key=>&$val) {
+        if (in_array($key, array('checksum')))
+            continue;
+        if (is_numeric($val)) 
+            $val = number_format($val);
+    }
+	
+	foreach ($historyData as $key=>&$val) {
+        if (in_array($key, array('checksum')))
+            continue;
+        if (is_numeric($val)) 
+            $val = number_format($val);
+    }
 ?>
 
 <?php require_once('templates/header.php'); ?>
