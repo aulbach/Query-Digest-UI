@@ -217,16 +217,17 @@
             <p>
                 <?php
                     $timeDiff = strtotime($reviewData['last_seen']) - strtotime($reviewData['first_seen']);
+					$count = (int)$historyData['ts_cnt'];
                     if ($timeDiff > 0 ) {
-                        $qps = $historyData['ts_cnt'] / $timeDiff;
-						$qpm = $historyData['ts_cnt'] / ($timeDiff/60);
-						$qph = $historyData['ts_cnt'] / ($timeDiff/60/60);
-						$qpd = $historyData['ts_cnt'] / ($timeDiff/60/60/24);
-						$qpw = $historyData['ts_cnt'] / ($timeDiff/60/60/24/7);
-						$qpM = $historyData['ts_cnt'] / ($timeDiff/60/60/24/30);
-						$qpq = $historyData['ts_cnt'] / ($timeDiff/60/60/24/91);
-						$qpy = $historyData['ts_cnt'] / ($timeDiff/60/60/24/365);
-						
+                        $qps = $count / $timeDiff;
+                        $qpm = $count / ($timeDiff/60);
+                        $qph = $count / ($timeDiff/60/60);
+                        $qpd = $count / ($timeDiff/60/60/24);
+                        $qpw = $count / ($timeDiff/60/60/24/7);
+                        $qpM = $count / ($timeDiff/60/60/24/30);
+                        $qpq = $count / ($timeDiff/60/60/24/91);
+                        $qpy = $count / ($timeDiff/60/60/24/365);
+                                                
                             if ($qps > 2) echo round($qps, 0).' queries per second.';
                         elseif ($qpm > 2) echo round($qpm, 0).' queries per minute.';
                         elseif ($qph > 2) echo round($qph, 0).' queries per hour.';
