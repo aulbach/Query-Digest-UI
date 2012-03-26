@@ -217,8 +217,11 @@
             <p>
                 <?php
                     $timeDiff = strtotime($reviewData['last_seen']) - strtotime($reviewData['first_seen']);
-					$count = (int)$historyData['ts_cnt'];
+					
                     if ($timeDiff > 0 ) {
+						$locale = localeconv();
+						$count = (int) str_replace($locale['thousands_sep'], '', $historyData['ts_cnt']);
+						
                         $qps = $count / $timeDiff;
                         $qpm = $count / ($timeDiff/60);
                         $qph = $count / ($timeDiff/60/60);
