@@ -24,6 +24,8 @@
 			dateFormat:         'yy-mm-dd'
 		});
 		$.datepicker.regional[""].dateFormat = 'yy-mm-dd';
+		
+		$('.inlinesparkline').sparkline(); 
     });
 </script>
 

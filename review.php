@@ -49,6 +49,7 @@
     unset ($key, $val);
 
     $historyData = array();
+	$historyDataTime = array();
 
     if (strlen($reviewhost['history_table'])) {
         $res = Database::find('review')->query('SELECT review.*
@@ -102,6 +103,36 @@
             }
         }
         unset ($key, $val);
+		
+		$res = Database::find('review')->query('SELECT HOUR(ts_min) AS `min`,
+											           HOUR(ts_max) AS `max`,
+													   ts_cnt AS `cnt`
+                                  FROM '.$reviewhost['history_table'].' AS review
+                                 WHERE review.checksum = ?
+                                  ',
+                                  $_REQUEST['checksum']
+                                  );
+        while ($td = $res->fetch_assoc()) {
+			if ($td['min'] == $td['max']) {
+				@$historyDataTime[$td['min']] += $td['cnt'];
+				continue;
+			}
+			
+			if ($td['min'] > $td['max'])
+				$td['min'] += 24;
+				
+			$per = $td['cnt'] / ($td['max'] - $td['min']);
+			for ($i = $td['min']; $i <= $td['max']; $i++)
+				@$historyDataTime[$i] += $per;
+		}
+		$keys = array_keys($historyDataTime);
+		foreach ( $keys as $key ) {
+			if ($key >= 24) {
+				$historyDataTime[$key-24] += $historyDataTime[$key];
+				unset($historyDataTime[$key]);
+			}
+		}
+		
     }
     
     $samples = array();
@@ -126,6 +157,7 @@
         if (is_numeric($val)) 
             $val = number_format($val);
     }
+	unset ($key, $val);
 	
 	foreach ($historyData as $key=>&$val) {
         if (in_array($key, array('checksum')))
@@ -133,6 +165,7 @@
         if (is_numeric($val)) 
             $val = number_format($val);
     }
+	unset ($key, $val);
 ?>
 
 <?php require_once('templates/header.php'); ?>
@@ -244,6 +277,17 @@
                     }
 
                 ?>
+				
+				Time of day <span class="inlinesparkline">
+					<?php
+						for ($i = 0; $i < 24; $i++) {
+							if (!isset($historyDataTime[$i]))
+								echo "0,";
+							else
+								echo round($historyDataTime[$i], 0).",";
+						}
+					?>
+				</span>
             </p>
             <table class="dataTable">
                 <thead>
