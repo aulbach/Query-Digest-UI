@@ -209,7 +209,8 @@ DataTable.defaults = {
 	 * array may be of any length, and DataTables will apply each class 
 	 * sequentially, looping when required.
 	 *  @type array
-	 *  @default [ 'odd', 'even' ]
+	 *  @default null <i>Will take the values determinted by the oClasses.sStripe*
+	 *    options</i>
 	 *  @dtopt Option
 	 * 
 	 *  @example
@@ -219,7 +220,7 @@ DataTable.defaults = {
 	 *      } );
 	 *    } )
 	 */
-	"asStripeClasses": [ 'odd', 'even' ],
+	"asStripeClasses": null,
 
 
 	/**
@@ -294,7 +295,7 @@ DataTable.defaults = {
 	 * specified (this allow matching across multiple columns). Note that if you
 	 * wish to use filtering in DataTables this must remain 'true' - to remove the
 	 * default filtering input box and retain filtering abilities, please use
-	 * @ref{sDom}.
+	 * {@link DataTable.defaults.sDom}.
 	 *  @type boolean
 	 *  @default true
 	 *  @dtopt Features
@@ -655,7 +656,7 @@ DataTable.defaults = {
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "fnDrawCallback": function() {
+	 *        "fnDrawCallback": function( oSettings ) {
 	 *          alert( 'DataTables has redrawn the table' );
 	 *        }
 	 *      } );
@@ -925,8 +926,8 @@ DataTable.defaults = {
 			"type": oSettings.sServerMethod,
 			"error": function (xhr, error, thrown) {
 				if ( error == "parsererror" ) {
-					alert( "DataTables warning: JSON data from server could not be parsed. "+
-						"This is caused by a JSON formatting error." );
+					oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
+						"server could not be parsed. This is caused by a JSON formatting error." );
 				}
 			}
 		} );
@@ -979,7 +980,7 @@ DataTable.defaults = {
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
-	 *        "fnStateSave": function (oSettings, oData) {
+	 *        "fnStateLoad": function (oSettings, oData) {
 	 *          var o;
 	 *          
 	 *          // Send an Ajax request to the server to get the data. Note that
@@ -1030,7 +1031,7 @@ DataTable.defaults = {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateLoadParams": function (oSettings, oData) {
-	 *          oData.oFilter.sSearch = "";
+	 *          oData.oSearch.sSearch = "";
 	 *      } );
 	 *    } );
 	 * 
@@ -1061,7 +1062,7 @@ DataTable.defaults = {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateLoaded": function (oSettings, oData) {
-	 *          alert( 'Saved filter was: '+oData.oFilter.sSearch );
+	 *          alert( 'Saved filter was: '+oData.oSearch.sSearch );
 	 *      } );
 	 *    } );
 	 */
@@ -1122,8 +1123,8 @@ DataTable.defaults = {
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
-	 *        "fnStateLoadParams": function (oSettings, oData) {
-	 *          oData.oFilter.sSearch = "";
+	 *        "fnStateSaveParams": function (oSettings, oData) {
+	 *          oData.oSearch.sSearch = "";
 	 *      } );
 	 *    } );
 	 */
@@ -1153,17 +1154,36 @@ DataTable.defaults = {
 	 * will be applied to it), thus saving on an XHR at load time. iDeferLoading
 	 * is used to indicate that deferred loading is required, but it is also used
 	 * to tell DataTables how many records there are in the full table (allowing
-	 * the information element and pagination to be displayed correctly).
-	 *  @type int
+	 * the information element and pagination to be displayed correctly). In the case
+	 * where a filtering is applied to the table on initial load, this can be
+	 * indicated by giving the parameter as an array, where the first element is
+	 * the number of records available after filtering and the second element is the
+	 * number of records without filtering (allowing the table information element
+	 * to be shown correctly).
+	 *  @type int | array
 	 *  @default null
 	 *  @dtopt Options
 	 * 
 	 *  @example
+	 *    // 57 records available in the table, no filtering applied
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
 	 *        "bServerSide": true,
 	 *        "sAjaxSource": "scripts/server_processing.php",
 	 *        "iDeferLoading": 57
+	 *      } );
+	 *    } );
+	 * 
+	 *  @example
+	 *    // 57 records after filtering, 100 without filtering (an initial filter applied)
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "bServerSide": true,
+	 *        "sAjaxSource": "scripts/server_processing.php",
+	 *        "iDeferLoading": [ 57, 100 ],
+	 *        "oSearch": {
+	 *          "sSearch": "my_filter"
+	 *        }
 	 *      } );
 	 *    } );
 	 */
@@ -1841,7 +1861,7 @@ DataTable.defaults = {
 	 * Enable horizontal scrolling. When a table is too wide to fit into a certain
 	 * layout, or you have a large number of columns in the table, you can enable
 	 * x-scrolling to show the table in a viewport, which can be scrolled. This
-	 * property can by any CSS unit, or a number (in which case it will be treated
+	 * property can be any CSS unit, or a number (in which case it will be treated
 	 * as a pixel measurement).
 	 *  @type string
 	 *  @default <i>blank string - i.e. disabled</i>
@@ -1882,10 +1902,10 @@ DataTable.defaults = {
 
 	/**
 	 * Enable vertical scrolling. Vertical scrolling will constrain the DataTable
-	 * to the given height, an enable scrolling for any data which overflows the
+	 * to the given height, and enable scrolling for any data which overflows the
 	 * current viewport. This can be used as an alternative to paging to display
 	 * a lot of data in a small area (although paging and scrolling can both be
-	 * enabled at the same time). This property can by any CSS unit, or a number
+	 * enabled at the same time). This property can be any CSS unit, or a number
 	 * (in which case it will be treated as a pixel measurement).
 	 *  @type string
 	 *  @default <i>blank string - i.e. disabled</i>

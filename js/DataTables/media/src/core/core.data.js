@@ -20,9 +20,8 @@ function _fnAddData ( oSettings, aDataSupplied )
 	
 	/* Create the object for storing information about this new row */
 	var iRow = oSettings.aoData.length;
-	var oData = $.extend( true, {}, DataTable.models.oRow, {
-		"_aData": aDataIn
-	} );
+	var oData = $.extend( true, {}, DataTable.models.oRow );
+	oData._aData = aDataIn;
 	oSettings.aoData.push( oData );
 
 	/* Create the cells */
@@ -35,6 +34,10 @@ function _fnAddData ( oSettings, aDataSupplied )
 		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
 		{
 			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
+		}
+		else
+		{
+			_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
 		}
 		
 		/* See if we should auto-detect the column type */
@@ -313,8 +316,9 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 	{
 		if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 		{
-			_fnLog( oSettings, 0, "Requested unknown parameter '"+oCol.mDataProp+
-				"' from the data source for row "+iRow );
+			_fnLog( oSettings, 0, "Requested unknown parameter "+
+				(typeof oCol.mDataProp=='function' ? '{mDataprop function}' : "'"+oCol.mDataProp+"'")+
+				" from the data source for row "+iRow );
 			oSettings.iDrawError = oSettings.iDraw;
 		}
 		return oCol.sDefaultContent;
@@ -437,6 +441,10 @@ function _fnSetObjectDataFn( mSource )
 			for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
 			{
 				data = data[ a[i] ];
+				if ( data === undefined )
+				{
+					return;
+				}
 			}
 			data[ a[a.length-1] ] = val;
 		};

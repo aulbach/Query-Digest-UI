@@ -23,7 +23,7 @@
 					<h1 class="page-title">Namespace: defaults</h1>
 					<h2 class="ancestors">Ancestry: <span class="ancestors"><a href="DataTable.html">DataTable</a>.</span> » defaults</h2>
 					<div class="page-info">
-						DataTables v1.9.0 documentation
+						DataTables v1.9.1 documentation
 					</div>
 				</div>
 
@@ -54,18 +54,6 @@
 						<div class="nav_blocker"></div>
 						<p class="description">Initialisation options that can be given to DataTables at initialisation 
 time.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 </dl>
 
@@ -146,7 +134,8 @@ that it allows the end user to input multiple words (space separated) and
 will match a row containing those words, even if not in the order that was
 specified (this allow matching across multiple columns). Note that if you
 wish to use filtering in DataTables this must remain 'true' - to remove the
-default filtering input box and retain filtering abilities, please use</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bInfo">bInfo</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even">Enable or disable the table information display. This shows information 
+default filtering input box and retain filtering abilities, please use
+<a href="DataTable.defaults.html#sDom">DataTable.defaults.sDom</a>.</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bInfo">bInfo</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even">Enable or disable the table information display. This shows information 
 about the data that is currently visible on the page, including information
 about filtered data if that action is being performed.</dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bJQueryUI">bJQueryUI</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd">Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
 slightly different and additional mark-up from what DataTables has
@@ -230,12 +219,17 @@ has changed state a new state save is required. This method allows modification 
 the state saving object prior to actually doing the save, including addition or 
 other state properties or modification. Note that for plug-in authors, you should 
 use the 'stateSaveParams' event to save parameters for a plug-in.</dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iCookieDuration">iCookieDuration</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd">Duration of the cookie which is used for storing session information. This
-value is given in seconds.</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDeferLoading">iDeferLoading</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even">When enabled DataTables will not make a request to the server for the first
+value is given in seconds.</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDeferLoading">iDeferLoading</a></span><span class="type-sig"><span class="type-signature"> :int|array</span></span></dt><dd class="  even">When enabled DataTables will not make a request to the server for the first
 page draw - rather it will use the data already on the page (no sorting etc
 will be applied to it), thus saving on an XHR at load time. iDeferLoading
 is used to indicate that deferred loading is required, but it is also used
 to tell DataTables how many records there are in the full table (allowing
-the information element and pagination to be displayed correctly).</dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayLength">iDisplayLength</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd">Number of rows to display on a single page when using pagination. If
+the information element and pagination to be displayed correctly). In the case
+where a filtering is applied to the table on initial load, this can be
+indicated by giving the parameter as an array, where the first element is
+the number of records available after filtering and the second element is the
+number of records without filtering (allowing the table information element
+to be shown correctly).</dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayLength">iDisplayLength</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd">Number of rows to display on a single page when using pagination. If
 feature enabled (bLengthChange) then the end user will be able to override
 this to a custom setting using a pop-up menu.</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayStart">iDisplayStart</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even">Define the starting point for data display when using DataTables with
 pagination. Note that this parameter is the number of records, rather than
@@ -295,17 +289,17 @@ aid styling. The follow syntax is used:
 the end user. Further methods can be added using the API (see below).</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollX">sScrollX</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even">Enable horizontal scrolling. When a table is too wide to fit into a certain
 layout, or you have a large number of columns in the table, you can enable
 x-scrolling to show the table in a viewport, which can be scrolled. This
-property can by any CSS unit, or a number (in which case it will be treated
+property can be any CSS unit, or a number (in which case it will be treated
 as a pixel measurement).</dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollXInner">sScrollXInner</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd">This property can be used to force a DataTable to use more width than it
 might otherwise do when x-scrolling is enabled. For example if you have a
 table which requires to be well spaced, this parameter is useful for
 "over-sizing" the table, and thus forcing scrolling. This property can by
 any CSS unit, or a number (in which case it will be treated as a pixel
 measurement).</dd><dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollY">sScrollY</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even">Enable vertical scrolling. Vertical scrolling will constrain the DataTable
-to the given height, an enable scrolling for any data which overflows the
+to the given height, and enable scrolling for any data which overflows the
 current viewport. This can be used as an alternative to paging to display
 a lot of data in a small area (although paging and scrolling can both be
-enabled at the same time). This property can by any CSS unit, or a number
+enabled at the same time). This property can be any CSS unit, or a number
 (in which case it will be treated as a pixel measurement).</dd><dt class="  odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sServerMethod">sServerMethod</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd">Set the HTTP method that is used to make the Ajax call for server-side
 processing or Ajax sourced data.</dd>
 </dl></div>
@@ -322,19 +316,7 @@ processing or Ajax sourced data.</dd>
     <dt class="  even"><a name="aaData"></a><a name="aaData_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aaData">aaData</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  even"><p class="description">An array of data to use for the table, passed in at initialisation which 
 will be used in preference to any data which is already in the DOM. This is
 particularly useful for constructing tables purely in Javascript, for
-example with a custom Ajax call.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+example with a custom Ajax call.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Examples</h5>
@@ -389,23 +371,11 @@ example with a custom Ajax call.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="aaSorting"></a><a name="aaSorting_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aaSorting">aaSorting</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  odd"><p class="description">If sorting is enabled, then DataTables will perform a first pass sort on 
+</div></dd><dt class="  odd"><a name="aaSorting"></a><a name="aaSorting_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aaSorting">aaSorting</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  odd"><p class="description">If sorting is enabled, then DataTables will perform a first pass sort on 
 initialisation. You can define which column(s) the sort is performed upon, 
 and the sorting direction, with this variable. The aaSorting array should 
 contain an array for each column to be sorted initially containing the 
-column's index and a direction string ('asc' or 'desc').</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+column's index and a direction string ('asc' or 'desc').</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -424,24 +394,12 @@ column's index and a direction string ('asc' or 'desc').</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="aaSortingFixed"></a><a name="aaSortingFixed_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aaSortingFixed">aaSortingFixed</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  even"><p class="description">This parameter is basically identical to the aaSorting parameter, but 
+</div></dd><dt class="  even"><a name="aaSortingFixed"></a><a name="aaSortingFixed_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aaSortingFixed">aaSortingFixed</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  even"><p class="description">This parameter is basically identical to the aaSorting parameter, but 
 cannot be overridden by user interaction with the table. What this means 
 is that you could have a column (visible or hidden) which the sorting will 
 always be forced on first - any sorting after that (from the user) will 
 then be performed as required. This can be useful for grouping rows 
-together.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+together.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -452,24 +410,12 @@ together.</p><dl class="details">
      } );
    } )</pre>
     </div>
-</dd><dt class="  odd"><a name="aLengthMenu"></a><a name="aLengthMenu_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aLengthMenu">aLengthMenu</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  odd"><p class="description">This parameter allows you to readily specify the entries in the length drop
+</div></dd><dt class="  odd"><a name="aLengthMenu"></a><a name="aLengthMenu_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aLengthMenu">aLengthMenu</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  odd"><p class="description">This parameter allows you to readily specify the entries in the length drop
 down menu that DataTables shows when pagination is enabled. It can be 
 either a 1D array of options which will be used for both the displayed 
 option and the value, or a 2D array which will use the array in the first 
 position as the value, and the array in the second position as the 
-displayed options (useful for language strings such as 'All').</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+displayed options (useful for language strings such as 'All').</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Examples</h5>
@@ -494,7 +440,7 @@ displayed options (useful for language strings such as 'All').</p><dl class="det
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="aoColumnDefs"></a><a name="aoColumnDefs_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aoColumnDefs">aoColumnDefs</a></span><span class="type-sig"><span class="type-signature"></span></span></dt><dd class="  even"><p class="description">Very similar to aoColumns, aoColumnDefs allows you to target a specific 
+</div></dd><dt class="  even"><a name="aoColumnDefs"></a><a name="aoColumnDefs_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aoColumnDefs">aoColumnDefs</a></span><span class="type-sig"><span class="type-signature"></span></span></dt><dd class="  even"><p class="description">Very similar to aoColumns, aoColumnDefs allows you to target a specific 
 column, multiple columns, or all columns, using the aTargets property of 
 each object in the array. This allows great flexibility when creating 
 tables, as the aoColumnDefs arrays can be of any length, targeting the 
@@ -507,59 +453,23 @@ array may be:
     <li>0 or a positive integer - column index counting from the left</li>
     <li>a negative integer - column index counting from the right</li>
     <li>the string "_all" - all columns (i.e. assign a default)</li>
-  </ul></p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+  </ul></p><div class="collapse_details"><dl class="details">
 	
 </dl>
-</dd><dt class="  odd"><a name="aoColumns"></a><a name="aoColumns_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aoColumns">aoColumns</a></span><span class="type-sig"><span class="type-signature"></span></span></dt><dd class="  odd"><p class="description">The aoColumns option in the initialisation parameter allows you to define
+</div></dd><dt class="  odd"><a name="aoColumns"></a><a name="aoColumns_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aoColumns">aoColumns</a></span><span class="type-sig"><span class="type-signature"></span></span></dt><dd class="  odd"><p class="description">The aoColumns option in the initialisation parameter allows you to define
 details about the way individual columns behave. For a full list of
 column options that can be set, please see 
 <a href="DataTable.defaults.columns.html">DataTable.defaults.columns</a>. Note that if you use aoColumns to
 define your columns, you must have an entry in the array for every single
 column that you have in your table (these can be null if you don't which
-to specify any options).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+to specify any options).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
-</dd><dt class="  even"><a name="aoSearchCols"></a><a name="aoSearchCols_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aoSearchCols">aoSearchCols</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  even"><p class="description">Basically the same as oSearch, this parameter defines the individual column
+</div></dd><dt class="  even"><a name="aoSearchCols"></a><a name="aoSearchCols_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aoSearchCols">aoSearchCols</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  even"><p class="description">Basically the same as oSearch, this parameter defines the individual column
 filtering state at initialisation time. The array must be of the same size 
 as the number of columns, and each element be an object with the parameters
 "sSearch" and "bEscapeRegex" (the latter is optional). 'null' is also
-accepted and the default will be used.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+accepted and the default will be used.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -575,21 +485,9 @@ accepted and the default will be used.</p><dl class="details">
      } );
    } )</pre>
     </div>
-</dd><dt class="  odd"><a name="asStripeClasses"></a><a name="asStripeClasses_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#asStripeClasses">asStripeClasses</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  odd"><p class="description">An array of CSS classes that should be applied to displayed rows. This 
+</div></dd><dt class="  odd"><a name="asStripeClasses"></a><a name="asStripeClasses_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#asStripeClasses">asStripeClasses</a></span><span class="type-sig"><span class="type-signature"> :array</span></span></dt><dd class="  odd"><p class="description">An array of CSS classes that should be applied to displayed rows. This 
 array may be of any length, and DataTables will apply each class 
-sequentially, looping when required.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+sequentially, looping when required.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -600,21 +498,9 @@ sequentially, looping when required.</p><dl class="details">
      } );
    } )</pre>
     </div>
-</dd><dt class="  even"><a name="bAutoWidth"></a><a name="bAutoWidth_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bAutoWidth">bAutoWidth</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable automatic column width calculation. This can be disabled
+</div></dd><dt class="  even"><a name="bAutoWidth"></a><a name="bAutoWidth_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bAutoWidth">bAutoWidth</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable automatic column width calculation. This can be disabled
 as an optimisation (it takes some time to calculate the widths) if the
-tables widths are passed in using aoColumns.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+tables widths are passed in using aoColumns.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -625,23 +511,11 @@ tables widths are passed in using aoColumns.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bDeferRender"></a><a name="bDeferRender_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bDeferRender">bDeferRender</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Deferred rendering can provide DataTables with a huge speed boost when you
+</div></dd><dt class="  odd"><a name="bDeferRender"></a><a name="bDeferRender_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bDeferRender">bDeferRender</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Deferred rendering can provide DataTables with a huge speed boost when you
 are using an Ajax or JS data source for the table. This option, when set to
 true, will cause DataTables to defer the creation of the table elements for
 each row until they are needed for a draw - saving a significant amount of
-time.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+time.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -653,22 +527,10 @@ time.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bDestroy"></a><a name="bDestroy_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bDestroy">bDestroy</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Replace a DataTable which matches the given selector and replace it with 
+</div></dd><dt class="  even"><a name="bDestroy"></a><a name="bDestroy_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bDestroy">bDestroy</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Replace a DataTable which matches the given selector and replace it with 
 one which has the properties of the new initialisation object passed. If no
 table matches the selector, then the new DataTable will be constructed as
-per normal.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+per normal.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -686,24 +548,13 @@ per normal.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bFilter"></a><a name="bFilter_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bFilter">bFilter</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable or disable filtering of data. Filtering in DataTables is "smart" in
+</div></dd><dt class="  odd"><a name="bFilter"></a><a name="bFilter_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bFilter">bFilter</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable or disable filtering of data. Filtering in DataTables is "smart" in
 that it allows the end user to input multiple words (space separated) and
 will match a row containing those words, even if not in the order that was
 specified (this allow matching across multiple columns). Note that if you
 wish to use filtering in DataTables this must remain 'true' - to remove the
-default filtering input box and retain filtering abilities, please use</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+default filtering input box and retain filtering abilities, please use
+<a href="DataTable.defaults.html#sDom">DataTable.defaults.sDom</a>.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -714,21 +565,9 @@ default filtering input box and retain filtering abilities, please use</p><dl cl
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bInfo"></a><a name="bInfo_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bInfo">bInfo</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable the table information display. This shows information 
+</div></dd><dt class="  even"><a name="bInfo"></a><a name="bInfo_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bInfo">bInfo</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable the table information display. This shows information 
 about the data that is currently visible on the page, including information
-about filtered data if that action is being performed.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+about filtered data if that action is being performed.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -739,21 +578,9 @@ about filtered data if that action is being performed.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bJQueryUI"></a><a name="bJQueryUI_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bJQueryUI">bJQueryUI</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
+</div></dd><dt class="  odd"><a name="bJQueryUI"></a><a name="bJQueryUI_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bJQueryUI">bJQueryUI</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
 slightly different and additional mark-up from what DataTables has
-traditionally used).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+traditionally used).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -764,20 +591,8 @@ traditionally used).</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bLengthChange"></a><a name="bLengthChange_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bLengthChange">bLengthChange</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Allows the end user to select the size of a formatted page from a select
-menu (sizes are 10, 25, 50 and 100). Requires pagination (bPaginate).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div></dd><dt class="  even"><a name="bLengthChange"></a><a name="bLengthChange_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bLengthChange">bLengthChange</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Allows the end user to select the size of a formatted page from a select
+menu (sizes are 10, 25, 50 and 100). Requires pagination (bPaginate).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -788,19 +603,7 @@ menu (sizes are 10, 25, 50 and 100). Requires pagination (bPaginate).</p><dl cla
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bPaginate"></a><a name="bPaginate_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bPaginate">bPaginate</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable or disable pagination.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div></dd><dt class="  odd"><a name="bPaginate"></a><a name="bPaginate_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bPaginate">bPaginate</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable or disable pagination.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -811,22 +614,10 @@ menu (sizes are 10, 25, 50 and 100). Requires pagination (bPaginate).</p><dl cla
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bProcessing"></a><a name="bProcessing_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bProcessing">bProcessing</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable the display of a 'processing' indicator when the table is
+</div></dd><dt class="  even"><a name="bProcessing"></a><a name="bProcessing_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bProcessing">bProcessing</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable the display of a 'processing' indicator when the table is
 being processed (e.g. a sort). This is particularly useful for tables with
 large amounts of data where it can take a noticeable amount of time to sort
-the entries.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the entries.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -837,25 +628,13 @@ the entries.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bRetrieve"></a><a name="bRetrieve_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bRetrieve">bRetrieve</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Retrieve the DataTables object for the given selector. Note that if the
+</div></dd><dt class="  odd"><a name="bRetrieve"></a><a name="bRetrieve_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bRetrieve">bRetrieve</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Retrieve the DataTables object for the given selector. Note that if the
 table has already been initialised, this parameter will cause DataTables
 to simply return the object that has already been set up - it will not take
 account of any changes you might have made to the initialisation object
 passed to DataTables (setting this parameter to true is an acknowledgement
 that you understand this). bDestroy can be used to reinitialise a table if
-you need.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+you need.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -880,21 +659,9 @@ you need.</p><dl class="details">
      // perform API operations with oTable 
    }</pre>
     </div>
-</dd><dt class="  even"><a name="bScrollAutoCss"></a><a name="bScrollAutoCss_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bScrollAutoCss">bScrollAutoCss</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Indicate if DataTables should be allowed to set the padding / margin
+</div></dd><dt class="  even"><a name="bScrollAutoCss"></a><a name="bScrollAutoCss_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bScrollAutoCss">bScrollAutoCss</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Indicate if DataTables should be allowed to set the padding / margin
 etc for the scrolling header elements or not. Typically you will want
-this.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+this.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -906,24 +673,12 @@ this.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bScrollCollapse"></a><a name="bScrollCollapse_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bScrollCollapse">bScrollCollapse</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">When vertical (y) scrolling is enabled, DataTables will force the height of
+</div></dd><dt class="  odd"><a name="bScrollCollapse"></a><a name="bScrollCollapse_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bScrollCollapse">bScrollCollapse</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">When vertical (y) scrolling is enabled, DataTables will force the height of
 the table's viewport to the given height at all times (useful for layout).
 However, this can look odd when filtering data down to a small data set,
 and the footer is left "floating" further down. This parameter (when
 enabled) will cause DataTables to collapse the table's viewport down when
-the result set will fit within the given Y height.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the result set will fit within the given Y height.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -935,24 +690,12 @@ the result set will fit within the given Y height.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bScrollInfinite"></a><a name="bScrollInfinite_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bScrollInfinite">bScrollInfinite</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable infinite scrolling for DataTables (to be used in combination with
+</div></dd><dt class="  even"><a name="bScrollInfinite"></a><a name="bScrollInfinite_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bScrollInfinite">bScrollInfinite</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable infinite scrolling for DataTables (to be used in combination with
 sScrollY). Infinite scrolling means that DataTables will continually load
 data as a user scrolls through a table, which is very useful for large
 dataset. This cannot be used with pagination, which is automatically
 disabled. Note - the Scroller extra for DataTables is recommended in
-in preference to this option.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+in preference to this option.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -965,21 +708,9 @@ in preference to this option.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bServerSide"></a><a name="bServerSide_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bServerSide">bServerSide</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Configure DataTables to use server-side processing. Note that the
+</div></dd><dt class="  odd"><a name="bServerSide"></a><a name="bServerSide_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bServerSide">bServerSide</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Configure DataTables to use server-side processing. Note that the
 sAjaxSource parameter must also be given in order to give DataTables a
-source to obtain the required data for each draw.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+source to obtain the required data for each draw.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -991,20 +722,8 @@ source to obtain the required data for each draw.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bSort"></a><a name="bSort_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bSort">bSort</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable sorting of columns. Sorting of individual columns can be
-disabled by the "bSortable" option for each column.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div></dd><dt class="  even"><a name="bSort"></a><a name="bSort_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bSort">bSort</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable sorting of columns. Sorting of individual columns can be
+disabled by the "bSortable" option for each column.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -1015,21 +734,9 @@ disabled by the "bSortable" option for each column.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bSortCellsTop"></a><a name="bSortCellsTop_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bSortCellsTop">bSortCellsTop</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Allows control over whether DataTables should use the top (true) unique
+</div></dd><dt class="  odd"><a name="bSortCellsTop"></a><a name="bSortCellsTop_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bSortCellsTop">bSortCellsTop</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Allows control over whether DataTables should use the top (true) unique
 cell that is found for a single column, or the bottom (false - default).
-This is useful when using complex headers.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+This is useful when using complex headers.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -1040,23 +747,11 @@ This is useful when using complex headers.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="bSortClasses"></a><a name="bSortClasses_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bSortClasses">bSortClasses</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable the addition of the classes 'sorting_1', 'sorting_2' and
+</div></dd><dt class="  even"><a name="bSortClasses"></a><a name="bSortClasses_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bSortClasses">bSortClasses</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  even"><p class="description">Enable or disable the addition of the classes 'sorting_1', 'sorting_2' and
 'sorting_3' to the columns which are currently being sorted on. This is
 presented as a feature switch as it can increase processing time (while
 classes are removed and added) so for large data sets you might want to
-turn this off.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+turn this off.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -1067,22 +762,10 @@ turn this off.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="bStateSave"></a><a name="bStateSave_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bStateSave">bStateSave</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable or disable state saving. When enabled a cookie will be used to save
+</div></dd><dt class="  odd"><a name="bStateSave"></a><a name="bStateSave_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#bStateSave">bStateSave</a></span><span class="type-sig"><span class="type-signature"> :boolean</span></span></dt><dd class="  odd"><p class="description">Enable or disable state saving. When enabled a cookie will be used to save
 table display information such as pagination information, display length,
 filtering and sorting. As such when the end user reloads the page the
-display display will match what thy had previously set up.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+display display will match what thy had previously set up.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -1093,23 +776,11 @@ display display will match what thy had previously set up.</p><dl class="details
      } );
    } );</pre>
     </div>
-</dd><dt id="DataTable.defaults.fnCookieCallback" class=" even"><a name="fnCookieCallback"></a><a name="fnCookieCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnCookieCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">Customise the cookie and / or the parameters being stored when using
+</div></dd><dt id="DataTable.defaults.fnCookieCallback" class=" even"><a name="fnCookieCallback"></a><a name="fnCookieCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnCookieCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">Customise the cookie and / or the parameters being stored when using
 DataTables with state saving enabled. This function is called whenever
 the cookie is modified, and it expects a fully formed cookie string to be
 returned. Note that the data object passed in is a Javascript object which
-must be converted to a string (JSON.stringify for example).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+must be converted to a string (JSON.stringify for example).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1141,22 +812,10 @@ must be converted to a string (JSON.stringify for example).</p><dl class="detail
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnCreatedRow" class=" odd"><a name="fnCreatedRow"></a><a name="fnCreatedRow_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnCreatedRow</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">This function is called when a TR element is created (and all TD child
 elements have been inserted), or registered if using a DOM source, allowing
-manipulation of the TR element (adding classes etc).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+manipulation of the TR element (adding classes etc).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1190,21 +849,9 @@ manipulation of the TR element (adding classes etc).</p><dl class="details">
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnDrawCallback" class=" even"><a name="fnDrawCallback"></a><a name="fnDrawCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnDrawCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">This function is called on every 'draw' event, and allows you to
-dynamically modify any aspect you want about the created DOM.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+dynamically modify any aspect you want about the created DOM.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1228,27 +875,15 @@ dynamically modify any aspect you want about the created DOM.</p><dl class="deta
     <div class="example-code">
     	<pre class="brush: js">   $(document).ready( function() {
      $('#example').dataTable( {
-       "fnDrawCallback": function() {
+       "fnDrawCallback": function( oSettings ) {
          alert( 'DataTables has redrawn the table' );
        }
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnFooterCallback" class=" odd"><a name="fnFooterCallback"></a><a name="fnFooterCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnFooterCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">Identical to fnHeaderCallback() but for the table footer this function
-allows you to modify the table footer on every 'draw' even.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+allows you to modify the table footer on every 'draw' even.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1281,24 +916,12 @@ allows you to modify the table footer on every 'draw' even.</p><dl class="detail
      } );
    } )</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnFormatNumber" class=" even"><a name="fnFormatNumber"></a><a name="fnFormatNumber_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnFormatNumber</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">When rendering large numbers in the information element for the table
 (i.e. "Showing 1 to 10 of 57 entries") DataTables will render large numbers
 to have a comma separator for the 'thousands' units (e.g. 1 million is
 rendered as "1,000,000") to help readability for the end user. This
-function will override the default method DataTables uses.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+function will override the default method DataTables uses.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1343,22 +966,10 @@ function will override the default method DataTables uses.</p><dl class="details
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnHeaderCallback" class=" odd"><a name="fnHeaderCallback"></a><a name="fnHeaderCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnHeaderCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">This function is called on every 'draw' event, and allows you to
 dynamically modify the header row. This can be used to calculate and
-display useful information about the table.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+display useful information about the table.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1391,24 +1002,12 @@ display useful information about the table.</p><dl class="details">
      } );
    } )</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnInfoCallback" class=" even"><a name="fnInfoCallback"></a><a name="fnInfoCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnInfoCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">The information element can be used to convey information about the current
 state of the table. Although the internationalisation options presented by
 DataTables are quite capable of dealing with most customisations, there may
 be times where you wish to customise the string further. This callback
-allows you to do exactly that.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+allows you to do exactly that.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1438,23 +1037,11 @@ allows you to do exactly that.</p><dl class="details">
      }
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnInitComplete" class=" odd"><a name="fnInitComplete"></a><a name="fnInitComplete_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnInitComplete</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">Called when the table has been initialised. Normally DataTables will
 initialise sequentially and there will be no need for this function,
 however, this does not hold true when using external language information
-since that is obtained using an async XHR call.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+since that is obtained using an async XHR call.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1485,22 +1072,10 @@ since that is obtained using an async XHR call.</p><dl class="details">
      } );
    } )</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnPreDrawCallback" class=" even"><a name="fnPreDrawCallback"></a><a name="fnPreDrawCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnPreDrawCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">Called at the very start of each table draw and can be used to cancel the
 draw by returning false, any other return (including undefined) results in
-the full draw occurring).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the full draw occurring).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1533,22 +1108,10 @@ the full draw occurring).</p><dl class="details">
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnRowCallback" class=" odd"><a name="fnRowCallback"></a><a name="fnRowCallback_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnRowCallback</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">This function allows you to 'post process' each row after it have been
 generated for each table draw, but before it is rendered on screen. This
-function might be used for setting the row class name etc.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+function might be used for setting the row class name etc.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1583,23 +1146,11 @@ function might be used for setting the row class name etc.</p><dl class="details
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnServerData" class=" even"><a name="fnServerData"></a><a name="fnServerData_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnServerData</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">This parameter allows you to override the default function which obtains
 the data from the server ($.getJSON) so something more suitable for your
 application. For example you could use POST data, or pull information from
-a Gears or AIR database.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+a Gears or AIR database.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1641,24 +1192,12 @@ a Gears or AIR database.</p><dl class="details">
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnServerParams" class=" odd"><a name="fnServerParams"></a><a name="fnServerParams_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnServerParams</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">It is often useful to send extra data to the server when making an Ajax
 request - for example custom filtering information, and this callback
 function makes it trivial to send extra information to the server. The
 passed in parameter is the data set that has been constructed by
-DataTables, and you can add to this or modify it as you require.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+DataTables, and you can add to this or modify it as you require.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1696,22 +1235,10 @@ DataTables, and you can add to this or modify it as you require.</p><dl class="d
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnStateLoad" class=" even"><a name="fnStateLoad"></a><a name="fnStateLoad_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnStateLoad</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">Load the table state. With this function you can define from where, and how, the
 state of a table is loaded. By default DataTables will load from its state saving
-cookie, but you might wish to use local storage (HTML5) or a server-side database.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+cookie, but you might wish to use local storage (HTML5) or a server-side database.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1736,7 +1263,7 @@ cookie, but you might wish to use local storage (HTML5) or a server-side databas
     	<pre class="brush: js">   $(document).ready(function() {
      $('#example').dataTable( {
        "bStateSave": true,
-       "fnStateSave": function (oSettings, oData) {
+       "fnStateLoad": function (oSettings, oData) {
          var o;
          
          // Send an Ajax request to the server to get the data. Note that
@@ -1755,21 +1282,9 @@ cookie, but you might wish to use local storage (HTML5) or a server-side databas
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnStateLoaded" class=" odd"><a name="fnStateLoaded"></a><a name="fnStateLoaded_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnStateLoaded</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">Callback that is called when the state has been loaded from the state saving method
-and the DataTables settings object has been modified as a result of the loaded state.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+and the DataTables settings object has been modified as a result of the loaded state.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1796,28 +1311,16 @@ and the DataTables settings object has been modified as a result of the loaded s
      $('#example').dataTable( {
        "bStateSave": true,
        "fnStateLoaded": function (oSettings, oData) {
-         alert( 'Saved filter was: '+oData.oFilter.sSearch );
+         alert( 'Saved filter was: '+oData.oSearch.sSearch );
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnStateLoadParams" class=" even"><a name="fnStateLoadParams"></a><a name="fnStateLoadParams_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnStateLoadParams</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">Callback which allows modification of the saved state prior to loading that state.
 This callback is called when the table is loading state from the stored data, but
 prior to the settings object being modified by the saved state. Note that for 
 plug-in authors, you should use the 'stateLoadParams' event to load parameters for 
-a plug-in.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+a plug-in.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1844,7 +1347,7 @@ a plug-in.</p><dl class="details">
      $('#example').dataTable( {
        "bStateSave": true,
        "fnStateLoadParams": function (oSettings, oData) {
-         oData.oFilter.sSearch = "";
+         oData.oSearch.sSearch = "";
      } );
    } );
 
@@ -1861,22 +1364,10 @@ a plug-in.</p><dl class="details">
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnStateSave" class=" odd"><a name="fnStateSave"></a><a name="fnStateSave_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnStateSave</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" odd"><p class="description">Save the table state. This function allows you to define where and how the state
 information for the table is stored - by default it will use a cookie, but you
-might want to use local storage (HTML5) or a server-side database.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+might want to use local storage (HTML5) or a server-side database.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1914,24 +1405,12 @@ might want to use local storage (HTML5) or a server-side database.</p><dl class=
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable.defaults.fnStateSaveParams" class=" even"><a name="fnStateSaveParams"></a><a name="fnStateSaveParams_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnStateSaveParams</a></span><span class="type-sig"><span class="type-signature"> :function</span></span></span></dt><dd class=" even"><p class="description">Callback which allows modification of the state to be saved. Called when the table 
 has changed state a new state save is required. This method allows modification of
 the state saving object prior to actually doing the save, including addition or 
 other state properties or modification. Note that for plug-in authors, you should 
-use the 'stateSaveParams' event to save parameters for a plug-in.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+use the 'stateSaveParams' event to save parameters for a plug-in.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1957,26 +1436,14 @@ use the 'stateSaveParams' event to save parameters for a plug-in.</p><dl class="
    $(document).ready(function() {
      $('#example').dataTable( {
        "bStateSave": true,
-       "fnStateLoadParams": function (oSettings, oData) {
-         oData.oFilter.sSearch = "";
+       "fnStateSaveParams": function (oSettings, oData) {
+         oData.oSearch.sSearch = "";
      } );
    } );</pre>
     </div>
-
+</div>
 <dt class="  odd"><a name="iCookieDuration"></a><a name="iCookieDuration_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iCookieDuration">iCookieDuration</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p class="description">Duration of the cookie which is used for storing session information. This
-value is given in seconds.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+value is given in seconds.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -1987,51 +1454,49 @@ value is given in seconds.</p><dl class="details">
      } );
    } )</pre>
     </div>
-</dd><dt class="  even"><a name="iDeferLoading"></a><a name="iDeferLoading_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDeferLoading">iDeferLoading</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p class="description">When enabled DataTables will not make a request to the server for the first
+</div></dd><dt class="  even"><a name="iDeferLoading"></a><a name="iDeferLoading_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDeferLoading">iDeferLoading</a></span><span class="type-sig"><span class="type-signature"> :int|array</span></span></dt><dd class="  even"><p class="description">When enabled DataTables will not make a request to the server for the first
 page draw - rather it will use the data already on the page (no sorting etc
 will be applied to it), thus saving on an XHR at load time. iDeferLoading
 is used to indicate that deferred loading is required, but it is also used
 to tell DataTables how many records there are in the full table (allowing
-the information element and pagination to be displayed correctly).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the information element and pagination to be displayed correctly). In the case
+where a filtering is applied to the table on initial load, this can be
+indicated by giving the parameter as an array, where the first element is
+the number of records available after filtering and the second element is the
+number of records without filtering (allowing the table information element
+to be shown correctly).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
-<h5>Example</h5>
+<h5>Examples</h5>
     <div class="example-code">
-    	<pre class="brush: js">   $(document).ready(function() {
+    	<pre class="brush: js">   // 57 records available in the table, no filtering applied
+   $(document).ready(function() {
      $('#example').dataTable( {
        "bServerSide": true,
        "sAjaxSource": "scripts/server_processing.php",
        "iDeferLoading": 57
      } );
+   } );
+
+ </pre>
+    </div>
+
+    <div class="example-code">
+    	<pre class="brush: js">   // 57 records after filtering, 100 without filtering (an initial filter applied)
+   $(document).ready(function() {
+     $('#example').dataTable( {
+       "bServerSide": true,
+       "sAjaxSource": "scripts/server_processing.php",
+       "iDeferLoading": [ 57, 100 ],
+       "oSearch": {
+         "sSearch": "my_filter"
+       }
+     } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="iDisplayLength"></a><a name="iDisplayLength_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayLength">iDisplayLength</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p class="description">Number of rows to display on a single page when using pagination. If
+</div></dd><dt class="  odd"><a name="iDisplayLength"></a><a name="iDisplayLength_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayLength">iDisplayLength</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p class="description">Number of rows to display on a single page when using pagination. If
 feature enabled (bLengthChange) then the end user will be able to override
-this to a custom setting using a pop-up menu.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+this to a custom setting using a pop-up menu.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2042,22 +1507,10 @@ this to a custom setting using a pop-up menu.</p><dl class="details">
      } );
    } )</pre>
     </div>
-</dd><dt class="  even"><a name="iDisplayStart"></a><a name="iDisplayStart_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayStart">iDisplayStart</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p class="description">Define the starting point for data display when using DataTables with
+</div></dd><dt class="  even"><a name="iDisplayStart"></a><a name="iDisplayStart_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iDisplayStart">iDisplayStart</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p class="description">Define the starting point for data display when using DataTables with
 pagination. Note that this parameter is the number of records, rather than
 the page number, so if you have 10 records per page and want to start on
-the third page, it should be "20".</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the third page, it should be "20".</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2068,22 +1521,10 @@ the third page, it should be "20".</p><dl class="details">
      } );
    } )</pre>
     </div>
-</dd><dt class="  odd"><a name="iScrollLoadGap"></a><a name="iScrollLoadGap_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iScrollLoadGap">iScrollLoadGap</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p class="description">The scroll gap is the amount of scrolling that is left to go before
+</div></dd><dt class="  odd"><a name="iScrollLoadGap"></a><a name="iScrollLoadGap_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iScrollLoadGap">iScrollLoadGap</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  odd"><p class="description">The scroll gap is the amount of scrolling that is left to go before
 DataTables will load the next 'page' of data automatically. You typically
 want a gap which is big enough that the scrolling will be smooth for the
-user, while not so large that it will load more data than need.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+user, while not so large that it will load more data than need.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2097,24 +1538,12 @@ user, while not so large that it will load more data than need.</p><dl class="de
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="iTabIndex"></a><a name="iTabIndex_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iTabIndex">iTabIndex</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p class="description">By default DataTables allows keyboard navigation of the table (sorting, paging,
+</div></dd><dt class="  even"><a name="iTabIndex"></a><a name="iTabIndex_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iTabIndex">iTabIndex</a></span><span class="type-sig"><span class="type-signature"> :int</span></span></dt><dd class="  even"><p class="description">By default DataTables allows keyboard navigation of the table (sorting, paging,
 and filtering) by adding a tabindex attribute to the required elements. This
 allows you to tab through the controls and press the enter key to activate them.
 The tabindex is default 0, meaning that the tab follows the flow of the document.
 You can overrule this using this parameter if you wish. Use a value of -1 to
-disable built-in keyboard navigation.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+disable built-in keyboard navigation.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2125,22 +1554,10 @@ disable built-in keyboard navigation.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="sAjaxDataProp"></a><a name="sAjaxDataProp_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sAjaxDataProp">sAjaxDataProp</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">By default DataTables will look for the property 'aaData' when obtaining
+</div></dd><dt class="  odd"><a name="sAjaxDataProp"></a><a name="sAjaxDataProp_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sAjaxDataProp">sAjaxDataProp</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">By default DataTables will look for the property 'aaData' when obtaining
 data from an Ajax source or for server-side processing - this parameter
 allows that property to be changed. You can use Javascript dotted object
-notation to get a data source for multiple levels of nesting.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+notation to get a data source for multiple levels of nesting.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Examples</h5>
@@ -2165,22 +1582,10 @@ notation to get a data source for multiple levels of nesting.</p><dl class="deta
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="sAjaxSource"></a><a name="sAjaxSource_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sAjaxSource">sAjaxSource</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">You can instruct DataTables to load data from an external source using this
+</div></dd><dt class="  even"><a name="sAjaxSource"></a><a name="sAjaxSource_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sAjaxSource">sAjaxSource</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">You can instruct DataTables to load data from an external source using this
 parameter (use aData if you want to pass data in you already have). Simply
 provide a url a JSON object can be obtained from. This object must include
-the parameter 'aaData' which is the data source for the table.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the parameter 'aaData' which is the data source for the table.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2191,20 +1596,8 @@ the parameter 'aaData' which is the data source for the table.</p><dl class="det
      } );
    } )</pre>
     </div>
-</dd><dt class="  odd"><a name="sCookiePrefix"></a><a name="sCookiePrefix_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sCookiePrefix">sCookiePrefix</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">This parameter can be used to override the default prefix that DataTables
-assigns to a cookie when state saving is enabled.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div></dd><dt class="  odd"><a name="sCookiePrefix"></a><a name="sCookiePrefix_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sCookiePrefix">sCookiePrefix</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">This parameter can be used to override the default prefix that DataTables
+assigns to a cookie when state saving is enabled.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2215,7 +1608,7 @@ assigns to a cookie when state saving is enabled.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="sDom"></a><a name="sDom_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sDom">sDom</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">This initialisation variable allows you to specify exactly where in the
+</div></dd><dt class="  even"><a name="sDom"></a><a name="sDom_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sDom">sDom</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">This initialisation variable allows you to specify exactly where in the
 DOM you want DataTables to inject the various controls it adds to the page
 (for example you might want the pagination controls at the top of the
 table). DIV elements (with or without a custom class) can also be added to
@@ -2250,19 +1643,7 @@ aid styling. The follow syntax is used:
         <li>'&lt;lf&lt;t&gt;ip&gt;'</li>
       </ul>
     </li>
-  </ul></p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+  </ul></p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2273,21 +1654,9 @@ aid styling. The follow syntax is used:
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="sPaginationType"></a><a name="sPaginationType_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sPaginationType">sPaginationType</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">DataTables features two different built-in pagination interaction methods
+</div></dd><dt class="  odd"><a name="sPaginationType"></a><a name="sPaginationType_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sPaginationType">sPaginationType</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">DataTables features two different built-in pagination interaction methods
 ('two_button' or 'full_numbers') which present different page controls to
-the end user. Further methods can be added using the API (see below).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the end user. Further methods can be added using the API (see below).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2298,23 +1667,11 @@ the end user. Further methods can be added using the API (see below).</p><dl cla
      } );
    } )</pre>
     </div>
-</dd><dt class="  even"><a name="sScrollX"></a><a name="sScrollX_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollX">sScrollX</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">Enable horizontal scrolling. When a table is too wide to fit into a certain
+</div></dd><dt class="  even"><a name="sScrollX"></a><a name="sScrollX_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollX">sScrollX</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">Enable horizontal scrolling. When a table is too wide to fit into a certain
 layout, or you have a large number of columns in the table, you can enable
 x-scrolling to show the table in a viewport, which can be scrolled. This
-property can by any CSS unit, or a number (in which case it will be treated
-as a pixel measurement).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+property can be any CSS unit, or a number (in which case it will be treated
+as a pixel measurement).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2326,24 +1683,12 @@ as a pixel measurement).</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="sScrollXInner"></a><a name="sScrollXInner_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollXInner">sScrollXInner</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">This property can be used to force a DataTable to use more width than it
+</div></dd><dt class="  odd"><a name="sScrollXInner"></a><a name="sScrollXInner_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollXInner">sScrollXInner</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">This property can be used to force a DataTable to use more width than it
 might otherwise do when x-scrolling is enabled. For example if you have a
 table which requires to be well spaced, this parameter is useful for
 "over-sizing" the table, and thus forcing scrolling. This property can by
 any CSS unit, or a number (in which case it will be treated as a pixel
-measurement).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+measurement).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2355,24 +1700,12 @@ measurement).</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd><dt class="  even"><a name="sScrollY"></a><a name="sScrollY_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollY">sScrollY</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">Enable vertical scrolling. Vertical scrolling will constrain the DataTable
-to the given height, an enable scrolling for any data which overflows the
+</div></dd><dt class="  even"><a name="sScrollY"></a><a name="sScrollY_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sScrollY">sScrollY</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">Enable vertical scrolling. Vertical scrolling will constrain the DataTable
+to the given height, and enable scrolling for any data which overflows the
 current viewport. This can be used as an alternative to paging to display
 a lot of data in a small area (although paging and scrolling can both be
-enabled at the same time). This property can by any CSS unit, or a number
-(in which case it will be treated as a pixel measurement).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+enabled at the same time). This property can be any CSS unit, or a number
+(in which case it will be treated as a pixel measurement).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2384,20 +1717,8 @@ enabled at the same time). This property can by any CSS unit, or a number
      } );
    } );</pre>
     </div>
-</dd><dt class="  odd"><a name="sServerMethod"></a><a name="sServerMethod_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sServerMethod">sServerMethod</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">Set the HTTP method that is used to make the Ajax call for server-side
-processing or Ajax sourced data.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div></dd><dt class="  odd"><a name="sServerMethod"></a><a name="sServerMethod_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sServerMethod">sServerMethod</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  odd"><p class="description">Set the HTTP method that is used to make the Ajax call for server-side
+processing or Ajax sourced data.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Example</h5>
@@ -2410,7 +1731,7 @@ processing or Ajax sourced data.</p><dl class="details">
      } );
    } );</pre>
     </div>
-</dd>
+</div></dd>
 </dl></div>
    					</div>
 				
@@ -2420,7 +1741,7 @@ processing or Ajax sourced data.</p><dl class="details">
 			DataTables: Copyright 2008-2012 Allan Jardine, all rights reserved<br>
 
 			Documentation generated by <a href="https://github.com/micmath/JSDoc">JSDoc 3</a> on
-			1st Feb 2012 - 14:08
+			15th Apr 2012 - 19:30
 			with the <a href="http://datatables.net/">DataTables</a> template.
 		</div>
 	</body>

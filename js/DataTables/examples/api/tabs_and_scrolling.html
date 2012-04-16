@@ -18,9 +18,9 @@
 			$(document).ready(function() {
 				$("#tabs").tabs( {
 					"show": function(event, ui) {
-						var oTable = $('div.dataTables_scrollBody>table.display', ui.panel).dataTable();
-						if ( oTable.length > 0 ) {
-							oTable.fnAdjustColumnSizing();
+						var table = $.fn.dataTable.fnTables(true);
+						if ( table.length > 0 ) {
+							$(table).dataTable().fnAdjustColumnSizing();
 						}
 					}
 				} );
@@ -300,9 +300,9 @@
 			<pre class="brush: js;">$(document).ready(function() {
 	$("#tabs").tabs( {
 		"show": function(event, ui) {
-			var oTable = $('div.dataTables_scrollBody&gt;table.display', ui.panel).dataTable();
-			if ( oTable.length &gt; 0 ) {
-				oTable.fnAdjustColumnSizing();
+			var table = $.fn.dataTable.fnTables(true);
+			if ( table.length &gt; 0 ) {
+				$(table).dataTable().fnAdjustColumnSizing();
 			}
 		}
 	} );
@@ -413,7 +413,6 @@
 					<li><a href="../server_side/jsonp.html">JSONP for a cross domain data source</a></li>
 					<li><a href="../server_side/editable.html">jEditable integration with DataTables</a></li>
 					<li><a href="../server_side/defer_loading.html">Deferred loading of Ajax data</a></li>
-					<li><a href="../server_side/column_ordering.html">Custom column ordering (in callback data)</a></li>
 					<li><a href="../server_side/pipeline.html">Pipelining data (reduce Ajax calls for paging)</a></li>
 				</ul>
 				

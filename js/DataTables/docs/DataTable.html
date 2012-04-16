@@ -23,7 +23,7 @@
 					<h1 class="page-title">Class: DataTable</h1>
 					
 					<div class="page-info">
-						DataTables v1.9.0 documentation
+						DataTables v1.9.1 documentation
 					</div>
 				</div>
 
@@ -58,19 +58,7 @@ enhancement, which will add advanced interaction controls to any
 HTML table. For a full list of features please refer to
 <a href="http://datatables.net">DataTables.net</a>.<br><br>Note that the <i>DataTable</i> object is not a global variable but is
 aliased to <i>jQuery.fn.DataTable</i> and <i>jQuery.fn.dataTable</i> through which 
-it may be  accessed.</p><h3>Constructor</h3><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+it may be  accessed.</p><div class="collapse_details"><h3>Constructor</h3><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -111,7 +99,7 @@ it may be  accessed.</p><h3>Constructor</h3><dl class="details">
      } );
    } );</pre>
     </div>
-
+</div>
 </dl><h3 class="subsection-title">Requires</h3>
 <ul>
 	<li>module:jQuery</li>
@@ -127,9 +115,7 @@ it may be  accessed.</p><h3>Constructor</h3><dl class="details">
 						<div class="doc_group"><a name="summary_namespaces"></a><h3 class="subsection-title">Namespaces</h3>
 <dl>
 	<dt class="even"><span class="type-name"><a href="DataTable.defaults.html">defaults</a></span></dt><dd class="even">Initialisation options that can be given to DataTables at initialisation 
-time.</dd><dt class="odd"><span class="type-name"><a href="DataTable.ext.html">ext</a></span></dt><dd class="odd">Extension object for DataTables that is used to provide all extension options.
-
-Note that the <i>DataTable.ext</i> object is available through
+time.</dd><dt class="odd"><span class="type-name"><a href="DataTable.ext.html">ext</a></span></dt><dd class="odd">Extension object for DataTables that is used to provide all extension options.<br><br>Note that the <i>DataTable.ext</i> object is available through
 <i>jQuery.fn.dataTable.ext</i> where it may be accessed and manipulated. It is
 also aliased to <i>jQuery.fn.dataTableExt</i> for historic reasons.</dd><dt class="even"><span class="type-name"><a href="DataTable.models.html">models</a></span></dt><dd class="even">Object models container, for the various models that DataTables has available
 to it. These models define the objects that are used to hold the active state 
@@ -166,32 +152,36 @@ enhancements, alterations to the DOM structure of the table and event listeners.
 provided parameters.</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnGetNodes">fnGetNodes</a></span><span class="type-sig"><span class="signature">(<span class="optional">iRow</span>)</span><span class="type-signature"> &rarr; {array|node}</span></span></dt><dd class=" odd">Get an array of the TR nodes that are used in the table's body. Note that you will 
 typically want to use the '$' API method in preference to this as it is more 
 flexible.</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnGetPosition">fnGetPosition</a></span><span class="type-sig"><span class="signature">(nNode)</span><span class="type-signature"> &rarr; {int}</span></span></dt><dd class=" even">Get the array indexes of a particular cell from it's DOM element
-and column index including hidden columns</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnIsOpen">fnIsOpen</a></span><span class="type-sig"><span class="signature">(nTr)</span><span class="type-signature"> &rarr; {boolean}</span></span></dt><dd class=" odd">Check to see if a row is 'open' or not.</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnOpen">fnOpen</a></span><span class="type-sig"><span class="signature">(nTr, mHtml, sClass)</span><span class="type-signature"> &rarr; {node}</span></span></dt><dd class=" even">This function will place a new row directly after a row which is currently 
+and column index including hidden columns</dd><dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#fnIsDataTable">fnIsDataTable</a></span><span class="type-sig"><span class="signature">(nTable)</span><span class="type-signature"> &rarr; {boolean}</span></span></dt><dd class=" odd">Check if a TABLE node is a DataTable table already or not.</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnIsOpen">fnIsOpen</a></span><span class="type-sig"><span class="signature">(nTr)</span><span class="type-signature"> &rarr; {boolean}</span></span></dt><dd class=" even">Check to see if a row is 'open' or not.</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnOpen">fnOpen</a></span><span class="type-sig"><span class="signature">(nTr, mHtml, sClass)</span><span class="type-signature"> &rarr; {node}</span></span></dt><dd class=" odd">This function will place a new row directly after a row which is currently 
 on display on the page, with the HTML contents that is passed into the 
 function. This can be used, for example, to ask for confirmation that a 
-particular record should be deleted.</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnPageChange">fnPageChange</a></span><span class="type-sig"><span class="signature">(mAction, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></dt><dd class=" odd">Change the pagination - provides the internal logic for pagination in a simple API 
+particular record should be deleted.</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnPageChange">fnPageChange</a></span><span class="type-sig"><span class="signature">(mAction, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></dt><dd class=" even">Change the pagination - provides the internal logic for pagination in a simple API 
 function. With this function you can have a DataTables table go to the next, 
-previous, first or last pages.</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSetColumnVis">fnSetColumnVis</a></span><span class="type-sig"><span class="signature">(iCol, bShow, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></dt><dd class=" even">Show a particular column</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSettings">fnSettings</a></span><span class="type-sig"><span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></span></dt><dd class=" odd">Get the settings for a particular table for external manipulation</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSort">fnSort</a></span><span class="type-sig"><span class="signature">(iCol)</span><span class="type-signature"></span></span></dt><dd class=" even">Sort the table by a particular row</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSortListener">fnSortListener</a></span><span class="type-sig"><span class="signature">(nNode, iColumn, <span class="optional">fnCallback</span>)</span><span class="type-signature"></span></span></dt><dd class=" odd">Attach a sort listener to an element for a given column</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnUpdate">fnUpdate</a></span><span class="type-sig"><span class="signature">(mData, mRow, <span class="optional">iColumn</span>, <span class="optional">bRedraw</span>, <span class="optional">bAction</span>)</span><span class="type-signature"> &rarr; {int}</span></span></dt><dd class=" even">Update a table cell or row - this method will accept either a single value to
+previous, first or last pages.</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSetColumnVis">fnSetColumnVis</a></span><span class="type-sig"><span class="signature">(iCol, bShow, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></dt><dd class=" odd">Show a particular column</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSettings">fnSettings</a></span><span class="type-sig"><span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></span></dt><dd class=" even">Get the settings for a particular table for external manipulation</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSort">fnSort</a></span><span class="type-sig"><span class="signature">(iCol)</span><span class="type-signature"></span></span></dt><dd class=" odd">Sort the table by a particular column</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnSortListener">fnSortListener</a></span><span class="type-sig"><span class="signature">(nNode, iColumn, <span class="optional">fnCallback</span>)</span><span class="type-signature"></span></span></dt><dd class=" even">Attach a sort listener to an element for a given column</dd><dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#fnTables">fnTables</a></span><span class="type-sig"><span class="signature">(<span class="optional">bVisible</span>)</span><span class="type-signature"> &rarr; {array}</span></span></dt><dd class=" odd">Get all DataTable tables that have been initialised - optionally you can select to
+get only currently visible tables.</dd><dt class=" even"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnUpdate">fnUpdate</a></span><span class="type-sig"><span class="signature">(mData, mRow, <span class="optional">iColumn</span>, <span class="optional">bRedraw</span>, <span class="optional">bAction</span>)</span><span class="type-signature"> &rarr; {int}</span></span></dt><dd class=" even">Update a table cell or row - this method will accept either a single value to
 update the cell with, an array of values with one element for each column or
 an object in the same format as the original data source. The function is
 self-referencing in order to make the multi column updates easier.</dd><dt class=" odd"><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a href="#fnVersionCheck">fnVersionCheck</a></span><span class="type-sig"><span class="signature">(sVersion)</span><span class="type-signature"> &rarr; {boolean}</span></span></dt><dd class=" odd">Provide a common method for plug-ins to check the version of DataTables being used, in order
+to ensure compatibility.</dd><dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#fnVersionCheck">fnVersionCheck</a></span><span class="type-sig"><span class="signature">(sVersion)</span><span class="type-signature"> &rarr; {boolean}</span></span></dt><dd class=" even">Provide a common method for plug-ins to check the version of DataTables being used, in order
 to ensure compatibility.</dd>
 </dl>
 </div><div class="doc_group"><a name="summary_events"></a><h3 class="subsection-title">Events</h3>
 <dl>
-    <dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#draw">draw</a></span><span class="type-sig"></span></dt><dd class=" even">Draw event, fired whenever the table is redrawn on the page, at the same point as
+    <dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#destroy">destroy</a></span><span class="type-sig"></span></dt><dd class=" even">Destroy event, fired when the DataTable is destroyed by calling fnDestroy or passing
+the bDestroy:true parameter in the initialisation object. This can be used to remove
+bound events, added DOM nodes, etc.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#draw">draw</a></span><span class="type-sig"></span></dt><dd class=" odd">Draw event, fired whenever the table is redrawn on the page, at the same point as
 fnDrawCallback. This may be useful for binding events or performing calculations when
-the table is altered at all.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#filter">filter</a></span><span class="type-sig"></span></dt><dd class=" odd">Filter event, fired when the filtering applied to the table (using the build in global
-global filter, or column filters) is altered.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#init">init</a></span><span class="type-sig"></span></dt><dd class=" even">DataTables initialisation complete event, fired when the table is fully drawn,
-including Ajax data loaded, if Ajax data is required.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#page">page</a></span><span class="type-sig"></span></dt><dd class=" odd">Page change event, fired when the paging of the table is altered.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#processing">processing</a></span><span class="type-sig"></span></dt><dd class=" even">Processing event, fired when DataTables is doing some kind of processing (be it,
+the table is altered at all.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#filter">filter</a></span><span class="type-sig"></span></dt><dd class=" even">Filter event, fired when the filtering applied to the table (using the build in global
+global filter, or column filters) is altered.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#init">init</a></span><span class="type-sig"></span></dt><dd class=" odd">DataTables initialisation complete event, fired when the table is fully drawn,
+including Ajax data loaded, if Ajax data is required.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#page">page</a></span><span class="type-sig"></span></dt><dd class=" even">Page change event, fired when the paging of the table is altered.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#processing">processing</a></span><span class="type-sig"></span></dt><dd class=" odd">Processing event, fired when DataTables is doing some kind of processing (be it,
 sort, filter or anything else). Can be used to indicate to the end user that
-there is something happening, or that something has finished.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#sort">sort</a></span><span class="type-sig"></span></dt><dd class=" odd">Sort event, fired when the sorting applied to the table is altered.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#stateLoaded">stateLoaded</a></span><span class="type-sig"></span></dt><dd class=" even">State loaded event, fired when state has been loaded from stored data and the settings
-object has been modified by the loaded data.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#stateLoadParams">stateLoadParams</a></span><span class="type-sig"></span></dt><dd class=" odd">State load event, fired when the table is loading state from the stored data, but
+there is something happening, or that something has finished.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#sort">sort</a></span><span class="type-sig"></span></dt><dd class=" even">Sort event, fired when the sorting applied to the table is altered.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#stateLoaded">stateLoaded</a></span><span class="type-sig"></span></dt><dd class=" odd">State loaded event, fired when state has been loaded from stored data and the settings
+object has been modified by the loaded data.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#stateLoadParams">stateLoadParams</a></span><span class="type-sig"></span></dt><dd class=" even">State load event, fired when the table is loading state from the stored data, but
 prior to the settings object being modified by the saved state - allowing modification
-of the saved state is required or loading of state for a plug-in.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#stateSaveParams">stateSaveParams</a></span><span class="type-sig"></span></dt><dd class=" even">State save event, fired when the table has changed state a new state save is required.
+of the saved state is required or loading of state for a plug-in.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#stateSaveParams">stateSaveParams</a></span><span class="type-sig"></span></dt><dd class=" odd">State save event, fired when the table has changed state a new state save is required.
 This method allows modification of the state saving object prior to actually doing the
 save, including addition or other state properties (for plug-ins) or modification
-of a DataTables core property.</dd><dt class=" odd"><span class="type-attr"></span><span class="type-name"><a href="#xhr">xhr</a></span><span class="type-sig"></span></dt><dd class=" odd">Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
+of a DataTables core property.</dd><dt class=" even"><span class="type-attr"></span><span class="type-name"><a href="#xhr">xhr</a></span><span class="type-sig"></span></dt><dd class=" even">Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
 made to the server for new data (note that this trigger is called in fnServerData,
 if you override fnServerData and which to use this event, you need to trigger it in
 you success function).</dd>
@@ -209,38 +199,14 @@ you success function).</dd>
 <dl>
     <dt class="  even"><a name="version"></a><a name="version_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#version">version</a></span><span class="type-sig"><span class="type-signature"> :string</span></span></dt><dd class="  even"><p class="description">Version string for plug-ins to check compatibility. Allowed format is
 a.b.c.d.e where: a:int, b:int, c:int, d:string(dev|beta), e:int. d and
-e are optional</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+e are optional</p><div class="collapse_details"><dl class="details">
 	
 </dl>
-</dd>
+</div></dd>
 </dl></div><div class="doc_group"><a name="details_methods"></a><h3 class="subsection-title">Methods</h3>
 <dl>
     <dt id="DataTable#$" class=" even"><a name="$"></a><a name="$_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>$</a></span><span class="type-sig"><span class="signature">(sSelector, <span class="optional">oOpts</span>)</span><span class="type-signature"> &rarr; {object}</span></span></span></dt><dd class=" even"><p class="description">Perform a jQuery selector action on the table's TR elements (from the tbody) and
-return the resulting jQuery object.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+return the resulting jQuery object.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -288,25 +254,13 @@ return the resulting jQuery object.</p><dl class="details">
      oTable.fnFilter('');
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#_" class=" odd"><a name="_"></a><a name="__details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>_</a></span><span class="type-sig"><span class="signature">(sSelector, <span class="optional">oOpts</span>)</span><span class="type-signature"> &rarr; {array}</span></span></span></dt><dd class=" odd"><p class="description">Almost identical to $ in operation, but in this case returns the data for the matched
 rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
 rather than any decendents, so the data can be obtained for the row/cell. If matching
 rows are found, the data returned is the original data array/object that was used to  
 create the row (or a generated array if from a DOM source).<br><br>This method is often useful incombination with $ where both functions are given the
-same parameters and the array indexes will match identically.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+same parameters and the array indexes will match identically.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -360,23 +314,11 @@ same parameters and the array indexes will match identically.</p><dl class="deta
      alert( data.length+" rows matched the filter" );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnAddData" class=" even"><a name="fnAddData"></a><a name="fnAddData_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnAddData</a></span><span class="type-sig"><span class="signature">(mData, <span class="optional">bRedraw</span>)</span><span class="type-signature"> &rarr; {array}</span></span></span></dt><dd class=" even"><p class="description">Add a single new row or multiple rows of data to the table. Please note
 that this is suitable for client-side processing only - if you are using 
 server-side processing (i.e. "bServerSide": true), then to add data, you
-must add it to the data source, i.e. the server-side, through an Ajax call.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+must add it to the data source, i.e. the server-side, through an Ajax call.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -424,23 +366,11 @@ must add it to the data source, i.e. the server-side, through an Ajax call.</p><
      giCount++;
    }</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnAdjustColumnSizing" class=" odd"><a name="fnAdjustColumnSizing"></a><a name="fnAdjustColumnSizing_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnAdjustColumnSizing</a></span><span class="type-sig"><span class="signature">(<span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">This function will make DataTables recalculate the column sizes, based on the data 
 contained in the table and the sizes applied to the columns (in the DOM, CSS or 
 through the sWidth parameter). This can be useful when the width of the table's 
-parent element changes (for example a window resize).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+parent element changes (for example a window resize).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -473,20 +403,8 @@ parent element changes (for example a window resize).</p><dl class="details">
      } );
    } );</pre>
     </div>
-
-<dt id="DataTable#fnClearTable" class=" even"><a name="fnClearTable"></a><a name="fnClearTable_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnClearTable</a></span><span class="type-sig"><span class="signature">(<span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Quickly and simply clear a table</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnClearTable" class=" even"><a name="fnClearTable"></a><a name="fnClearTable_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnClearTable</a></span><span class="type-sig"><span class="signature">(<span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Quickly and simply clear a table</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -515,21 +433,9 @@ parent element changes (for example a window resize).</p><dl class="details">
      oTable.fnClearTable();
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnClose" class=" odd"><a name="fnClose"></a><a name="fnClose_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnClose</a></span><span class="type-sig"><span class="signature">(nTr)</span><span class="type-signature"> &rarr; {int}</span></span></span></dt><dd class=" odd"><p class="description">The exact opposite of 'opening' a row, this function will close any rows which 
-are currently 'open'.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+are currently 'open'.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -566,20 +472,8 @@ are currently 'open'.</p><dl class="details">
      oTable = $('#example').dataTable();
    } );</pre>
     </div>
-
-<dt id="DataTable#fnDeleteRow" class=" even"><a name="fnDeleteRow"></a><a name="fnDeleteRow_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnDeleteRow</a></span><span class="type-sig"><span class="signature">(mTarget, <span class="optional">fnCallBack</span>, <span class="optional">bRedraw</span>)</span><span class="type-signature"> &rarr; {array}</span></span></span></dt><dd class=" even"><p class="description">Remove a row for the table</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnDeleteRow" class=" even"><a name="fnDeleteRow"></a><a name="fnDeleteRow_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnDeleteRow</a></span><span class="type-sig"><span class="signature">(mTarget, <span class="optional">fnCallBack</span>, <span class="optional">bRedraw</span>)</span><span class="type-signature"> &rarr; {array}</span></span></span></dt><dd class=" even"><p class="description">Remove a row for the table</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -609,21 +503,9 @@ are currently 'open'.</p><dl class="details">
      oTable.fnDeleteRow( 0 );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnDestroy" class=" odd"><a name="fnDestroy"></a><a name="fnDestroy_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnDestroy</a></span><span class="type-sig"><span class="signature">(<span class="optional">bRemove</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Restore the table to it's original state in the DOM by removing all of DataTables 
-enhancements, alterations to the DOM structure of the table and event listeners.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+enhancements, alterations to the DOM structure of the table and event listeners.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -651,20 +533,8 @@ enhancements, alterations to the DOM structure of the table and event listeners.
      oTable.fnDestroy();
    } );</pre>
     </div>
-
-<dt id="DataTable#fnDraw" class=" even"><a name="fnDraw"></a><a name="fnDraw_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnDraw</a></span><span class="type-sig"><span class="signature">(<span class="optional">bComplete</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Redraw the table</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnDraw" class=" even"><a name="fnDraw"></a><a name="fnDraw_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnDraw</a></span><span class="type-sig"><span class="signature">(<span class="optional">bComplete</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Redraw the table</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -693,20 +563,8 @@ enhancements, alterations to the DOM structure of the table and event listeners.
      oTable.fnDraw();
    } );</pre>
     </div>
-
-<dt id="DataTable#fnFilter" class=" odd"><a name="fnFilter"></a><a name="fnFilter_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnFilter</a></span><span class="type-sig"><span class="signature">(sInput, <span class="optional">iColumn</span>, <span class="optional">bRegex</span>, <span class="optional">bSmart</span>, <span class="optional">bShowGlobal</span>, <span class="optional">bCaseInsensitive</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Filter the input based on data</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnFilter" class=" odd"><a name="fnFilter"></a><a name="fnFilter_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnFilter</a></span><span class="type-sig"><span class="signature">(sInput, <span class="optional">iColumn</span>, <span class="optional">bRegex</span>, <span class="optional">bSmart</span>, <span class="optional">bShowGlobal</span>, <span class="optional">bCaseInsensitive</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Filter the input based on data</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -735,21 +593,9 @@ enhancements, alterations to the DOM structure of the table and event listeners.
      oTable.fnFilter( 'test string' );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnGetData" class=" even"><a name="fnGetData"></a><a name="fnGetData_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnGetData</a></span><span class="type-sig"><span class="signature">(<span class="optional">mRow</span>, <span class="optional">iCol</span>)</span><span class="type-signature"> &rarr; {array|object|string}</span></span></span></dt><dd class=" even"><p class="description">Get the data for the whole table, an individual row or an individual cell based on the 
-provided parameters.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+provided parameters.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -801,22 +647,10 @@ provided parameters.</p><dl class="details">
      } );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnGetNodes" class=" odd"><a name="fnGetNodes"></a><a name="fnGetNodes_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnGetNodes</a></span><span class="type-sig"><span class="signature">(<span class="optional">iRow</span>)</span><span class="type-signature"> &rarr; {array|node}</span></span></span></dt><dd class=" odd"><p class="description">Get an array of the TR nodes that are used in the table's body. Note that you will 
 typically want to use the '$' API method in preference to this as it is more 
-flexible.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+flexible.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -846,21 +680,9 @@ flexible.</p><dl class="details">
      var nNodes = oTable.fnGetNodes( );
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnGetPosition" class=" even"><a name="fnGetPosition"></a><a name="fnGetPosition_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnGetPosition</a></span><span class="type-sig"><span class="signature">(nNode)</span><span class="type-signature"> &rarr; {int}</span></span></span></dt><dd class=" even"><p class="description">Get the array indexes of a particular cell from it's DOM element
-and column index including hidden columns</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+and column index including hidden columns</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -900,20 +722,37 @@ and column index including hidden columns</p><dl class="details">
      oTable = $('#example').dataTable();
    } );</pre>
     </div>
+</div>
+<dt id="DataTable.fnIsDataTable" class=" odd"><a name="fnIsDataTable"></a><a name="fnIsDataTable_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnIsDataTable</a></span><span class="type-sig"><span class="signature">(nTable)</span><span class="type-signature"> &rarr; {boolean}</span></span></span></dt><dd class=" odd"><p class="description">Check if a TABLE node is a DataTable table already or not.</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Parameters:</h5>
 
-<dt id="DataTable#fnIsOpen" class=" odd"><a name="fnIsOpen"></a><a name="fnIsOpen_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnIsOpen</a></span><span class="type-sig"><span class="signature">(nTr)</span><span class="type-signature"> &rarr; {boolean}</span></span></span></dt><dd class=" odd"><p class="description">Check to see if a row is 'open' or not.</p><dl class="details">
+<table class="params">
+    <thead>
+	<tr>
+        <th width="20"></th>
+        <th width="12%" class="bottom_border name">Name</th>
+		<th width="10%" class="bottom_border">Type</th>
+		<th width="10%" class="bottom_border">Attributes</th>
+		<th width="10%" class="bottom_border">Default</th>
+		<th class="last bottom_border">Description</th>
+	</tr>
+	</thead>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	<tbody>
+	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">nTable</td><td class="type type-param">node</td><td class="attributes"></td><td class="default"></td><td class="description last">The TABLE node to check if it is a DataTable or not (note that other
+   node types can be passed in, but will always return false).</td></tr>
+	</tbody>
+</table><h5>Returns:</h5><p class="returns">true the table given is a DataTable, or false otherwise</p><h5>Example:</h5>
+    <div class="example-code">
+    	<pre class="brush: js">   var ex = document.getElementById('example');
+   if ( ! $.fn.DataTable.fnIsDataTable( ex ) ) {
+     $(ex).dataTable();
+   }</pre>
+    </div>
+</div>
+<dt id="DataTable#fnIsOpen" class=" even"><a name="fnIsOpen"></a><a name="fnIsOpen_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnIsOpen</a></span><span class="type-sig"><span class="signature">(nTr)</span><span class="type-signature"> &rarr; {boolean}</span></span></span></dt><dd class=" even"><p class="description">Check to see if a row is 'open' or not.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -950,23 +789,11 @@ and column index including hidden columns</p><dl class="details">
      oTable = $('#example').dataTable();
    } );</pre>
     </div>
-
-<dt id="DataTable#fnOpen" class=" even"><a name="fnOpen"></a><a name="fnOpen_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnOpen</a></span><span class="type-sig"><span class="signature">(nTr, mHtml, sClass)</span><span class="type-signature"> &rarr; {node}</span></span></span></dt><dd class=" even"><p class="description">This function will place a new row directly after a row which is currently 
+</div>
+<dt id="DataTable#fnOpen" class=" odd"><a name="fnOpen"></a><a name="fnOpen_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnOpen</a></span><span class="type-sig"><span class="signature">(nTr, mHtml, sClass)</span><span class="type-signature"> &rarr; {node}</span></span></span></dt><dd class=" odd"><p class="description">This function will place a new row directly after a row which is currently 
 on display on the page, with the HTML contents that is passed into the 
 function. This can be used, for example, to ask for confirmation that a 
-particular record should be deleted.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+particular record should be deleted.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1005,22 +832,10 @@ particular record should be deleted.</p><dl class="details">
      oTable = $('#example').dataTable();
    } );</pre>
     </div>
-
-<dt id="DataTable#fnPageChange" class=" odd"><a name="fnPageChange"></a><a name="fnPageChange_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnPageChange</a></span><span class="type-sig"><span class="signature">(mAction, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Change the pagination - provides the internal logic for pagination in a simple API 
+</div>
+<dt id="DataTable#fnPageChange" class=" even"><a name="fnPageChange"></a><a name="fnPageChange_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnPageChange</a></span><span class="type-sig"><span class="signature">(mAction, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Change the pagination - provides the internal logic for pagination in a simple API 
 function. With this function you can have a DataTables table go to the next, 
-previous, first or last pages.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+previous, first or last pages.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1048,20 +863,8 @@ previous, first or last pages.</p><dl class="details">
      oTable.fnPageChange( 'next' );
    } );</pre>
     </div>
-
-<dt id="DataTable#fnSetColumnVis" class=" even"><a name="fnSetColumnVis"></a><a name="fnSetColumnVis_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSetColumnVis</a></span><span class="type-sig"><span class="signature">(iCol, bShow, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Show a particular column</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnSetColumnVis" class=" odd"><a name="fnSetColumnVis"></a><a name="fnSetColumnVis_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSetColumnVis</a></span><span class="type-sig"><span class="signature">(iCol, bShow, <span class="optional">bRedraw</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Show a particular column</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1090,20 +893,8 @@ previous, first or last pages.</p><dl class="details">
      oTable.fnSetColumnVis( 1, false );
    } );</pre>
     </div>
-
-<dt id="DataTable#fnSettings" class=" odd"><a name="fnSettings"></a><a name="fnSettings_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSettings</a></span><span class="type-sig"><span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></span></span></dt><dd class=" odd"><p class="description">Get the settings for a particular table for external manipulation</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnSettings" class=" even"><a name="fnSettings"></a><a name="fnSettings_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSettings</a></span><span class="type-sig"><span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></span></span></dt><dd class=" even"><p class="description">Get the settings for a particular table for external manipulation</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Returns:</h5><p class="returns">DataTables settings object. See 
@@ -1117,20 +908,8 @@ previous, first or last pages.</p><dl class="details">
      alert( oSettings._iDisplayStart );
    } );</pre>
     </div>
-
-<dt id="DataTable#fnSort" class=" even"><a name="fnSort"></a><a name="fnSort_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSort</a></span><span class="type-sig"><span class="signature">(iCol)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Sort the table by a particular row</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnSort" class=" odd"><a name="fnSort"></a><a name="fnSort_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSort</a></span><span class="type-sig"><span class="signature">(iCol)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Sort the table by a particular column</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1160,20 +939,8 @@ previous, first or last pages.</p><dl class="details">
      oTable.fnSort( [ [0,'asc'], [1,'asc'] ] );
    } );</pre>
     </div>
-
-<dt id="DataTable#fnSortListener" class=" odd"><a name="fnSortListener"></a><a name="fnSortListener_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSortListener</a></span><span class="type-sig"><span class="signature">(nNode, iColumn, <span class="optional">fnCallback</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" odd"><p class="description">Attach a sort listener to an element for a given column</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</div>
+<dt id="DataTable#fnSortListener" class=" even"><a name="fnSortListener"></a><a name="fnSortListener_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnSortListener</a></span><span class="type-sig"><span class="signature">(nNode, iColumn, <span class="optional">fnCallback</span>)</span><span class="type-signature"></span></span></span></dt><dd class=" even"><p class="description">Attach a sort listener to an element for a given column</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1202,23 +969,41 @@ previous, first or last pages.</p><dl class="details">
      oTable.fnSortListener( document.getElementById('sorter'), 1 );
    } );</pre>
     </div>
+</div>
+<dt id="DataTable.fnTables" class=" odd"><a name="fnTables"></a><a name="fnTables_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnTables</a></span><span class="type-sig"><span class="signature">(<span class="optional">bVisible</span>)</span><span class="type-signature"> &rarr; {array}</span></span></span></dt><dd class=" odd"><p class="description">Get all DataTable tables that have been initialised - optionally you can select to
+get only currently visible tables.</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Parameters:</h5>
 
+<table class="params">
+    <thead>
+	<tr>
+        <th width="20"></th>
+        <th width="12%" class="bottom_border name">Name</th>
+		<th width="10%" class="bottom_border">Type</th>
+		<th width="10%" class="bottom_border">Attributes</th>
+		<th width="10%" class="bottom_border">Default</th>
+		<th class="last bottom_border">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">bVisible</td><td class="type type-param">boolean</td><td class="attributes">Optional</td><td class="default">false</td><td class="description last">Flag to indicate if you want all (default) or 
+   visible tables only.</td></tr>
+	</tbody>
+</table><h5>Returns:</h5><p class="returns">Array of TABLE nodes (not DataTable instances) which are DataTables</p><h5>Example:</h5>
+    <div class="example-code">
+    	<pre class="brush: js">   var table = $.fn.dataTable.fnTables(true);
+   if ( table.length > 0 ) {
+     $(table).dataTable().fnAdjustColumnSizing();
+   }</pre>
+    </div>
+</div>
 <dt id="DataTable#fnUpdate" class=" even"><a name="fnUpdate"></a><a name="fnUpdate_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnUpdate</a></span><span class="type-sig"><span class="signature">(mData, mRow, <span class="optional">iColumn</span>, <span class="optional">bRedraw</span>, <span class="optional">bAction</span>)</span><span class="type-signature"> &rarr; {int}</span></span></span></dt><dd class=" even"><p class="description">Update a table cell or row - this method will accept either a single value to
 update the cell with, an array of values with one element for each column or
 an object in the same format as the original data source. The function is
-self-referencing in order to make the multi column updates easier.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+self-referencing in order to make the multi column updates easier.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1246,21 +1031,9 @@ self-referencing in order to make the multi column updates easier.</p><dl class=
      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
    } );</pre>
     </div>
-
+</div>
 <dt id="DataTable#fnVersionCheck" class=" odd"><a name="fnVersionCheck"></a><a name="fnVersionCheck_details"></a><span class="type-attr"><span class="type-signature"></span></span><span class="type-name"><a>fnVersionCheck</a></span><span class="type-sig"><span class="signature">(sVersion)</span><span class="type-signature"> &rarr; {boolean}</span></span></span></dt><dd class=" odd"><p class="description">Provide a common method for plug-ins to check the version of DataTables being used, in order
-to ensure compatibility.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+to ensure compatibility.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1289,26 +1062,65 @@ to ensure compatibility.</p><dl class="details">
      alert( oTable.fnVersionCheck( '1.9.0' ) );
    } );</pre>
     </div>
+</div>
+<dt id="DataTable.fnVersionCheck" class=" even"><a name="fnVersionCheck"></a><a name="fnVersionCheck_details"></a><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span class="type-name"><a>fnVersionCheck</a></span><span class="type-sig"><span class="signature">(sVersion)</span><span class="type-signature"> &rarr; {boolean}</span></span></span></dt><dd class=" even"><p class="description">Provide a common method for plug-ins to check the version of DataTables being used, in order
+to ensure compatibility.</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Parameters:</h5>
 
+<table class="params">
+    <thead>
+	<tr>
+        <th width="20"></th>
+        <th width="12%" class="bottom_border name">Name</th>
+		<th width="10%" class="bottom_border">Type</th>
+		<th width="10%" class="bottom_border">Attributes</th>
+		<th width="10%" class="bottom_border">Default</th>
+		<th class="last bottom_border">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">sVersion</td><td class="type type-param">string</td><td class="attributes"></td><td class="default"></td><td class="description last">Version string to check for, in the format "X.Y.Z". Note that the
+   formats "X" and "X.Y" are also acceptable.</td></tr>
+	</tbody>
+</table><h5>Returns:</h5><p class="returns">true if this version of DataTables is greater or equal to the required
+   version, or false if this version of DataTales is not suitable</p><h5>Example:</h5>
+    <div class="example-code">
+    	<pre class="brush: js">   alert( $.fn.dataTable.fnVersionCheck( '1.9.0' ) );</pre>
+    </div>
+</div>
 
 </dd>
 </div><div class="doc_group"><a name="details_events"></a><h3 class="subsection-title">Events</h3>
 <dl>
-    <dt id="DataTable#event:draw" class=" even"><a name="draw"></a><a name="draw_details"></a><span class="type-attr"></span><span class="type-name"><a>draw</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Draw event, fired whenever the table is redrawn on the page, at the same point as
+    <dt id="DataTable#event:destroy" class=" even"><a name="destroy"></a><a name="destroy_details"></a><span class="type-attr"></span><span class="type-name"><a>destroy</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Destroy event, fired when the DataTable is destroyed by calling fnDestroy or passing
+the bDestroy:true parameter in the initialisation object. This can be used to remove
+bound events, added DOM nodes, etc.</p><div class="collapse_details"><dl class="details">
+	
+</dl>
+<h5>Parameters:</h5>
+
+<table class="params">
+    <thead>
+	<tr>
+        <th width="20"></th>
+        <th width="12%" class="bottom_border name">Name</th>
+		<th width="10%" class="bottom_border">Type</th>
+		<th width="10%" class="bottom_border">Attributes</th>
+		<th width="10%" class="bottom_border">Default</th>
+		<th class="last bottom_border">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">o</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object <a href="DataTable.models.oSettings.html">DataTable.models.oSettings</a></td></tr>
+	</tbody>
+</table></div>
+<dt id="DataTable#event:draw" class=" odd"><a name="draw"></a><a name="draw_details"></a><span class="type-attr"></span><span class="type-name"><a>draw</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">Draw event, fired whenever the table is redrawn on the page, at the same point as
 fnDrawCallback. This may be useful for binding events or performing calculations when
-the table is altered at all.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+the table is altered at all.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1328,21 +1140,9 @@ the table is altered at all.</p><dl class="details">
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">o</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object <a href="DataTable.models.oSettings.html">DataTable.models.oSettings</a></td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:filter" class=" odd"><a name="filter"></a><a name="filter_details"></a><span class="type-attr"></span><span class="type-name"><a>filter</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">Filter event, fired when the filtering applied to the table (using the build in global
-global filter, or column filters) is altered.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</table></div>
+<dt id="DataTable#event:filter" class=" even"><a name="filter"></a><a name="filter_details"></a><span class="type-attr"></span><span class="type-name"><a>filter</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Filter event, fired when the filtering applied to the table (using the build in global
+global filter, or column filters) is altered.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1362,21 +1162,9 @@ global filter, or column filters) is altered.</p><dl class="details">
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">o</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object <a href="DataTable.models.oSettings.html">DataTable.models.oSettings</a></td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:init" class=" even"><a name="init"></a><a name="init_details"></a><span class="type-attr"></span><span class="type-name"><a>init</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">DataTables initialisation complete event, fired when the table is fully drawn,
-including Ajax data loaded, if Ajax data is required.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</table></div>
+<dt id="DataTable#event:init" class=" odd"><a name="init"></a><a name="init_details"></a><span class="type-attr"></span><span class="type-name"><a>init</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">DataTables initialisation complete event, fired when the table is fully drawn,
+including Ajax data loaded, if Ajax data is required.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1397,20 +1185,8 @@ including Ajax data loaded, if Ajax data is required.</p><dl class="details">
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">oSettings</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object</td></tr><tr class="even"><td class="number right_border"><div>3</div></td><td class="name">json</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">The JSON object request from the server - only
    present if client-side Ajax sourced data is used</li></ol></td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:page" class=" odd"><a name="page"></a><a name="page_details"></a><span class="type-attr"></span><span class="type-name"><a>page</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">Page change event, fired when the paging of the table is altered.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</table></div>
+<dt id="DataTable#event:page" class=" even"><a name="page"></a><a name="page_details"></a><span class="type-attr"></span><span class="type-name"><a>page</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Page change event, fired when the paging of the table is altered.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1430,22 +1206,10 @@ including Ajax data loaded, if Ajax data is required.</p><dl class="details">
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">o</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object <a href="DataTable.models.oSettings.html">DataTable.models.oSettings</a></td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:processing" class=" even"><a name="processing"></a><a name="processing_details"></a><span class="type-attr"></span><span class="type-name"><a>processing</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Processing event, fired when DataTables is doing some kind of processing (be it,
+</table></div>
+<dt id="DataTable#event:processing" class=" odd"><a name="processing"></a><a name="processing_details"></a><span class="type-attr"></span><span class="type-name"><a>processing</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">Processing event, fired when DataTables is doing some kind of processing (be it,
 sort, filter or anything else). Can be used to indicate to the end user that
-there is something happening, or that something has finished.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+there is something happening, or that something has finished.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1465,20 +1229,8 @@ there is something happening, or that something has finished.</p><dl class="deta
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">oSettings</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object</td></tr><tr class="even"><td class="number right_border"><div>3</div></td><td class="name">bShow</td><td class="type type-param">boolean</td><td class="attributes"></td><td class="default"></td><td class="description last">Flag for if DataTables is doing processing or not</td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:sort" class=" odd"><a name="sort"></a><a name="sort_details"></a><span class="type-attr"></span><span class="type-name"><a>sort</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">Sort event, fired when the sorting applied to the table is altered.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</table></div>
+<dt id="DataTable#event:sort" class=" even"><a name="sort"></a><a name="sort_details"></a><span class="type-attr"></span><span class="type-name"><a>sort</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Sort event, fired when the sorting applied to the table is altered.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1498,21 +1250,9 @@ there is something happening, or that something has finished.</p><dl class="deta
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">o</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object <a href="DataTable.models.oSettings.html">DataTable.models.oSettings</a></td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:stateLoaded" class=" even"><a name="stateLoaded"></a><a name="stateLoaded_details"></a><span class="type-attr"></span><span class="type-name"><a>stateLoaded</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">State loaded event, fired when state has been loaded from stored data and the settings
-object has been modified by the loaded data.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+</table></div>
+<dt id="DataTable#event:stateLoaded" class=" odd"><a name="stateLoaded"></a><a name="stateLoaded_details"></a><span class="type-attr"></span><span class="type-name"><a>stateLoaded</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">State loaded event, fired when state has been loaded from stored data and the settings
+object has been modified by the loaded data.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1532,22 +1272,10 @@ object has been modified by the loaded data.</p><dl class="details">
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">oSettings</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object</td></tr><tr class="even"><td class="number right_border"><div>3</div></td><td class="name">json</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">The saved state information</td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:stateLoadParams" class=" odd"><a name="stateLoadParams"></a><a name="stateLoadParams_details"></a><span class="type-attr"></span><span class="type-name"><a>stateLoadParams</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">State load event, fired when the table is loading state from the stored data, but
+</table></div>
+<dt id="DataTable#event:stateLoadParams" class=" even"><a name="stateLoadParams"></a><a name="stateLoadParams_details"></a><span class="type-attr"></span><span class="type-name"><a>stateLoadParams</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">State load event, fired when the table is loading state from the stored data, but
 prior to the settings object being modified by the saved state - allowing modification
-of the saved state is required or loading of state for a plug-in.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+of the saved state is required or loading of state for a plug-in.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1567,23 +1295,11 @@ of the saved state is required or loading of state for a plug-in.</p><dl class="
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">oSettings</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object</td></tr><tr class="even"><td class="number right_border"><div>3</div></td><td class="name">json</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">The saved state information</td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:stateSaveParams" class=" even"><a name="stateSaveParams"></a><a name="stateSaveParams_details"></a><span class="type-attr"></span><span class="type-name"><a>stateSaveParams</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">State save event, fired when the table has changed state a new state save is required.
+</table></div>
+<dt id="DataTable#event:stateSaveParams" class=" odd"><a name="stateSaveParams"></a><a name="stateSaveParams_details"></a><span class="type-attr"></span><span class="type-name"><a>stateSaveParams</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">State save event, fired when the table has changed state a new state save is required.
 This method allows modification of the state saving object prior to actually doing the
 save, including addition or other state properties (for plug-ins) or modification
-of a DataTables core property.</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+of a DataTables core property.</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1603,23 +1319,11 @@ of a DataTables core property.</p><dl class="details">
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">oSettings</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object</td></tr><tr class="even"><td class="number right_border"><div>3</div></td><td class="name">json</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">The state information to be saved</td></tr>
 	</tbody>
-</table>
-<dt id="DataTable#event:xhr" class=" odd"><a name="xhr"></a><a name="xhr_details"></a><span class="type-attr"></span><span class="type-name"><a>xhr</a></span><span class="type-sig"></span></span></dt><dd class=" odd"><p class="description">Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
+</table></div>
+<dt id="DataTable#event:xhr" class=" even"><a name="xhr"></a><a name="xhr_details"></a><span class="type-attr"></span><span class="type-name"><a>xhr</a></span><span class="type-sig"></span></span></dt><dd class=" even"><p class="description">Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
 made to the server for new data (note that this trigger is called in fnServerData,
 if you override fnServerData and which to use this event, you need to trigger it in
-you success function).</p><dl class="details">
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+you success function).</p><div class="collapse_details"><dl class="details">
 	
 </dl>
 <h5>Parameters:</h5>
@@ -1639,7 +1343,7 @@ you success function).</p><dl class="details">
 	<tbody>
 	<tr class="even"><td class="number right_border"><div>1</div></td><td class="name">e</td><td class="type type-param">event</td><td class="attributes"></td><td class="default"></td><td class="description last">jQuery event object</td></tr><tr class="odd"><td class="number right_border"><div>2</div></td><td class="name">o</td><td class="type type-param">object</td><td class="attributes"></td><td class="default"></td><td class="description last">DataTables settings object <a href="DataTable.models.oSettings.html">DataTable.models.oSettings</a></td></tr>
 	</tbody>
-</table>
+</table></div>
 
 </dd>
 </div>
@@ -1651,7 +1355,7 @@ you success function).</p><dl class="details">
 			DataTables: Copyright 2008-2012 Allan Jardine, all rights reserved<br>
 
 			Documentation generated by <a href="https://github.com/micmath/JSDoc">JSDoc 3</a> on
-			1st Feb 2012 - 14:08
+			15th Apr 2012 - 19:30
 			with the <a href="http://datatables.net/">DataTables</a> template.
 		</div>
 	</body>

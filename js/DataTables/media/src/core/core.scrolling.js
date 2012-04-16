@@ -76,7 +76,8 @@ function _fnFeatureHtmlTable ( oSettings )
 	nScrollHead.style.border = "0";
 	nScrollHead.style.width = "100%";
 	nScrollFoot.style.border = "0";
-	nScrollHeadInner.style.width = "150%"; /* will be overwritten */
+	nScrollHeadInner.style.width = oSettings.oScroll.sXInner !== "" ?
+		oSettings.oScroll.sXInner : "100%"; /* will be overwritten */
 	
 	/* Modify attributes to respect the clones */
 	nScrollHeadTable.removeAttribute('id');
@@ -88,11 +89,20 @@ function _fnFeatureHtmlTable ( oSettings )
 		nScrollFootTable.style.marginLeft = "0";
 	}
 	
-	/* Move any caption elements from the body to the header */
-	var nCaptions = $(oSettings.nTable).children('caption');
-	for ( var i=0, iLen=nCaptions.length ; i<iLen ; i++ )
+	/* Move caption elements from the body to the header, footer or leave where it is
+	 * depending on the configuration. Note that the DTD says there can be only one caption */
+	var nCaption = $(oSettings.nTable).children('caption');
+	if ( nCaption.length > 0 )
 	{
-		nScrollHeadTable.appendChild( nCaptions[i] );
+		nCaption = nCaption[0];
+		if ( nCaption._captionSide === "top" )
+		{
+			nScrollHeadTable.appendChild( nCaption );
+		}
+		else if ( nCaption._captionSide === "bottom" && nTfoot )
+		{
+			nScrollFootTable.appendChild( nCaption );
+		}
 	}
 	
 	/*
@@ -180,6 +190,7 @@ function _fnScrollDraw ( o )
 		nScrollHeadTable = nScrollHeadInner.getElementsByTagName('table')[0],
 		nScrollBody = o.nTable.parentNode,
 		i, iLen, j, jLen, anHeadToSize, anHeadSizers, anFootSizers, anFootToSize, oStyle, iVis,
+		nTheadSize, nTfootSize,
 		iWidth, aApplied=[], iSanityWidth,
 		nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
 		nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
@@ -190,30 +201,15 @@ function _fnScrollDraw ( o )
 	 */
 	
 	/* Remove the old minimised thead and tfoot elements in the inner table */
-	var nTheadSize = o.nTable.getElementsByTagName('thead');
-	if ( nTheadSize.length > 0 )
-	{
-		o.nTable.removeChild( nTheadSize[0] );
-	}
-	
-	var nTfootSize;
-	if ( o.nTFoot !== null )
-	{
-		/* Remove the old minimised footer element in the cloned header */
-		nTfootSize = o.nTable.getElementsByTagName('tfoot');
-		if ( nTfootSize.length > 0 )
-		{
-			o.nTable.removeChild( nTfootSize[0] );
-		}
-	}
-	
+	$(o.nTable).children('thead, tfoot').remove();
+
 	/* Clone the current header and footer elements and then place it into the inner table */
-	nTheadSize = o.nTHead.cloneNode(true);
+	nTheadSize = $(o.nTHead).clone()[0];
 	o.nTable.insertBefore( nTheadSize, o.nTable.childNodes[0] );
 	
 	if ( o.nTFoot !== null )
 	{
-		nTfootSize = o.nTFoot.cloneNode(true);
+		nTfootSize = $(o.nTFoot).clone()[0];
 		o.nTable.insertBefore( nTfootSize, o.nTable.childNodes[1] );
 	}
 	
@@ -244,6 +240,14 @@ function _fnScrollDraw ( o )
 			n.style.width = "";
 		}, nTfootSize.getElementsByTagName('tr') );
 	}
+
+	// If scroll collapse is enabled, when we put the headers back into the body for sizing, we
+	// will end up forcing the scrollbar to appear, making our measurements wrong for when we
+	// then hide it (end of this function), so add the header height to the body scroller.
+	if ( o.oScroll.bCollapse && o.oScroll.sY !== "" )
+	{
+		nScrollBody.style.height = (nScrollBody.offsetHeight + o.nTHead.offsetHeight)+"px";
+	}
 	
 	/* Size the table as a whole */
 	iSanityWidth = $(o.nTable).outerWidth();
@@ -259,7 +263,7 @@ function _fnScrollDraw ( o )
 		if ( ie67 && ($('tbody', nScrollBody).height() > nScrollBody.offsetHeight || 
 			$(nScrollBody).css('overflow-y') == "scroll")  )
 		{
-			o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth()-o.oScroll.iBarWidth );
+			o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth() - o.oScroll.iBarWidth);
 		}
 	}
 	else
@@ -428,7 +432,7 @@ function _fnScrollDraw ( o )
 		 	o.oScroll.iBarWidth : 0;
 		if ( o.nTable.offsetHeight < nScrollBody.offsetHeight )
 		{
-			nScrollBody.style.height = _fnStringToCss( $(o.nTable).height()+iExtra );
+			nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+iExtra );
 		}
 	}
 	
@@ -436,12 +440,21 @@ function _fnScrollDraw ( o )
 	var iOuterWidth = $(o.nTable).outerWidth();
 	nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
 	nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth );
+
+	// Figure out if there are scrollbar present - if so then we need a the header and footer to
+	// provide a bit more space to allow "overflow" scrolling (i.e. past the scrollbar)
+	var bScrolling = $(o.nTable).height() > nScrollBody.clientHeight || $(nScrollBody).css('overflow-y') == "scroll";
+	nScrollHeadInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	
 	if ( o.nTFoot !== null )
 	{
-		nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth );
-		nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
+		nScrollFootTable.style.width = _fnStringToCss( iOuterWidth );
+		nScrollFootInner.style.width = _fnStringToCss( iOuterWidth );
+		nScrollFootInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	}
+
+	/* Adjust the position of the header incase we loose the y-scrollbar */
+	$(nScrollBody).scroll();
 	
 	/* If sorting or filtering has occurred, jump the scrolling back to the top */
 	if ( o.bSorted || o.bFiltered )

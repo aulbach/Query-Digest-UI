@@ -345,17 +345,19 @@ DataTable.defaults.columns = {
 	 *     <li>string - read an object property from the data source. Note that you can
 	 *       use Javascript dotted notation to read deep properties/arrays from the
 	 *       data source.</li>
-	 *     <li>null -  the sDafaultContent option will use used for the cell (empty
-	 *       string by default. This can be useful on generated columns such as
-	 *       edit / delete action columns.</li>
+	 *     <li>null - the sDefaultContent option will be used for the cell (null
+	 *       by default, so you will need to specify the default content you want -
+	 *       typically an empty string). This can be useful on generated columns such 
+	 *       as edit / delete action columns.</li>
 	 *     <li>function - the function given will be executed whenever DataTables 
 	 *       needs to set or get the data for a cell in the column. The function 
 	 *       takes three parameters:
 	 *       <ul>
 	 *         <li>{array|object} The data source for the row</li>
 	 *         <li>{string} The type call data requested - this will be 'set' when
-	 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
-	 *           data.</li>
+	 *           setting data or 'filter', 'display', 'type', 'sort' or undefined when 
+	 *           gathering data. Note that when <i>undefined</i> is given for the type
+	 *           DataTables expects to get the raw data for the object back</li>
 	 *         <li>{*} Data to set when the second parameter is 'set'.</li>
 	 *       </ul>
 	 *       The return value from the function is not required when 'set' is the type
@@ -403,7 +405,7 @@ DataTable.defaults.columns = {
 	 *            else if (type === 'filter') {
 	 *              return source.price_filter;
 	 *            }
-	 *            // 'sort' and 'type' both just use the integer
+	 *            // 'sort', 'type' and undefined all just use the integer
 	 *            return source.price;
 	 *          }
 	 *        ]
@@ -411,6 +413,29 @@ DataTable.defaults.columns = {
 	 *    } );
 	 */
 	"mDataProp": null,
+
+
+	/**
+	 * Change the cell type created for the column - either TD cells or TH cells. This
+	 * can be useful as TH cells have semantic meaning in the table body, allowing them
+	 * to act as a header for a row (you may wish to add scope='row' to the TH elements).
+	 *  @type string
+	 *  @default td
+	 *  @dtopt Columns
+	 * 
+	 *  @example
+	 *    // Make the first column use TH cells
+	 *    $(document).ready(function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "aoColumnDefs": [
+	 *        {
+	 *          "aTargets": [ 0 ],
+	 *          "sCellType": "th"
+	 *        ]
+	 *      } );
+	 *    } );
+	 */
+	"sCellType": "td",
 
 
 	/**

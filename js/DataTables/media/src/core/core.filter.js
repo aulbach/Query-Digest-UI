@@ -23,24 +23,31 @@ function _fnFeatureHtmlFilter ( oSettings )
 		nFilter.id = oSettings.sTableId+'_filter';
 	}
 	
-	var jqFilter = $("input", nFilter);
+	var jqFilter = $('input[type="text"]', nFilter);
+
+	// Store a reference to the input element, so other input elements could be
+	// added to the filter wrapper if needed (submit button for example)
+	nFilter._DT_Input = jqFilter[0];
+
 	jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
 	jqFilter.bind( 'keyup.DT', function(e) {
 		/* Update all other filter input elements for the new display */
 		var n = oSettings.aanFeatures.f;
+		var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
+
 		for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 		{
 			if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
 			{
-				$('input', n[i]).val( this.value );
+				$(n[i]._DT_Input).val( val );
 			}
 		}
 		
 		/* Now do the filter */
-		if ( this.value != oPreviousSearch.sSearch )
+		if ( val != oPreviousSearch.sSearch )
 		{
 			_fnFilterComplete( oSettings, { 
-				"sSearch": this.value, 
+				"sSearch": val, 
 				"bRegex": oPreviousSearch.bRegex,
 				"bSmart": oPreviousSearch.bSmart ,
 				"bCaseInsensitive": oPreviousSearch.bCaseInsensitive 
@@ -367,6 +374,10 @@ function _fnDataToSearch ( sData, sType )
 	{
 		return DataTable.ext.ofnSearch[sType]( sData );
 	}
+	else if ( sData === null )
+	{
+		return '';
+	}
 	else if ( sType == "html" )
 	{
 		return sData.replace(/[\r\n]/g," ").replace( /<.*?>/g, "" );
@@ -374,10 +385,6 @@ function _fnDataToSearch ( sData, sType )
 	else if ( typeof sData === "string" )
 	{
 		return sData.replace(/[\r\n]/g," ");
-	}
-	else if ( sData === null )
-	{
-		return '';
 	}
 	return sData;
 }

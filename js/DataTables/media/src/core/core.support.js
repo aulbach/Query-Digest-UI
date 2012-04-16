@@ -121,11 +121,11 @@ function _fnLog( oSettings, iLevel, sMesg )
 		}
 		else
 		{
-			throw sAlert;
+			throw new Error(sAlert);
 		}
 		return;
 	}
-	else if ( console !== undefined && console.log )
+	else if ( window.console && console.log )
 	{
 		console.log( sAlert );
 	}
@@ -166,9 +166,9 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
  */
 function _fnExtend( oOut, oExtender )
 {
-	for ( var prop in oOut )
+	for ( var prop in oExtender )
 	{
-		if ( oOut.hasOwnProperty(prop) && oExtender[prop] !== undefined )
+		if ( oExtender.hasOwnProperty(prop) )
 		{
 			if ( typeof oInit[prop] === 'object' && $.isArray(oExtender[prop]) === false )
 			{
@@ -198,8 +198,8 @@ function _fnBindAction( n, oData, fn )
 {
 	$(n)
 		.bind( 'click.DT', oData, function (e) {
-				fn(e);
 				n.blur(); // Remove focus outline for mouse users
+				fn(e);
 			} )
 		.bind( 'keypress.DT', oData, function (e){
 			if ( e.which === 13 ) {

@@ -459,10 +459,8 @@ this.fnDestroy = function ( bRemove )
 	/* Flag to note that the table is currently being destroyed - no action should be taken */
 	oSettings.bDestroying = true;
 	
-	/* Restore hidden columns */
-	for ( i=0, iLen=oSettings.aoDestroyCallback.length ; i<iLen ; i++ ) {
-		oSettings.aoDestroyCallback[i].fn();
-	}
+	/* Fire off the destroy callbacks for plug-ins etc */
+	_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
 	
 	/* Restore hidden columns */
 	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
@@ -582,7 +580,7 @@ this.fnDestroy = function ( bRemove )
 this.fnDraw = function( bComplete )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	if ( bComplete )
+	if ( bComplete === false )
 	{
 		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
@@ -656,7 +654,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 			var n = oSettings.aanFeatures.f;
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 			{
-				$('input', n[i]).val( sInput );
+				$(n[i]._DT_Input).val( sInput );
 			}
 		}
 	}
@@ -978,7 +976,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	var i, iLen;
 	var aoColumns = oSettings.aoColumns;
 	var aoData = oSettings.aoData;
-	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
+	var nTd, bAppend, iBefore;
 	
 	/* No point in doing anything if we are requesting what is already true */
 	if ( aoColumns[iCol].bVisible == bShow )
@@ -1098,7 +1096,7 @@ this.fnSettings = function()
 
 
 /**
- * Sort the table by a particular row
+ * Sort the table by a particular column
  *  @param {int} iCol the data index to sort on. Note that this will not match the 
  *    'display index' if you have hidden data entries
  *  @dtopt API
@@ -1164,7 +1162,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
 this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	var iVisibleColumn, i, iLen, sDisplay;
+	var i, iLen, sDisplay;
 	var iRow = (typeof mRow === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
 	

@@ -16,7 +16,8 @@
 			$(document).ready(function() {
 				$('#example').dataTable( {
 					"sScrollY": "200px",
-					"bPaginate": false
+					"bPaginate": false,
+					"bScrollCollapse": true
 				} );
 			} );
 		</script>
@@ -465,7 +466,8 @@
 			<pre class="brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		"sScrollY": "200px",
-		"bPaginate": false
+		"bPaginate": false,
+		"bScrollCollapse": true
 	} );
 } );</pre>
 			<style type="text/css">
@@ -564,7 +566,6 @@
 					<li><a href="../server_side/jsonp.html">JSONP for a cross domain data source</a></li>
 					<li><a href="../server_side/editable.html">jEditable integration with DataTables</a></li>
 					<li><a href="../server_side/defer_loading.html">Deferred loading of Ajax data</a></li>
-					<li><a href="../server_side/column_ordering.html">Custom column ordering (in callback data)</a></li>
 					<li><a href="../server_side/pipeline.html">Pipelining data (reduce Ajax calls for paging)</a></li>
 				</ul>
 				

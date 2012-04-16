@@ -22,14 +22,9 @@ function _fnSort ( oSettings, bApplyClasses )
 	if ( !oSettings.oFeatures.bServerSide && 
 		(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
 	{
-		if ( oSettings.aaSortingFixed !== null )
-		{
-			aaSort = oSettings.aaSortingFixed.concat( oSettings.aaSorting );
-		}
-		else
-		{
-			aaSort = oSettings.aaSorting.slice();
-		}
+		aaSort = ( oSettings.aaSortingFixed !== null ) ?
+			oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
+			oSettings.aaSorting.slice();
 		
 		/* If there is a sorting data type, and a fuction belonging to it, then we need to
 		 * get the data from the developer's function and apply it for this column
@@ -41,10 +36,19 @@ function _fnSort ( oSettings, bApplyClasses )
 			sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
 			if ( DataTable.ext.afnSortData[sDataType] )
 			{
-				var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
-				for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
+				var aData = DataTable.ext.afnSortData[sDataType].call( 
+					oSettings.oInstance, oSettings, iColumn, iVisColumn
+				);
+				if ( aData.length === aoData.length )
 				{
-					_fnSetCellData( oSettings, j, iColumn, aData[j] );
+					for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
+					{
+						_fnSetCellData( oSettings, j, iColumn, aData[j] );
+					}
+				}
+				else
+				{
+					_fnLog( oSettings, 0, "Returned data sort array (col "+iColumn+") is the wrong length" );
 				}
 			}
 		}
@@ -132,6 +136,7 @@ function _fnSort ( oSettings, bApplyClasses )
 
 	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
+		var sTitle = aoColumns[i].sTitle.replace( /<.*?>/g, "" );
 		nTh = aoColumns[i].nTh;
 		nTh.removeAttribute('aria-sort');
 		nTh.removeAttribute('aria-label');
@@ -145,18 +150,18 @@ function _fnSort ( oSettings, bApplyClasses )
 				
 				var nextSort = (aoColumns[i].asSorting[ aaSort[0][2]+1 ]) ? 
 					aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
-				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+				nTh.setAttribute('aria-label', sTitle+
 					(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 			}
 			else
 			{
-				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+				nTh.setAttribute('aria-label', sTitle+
 					(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 			}
 		}
 		else
 		{
-			nTh.setAttribute('aria-label', aoColumns[i].sTitle);
+			nTh.setAttribute('aria-label', sTitle);
 		}
 	}
 	

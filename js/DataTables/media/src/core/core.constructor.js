@@ -50,7 +50,7 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 }
 
 /* Ensure the table has an ID - required for accessibility */
-if ( sId === null )
+if ( sId === null || sId === "" )
 {
 	sId = "DataTables_Table_"+(DataTable.ext._oExternConfig.iNextUnique++);
 	this.id = sId;
@@ -103,8 +103,8 @@ _fnMap( oSettings.oScroll, oInit, "bScrollCollapse", "bCollapse" );
 _fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
 _fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 _fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
-_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 _fnMap( oSettings, oInit, "asStripeClasses" );
+_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 _fnMap( oSettings, oInit, "fnServerData" );
 _fnMap( oSettings, oInit, "fnFormatNumber" );
 _fnMap( oSettings, oInit, "sServerMethod" );
@@ -197,8 +197,9 @@ if ( oInit.bStateSave )
 if ( oInit.iDeferLoading !== null )
 {
 	oSettings.bDeferLoading = true;
-	oSettings._iRecordsTotal = oInit.iDeferLoading;
-	oSettings._iRecordsDisplay = oInit.iDeferLoading;
+	var tmp = $.isArray( oInit.iDeferLoading );
+	oSettings._iRecordsDisplay = tmp ? oInit.iDeferLoading[0] : oInit.iDeferLoading;
+	oSettings._iRecordsTotal = tmp ? oInit.iDeferLoading[1] : oInit.iDeferLoading;
 }
 
 if ( oInit.aaData !== null )
@@ -230,6 +231,13 @@ else
 /*
  * Stripes
  */
+if ( oInit.asStripeClasses === null )
+{
+	oSettings.asStripeClasses =[
+		oSettings.oClasses.sStripeOdd,
+		oSettings.oClasses.sStripeEven
+	];
+}
 
 /* Remove row stripe classes if they are already on the table row */
 var bStripeRemove = false;
@@ -362,6 +370,12 @@ _fnSortingClasses( oSettings );
  * Final init
  * Cache the header, body and footer as required, creating them if needed
  */
+
+// Work around for Webkit bug 83867 - store the caption-side before removing from doc
+var captions = $(this).children('caption').each( function () {
+	this._captionSide = $(this).css('caption-side');
+} );
+
 var thead = $(this).children('thead');
 if ( thead.length === 0 )
 {
@@ -382,6 +396,14 @@ oSettings.nTBody.setAttribute( "aria-live", "polite" );
 oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 
 var tfoot = $(this).children('tfoot');
+if ( tfoot.length === 0 && captions.length > 0 && (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
+{
+	// If we are a scrolling table, and no footer has been given, then we need to create
+	// a tfoot element for the caption element to be appended to
+	tfoot = [ document.createElement( 'tfoot' ) ];
+	this.appendChild( tfoot[0] );
+}
+
 if ( tfoot.length > 0 )
 {
 	oSettings.nTFoot = tfoot[0];

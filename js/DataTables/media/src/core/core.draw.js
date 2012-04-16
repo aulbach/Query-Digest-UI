@@ -35,7 +35,7 @@ function _fnCreateTr ( oSettings, iRow )
 		for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			var oCol = oSettings.aoColumns[i];
-			nTd = document.createElement('td');
+			nTd = document.createElement( oCol.sCellType );
 
 			/* Render if needed - if bUseRendered is true then we already have the rendered
 			 * value in the data source - so can just use that
@@ -311,6 +311,7 @@ function _fnDraw( oSettings )
 	var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
 	if ( $.inArray( false, aPreDraw ) !== -1 )
 	{
+		_fnProcessingDisplay( oSettings, false );
 		return;
 	}
 	
@@ -410,22 +411,22 @@ function _fnDraw( oSettings )
 			anRows[ 0 ].className = oSettings.asStripeClasses[0];
 		}
 
-		var sZero = oSettings.oLanguage.sZeroRecords.replace(
-			'_MAX_', oSettings.fnFormatNumber(oSettings.fnRecordsTotal()) );
+		var oLang = oSettings.oLanguage;
+		var sZero = oLang.sZeroRecords;
 		if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 		{
-			sZero = oSettings.oLanguage.sLoadingRecords;
+			sZero = oLang.sLoadingRecords;
 		}
-		else if ( oSettings.oLanguage.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
+		else if ( oLang.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
 		{
-			sZero = oSettings.oLanguage.sEmptyTable;
+			sZero = oLang.sEmptyTable;
 		}
 
 		var nTd = document.createElement( 'td' );
 		nTd.setAttribute( 'valign', "top" );
 		nTd.colSpan = _fnVisbleColumns( oSettings );
 		nTd.className = oSettings.oClasses.sRowEmpty;
-		nTd.innerHTML = sZero;
+		nTd.innerHTML = _fnInfoMacros( oSettings, sZero );
 		
 		anRows[ iRowCount ].appendChild( nTd );
 	}
