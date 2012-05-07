@@ -135,22 +135,6 @@
 		
     }
     
-    $samples = array();
-    if (strlen($reviewhost['history_table'])) {
-        $res = Database::find('review')->query('SELECT review.sample
-                                                  FROM '.$reviewhost['history_table'].' AS review
-                                                 WHERE review.checksum = ?
-                                              ORDER BY review.ts_max DESC
-                                                 LIMIT '.$settings['sampleLimit'],
-                                                       $_REQUEST['checksum']
-        );
-        while ($sample = $res->fetch_col())
-            $samples[] = $sample;
-        unset($res);
-    }
-    else
-        $samples[] = $reviewData['sample'];
-		
     foreach ($reviewData as $key=>&$val) {
         if (in_array($key, array('checksum')))
             continue;
@@ -184,9 +168,7 @@
 			<button id="samplePrev"></button>
 			<button id="sampleNext"></button>
 		</div>
-		<div id="querySampleContent">
-			<?php echo SqlParser::html($samples[0]); ?>
-		</div>
+		<div id="querySampleContent"></div>
     </div>
     <div id="normalizedQuery">Please explain the query to view the normalized query.</div>
     <div id="queryReview">
