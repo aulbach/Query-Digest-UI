@@ -92,7 +92,7 @@
 					if (preg_match('/\(\s*(SELECT\s+.*)\)/', $this->sql, $subpatterns))
 						$select = trim("{$subpatterns[1]}");
 					else
-						preg_match('/^INSERT\s+INTO\s+(SELECT.*)/i', $subpatterns);
+						preg_match('/^INSERT\s+INTO\s+\w+\s+(SELECT.*)/i', $this->sql, $subpatterns);
 						$select = trim("{$subpatterns[1]}");
 					break;
 				default:

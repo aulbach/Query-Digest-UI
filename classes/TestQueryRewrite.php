@@ -130,7 +130,33 @@ WHERE id =123 )";
 			$expectedType 	 		 = QueryRewrite::INSERT;
 			$expectedSelect  	     = NULL;
 			$expectedExplain 		 = NULL;
-			$expectedExtendedExplain = NULL;;
+			$expectedExtendedExplain = NULL;
+			$this->_QueryRewrite->setQuery($sql);
+			$this->assertEquals($expectedType, 				$this->_QueryRewrite->getType());
+			$this->assertEquals($expectedSelect, 			$this->_QueryRewrite->toSelect());
+			$this->assertEquals($expectedExplain, 			$this->_QueryRewrite->asExplain());
+			$this->assertEquals($expectedExtendedExplain, 	$this->_QueryRewrite->asExtendedExplain());
+		}
+	
+		public function testInsertSelect() {
+			$sql 		  	 		 = 'INSERT INTO table SELECT * FROM table2';
+			$expectedType 	 		 = QueryRewrite::INSERTSELECT;
+			$expectedSelect  	     = 'SELECT * FROM table2';
+			$expectedExplain 		 = "EXPLAIN $expectedSelect";
+			$expectedExtendedExplain = "EXPLAIN EXTENDED $expectedSelect";
+			$this->_QueryRewrite->setQuery($sql);
+			$this->assertEquals($expectedType, 				$this->_QueryRewrite->getType());
+			$this->assertEquals($expectedSelect, 			$this->_QueryRewrite->toSelect());
+			$this->assertEquals($expectedExplain, 			$this->_QueryRewrite->asExplain());
+			$this->assertEquals($expectedExtendedExplain, 	$this->_QueryRewrite->asExtendedExplain());
+		}
+		
+		public function testInsertSelect1() {
+			$sql 		  	 		 = 'INSERT INTO table (SELECT * FROM table2)';
+			$expectedType 	 		 = QueryRewrite::INSERTSELECT;
+			$expectedSelect  	     = 'SELECT * FROM table2';
+			$expectedExplain 		 = "EXPLAIN $expectedSelect";
+			$expectedExtendedExplain = "EXPLAIN EXTENDED $expectedSelect";
 			$this->_QueryRewrite->setQuery($sql);
 			$this->assertEquals($expectedType, 				$this->_QueryRewrite->getType());
 			$this->assertEquals($expectedSelect, 			$this->_QueryRewrite->toSelect());
