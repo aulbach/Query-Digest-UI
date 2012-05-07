@@ -7,7 +7,6 @@
     $settings = array();
     $settings['sqlColor'] 							= true;
 	$settings['title'] 								= null;
-	$settings['sampleLimit'] 						= 1;
 	$settings['oldSlowQueryFormat'] 				= false;
     
 	$settings['defaultColumnVis']					= array();
