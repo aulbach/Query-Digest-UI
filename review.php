@@ -180,7 +180,13 @@
     </ul>
     <div id="queryFingerprint"><?php echo SqlParser::htmlPreparedStatement($reviewData['fingerprint']); ?></div>
     <div id="querySample">
-        <?php echo SqlParser::html($samples[0]); ?>
+		<div style="float: right">
+			<button id="samplePrev"></button>
+			<button id="sampleNext"></button>
+		</div>
+		<div id="querySampleContent">
+			<?php echo SqlParser::html($samples[0]); ?>
+		</div>
     </div>
     <div id="normalizedQuery">Please explain the query to view the normalized query.</div>
     <div id="queryReview">
@@ -464,7 +470,55 @@
                 "sDom":             "t"
             });
         });
-    });
+	
+		$( "#samplePrev" ).button({disabled: true, text: false,icons: {primary: "ui-icon-triangle-1-w"}}).click(prevSample)
+						  .next().button({text: false,icons: {primary: "ui-icon-triangle-1-e"}}).click(nextSample)
+						  .parent().buttonset();
+		$('#querySample').data('offset', 0);
+		loadSample();
+
+	});
+
+	function prevSample() {
+		$('#querySample').data('offset', $('#querySample').data('offset')-1);
+		return loadSample();
+	}
+	
+	function nextSample() {
+		$('#querySample').data('offset', $('#querySample').data('offset')+1);
+		return loadSample();
+	}
+	
+	function loadSample() {
+		$.ajax({
+			url: 'sample.php',
+			dataType: 'json',
+			data: {
+				checksum: '<?php echo $_REQUEST['checksum']; ?>',
+				offset: $('#querySample').data('offset')
+			},
+			success: setSample
+		});
+	}
+	
+	function setSample(data) {
+		console.log(data);
+		if (data.sample != null) {
+			$('#querySampleContent').html(data.sample);
+			$(generateMysqlDocLinks);
+			$('#querySample').data('offset', data.offset);
+			$('#querySample').data('primary', data.primary);
+			$( "#sampleNext" ).button( "option", "disabled", false );
+			$( "#samplePrev" ).button( "option", "disabled", false );
+		}
+		else {
+			$( "#sampleNext" ).button( "option", "disabled", true );
+			$('#querySample').data('offset', $('#querySample').data('offset')-1);
+		}
+		if (data.offset == 0)
+			$( "#samplePrev" ).button( "option", "disabled", true );
+	}
+	
 </script>
 
 <?php require_once('templates/footer.php'); ?>

@@ -1,12 +1,18 @@
 <?php
 
 	require_once('init.php');
-
+	
 	$return = array();
 	if (strlen($reviewhost['history_table'])) {
+		$where = '';
+		if (isset($_REQUEST['primary']) && count($_REQUEST['primary']) > 0) {
+			foreach( $_REQUEST['primary'] AS $field => $value)
+				$where .= ' AND '.Database::escapeField($field).' = '.Database::find('review')->escape_string($value);
+		}
+		
 		$query = Database::find('review')->query_col('SELECT review.sample
 								  FROM '.Database::escapeField($reviewhost['history_table']).' AS review
-								 WHERE review.checksum = ?
+								 WHERE review.checksum = ? '.$where.'
 							  ORDER BY review.ts_max DESC
 							     LIMIT 1',
 							  $_REQUEST['checksum']
@@ -27,6 +33,7 @@
     $return['QueryRewrite'] = (array) $Query;
 	$return['oQuery'] = $query;
 	$return['eQuery'] = $sample;
+	$return['_REQUEST'] = $_REQUEST;
 	
 	if (is_null($sample)) {
 		$return['Warnings'][] = array('Code' => '0', 'Level' => 'Error', 'Message' => "I can't explain this type of query yet");
@@ -38,7 +45,7 @@
 		Database::find($label)->query('USE '.Database::escapeField($database));
 	
 		Database::find($label)->disable_fatal_errors();
-		$query = Database::find($label)->query($sample);
+		$query = @Database::find($label)->query($sample);
 		Database::find($label)->enable_fatal_errors();
         
         if (!is_null($query)) {

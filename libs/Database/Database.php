@@ -193,6 +193,7 @@ abstract class Database {
  * @return string
  **/
     public function escape($string, $escape_question_marks = true) {
+		var_dump($string);
     // Null is special.
         if (is_null($string))
             return 'NULL';
@@ -201,6 +202,7 @@ abstract class Database {
             return (string)$string;
     // Force our alleged string into being a real, properly escaped, unquestioned string.
         $escaped = "'" . $this->escape_string((string)$string) . "'";
+		var_dump($escaped);
         if(!$escape_question_marks)
             return $escaped;
         return str_replace('?', '\\?', $escaped);

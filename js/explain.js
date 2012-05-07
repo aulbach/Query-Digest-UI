@@ -6,7 +6,8 @@ $(function() {
             url: 'explain.php',
             data : {
                 checksum: checksum,
-                explainDb: explainDb
+                explainDb: explainDb,
+                primary: $('#querySample').data('primary')
             },
 
             success: function(data) {

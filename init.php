@@ -23,8 +23,11 @@
     $settings['defaultColumnVis']['ReviewedOn']     = true;
     $settings['defaultColumnVis']['ReviewedBy']     = true;
     $settings['defaultColumnVis']['Comments']       = true;
-    
+
 	require_once('config.php');
+	
+	if (!isset($reviewhost['history_table_primary']))
+		$reviewhost['history_table_primary'] = array();
     
 // If the history_table is blank, hide a few extra columns
     if (!strlen($reviewhost['history_table'])) {
@@ -60,3 +63,13 @@
 
     require_once('libs/sqlquery/SqlParser.php');
 	require_once('classes/QueryRewrite.php');
+	
+// Figure out the PRIMARY key for the history table
+	
+	if (strlen($reviewhost['history_table']) && count($reviewhost['history_table_primary']) == 0) {
+		$res = Database::find('review')->query('SHOW INDEXES FROM '.Database::escapeField($reviewhost['history_table']).'
+												 WHERE key_name = "PRIMARY"');
+		while ($row = $res->fetch_assoc()) {
+			$reviewhost['history_table_primary'][] = $row['Column_name'];
+		}
+	}
