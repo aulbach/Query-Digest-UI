@@ -2,6 +2,94 @@
 
     require_once('init.php');
 
+// Function for time stats
+	function timeStats($row) {
+		global $historyDataTime;
+	// Hour of day
+		$ts_min = date('G', strtotime($row['ts_min']));
+		$ts_max = date('G', strtotime($row['ts_max']));
+		
+		if ($ts_min == $ts_max) {
+			@$historyDataTime['hours'][$ts_min] += $row['ts_cnt'];
+		}
+		else {
+			$cnt = 1;
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				$cnt++;
+				$i++;
+				if ($i >= 24)
+					$i -= 24;
+			}
+				
+			$per = $row['ts_cnt'] / $cnt;
+			
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				@$historyDataTime['hours'][$i] += $per;	
+				$i++;
+				if ($i >= 24)
+					$i -= 24;
+			}
+		}
+		
+	// Day of week
+		$ts_min = date('w', strtotime($row['ts_min']));
+		$ts_max = date('w', strtotime($row['ts_max']));
+		
+		if ($ts_min == $ts_max) {
+			@$historyDataTime['weekday'][$ts_min] += $row['ts_cnt'];
+		}
+		else {
+			$cnt = 1;
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				$cnt++;
+				$i++;
+				if ($i >= 7)
+					$i -= 7;
+			}
+				
+			$per = $row['ts_cnt'] / $cnt;
+			
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				@$historyDataTime['weekday'][$i] += $per;	
+				$i++;
+				if ($i >= 7)
+					$i -= 7;
+			}	
+		}
+	
+	// Day of month
+		$ts_min = date('j', strtotime($row['ts_min']));
+		$ts_max = date('j', strtotime($row['ts_max']));
+		
+		if ($ts_min == $ts_max) {
+			@$historyDataTime['monthday'][$ts_max] += $row['ts_cnt'];
+		}
+		else {
+			$cnt = 1;
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				$cnt++;
+				$i++;
+				if ($i >= 31)
+					$i -= 31;
+			}
+				
+			$per = $row['ts_cnt'] / $cnt;
+			
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				@$historyDataTime['monthday'][$i] += $per;	
+				$i++;
+				if ($i >= 31)
+					$i -= 31;
+			}	
+		}
+	}
+	
 // Scan for valid databases to explain against
 	foreach ($explainhosts as $label => $host) {
 		if (!key_exists('databases', $explainhosts[$label]) || !count($explainhosts[$label]['databases'])) {
@@ -49,7 +137,11 @@
     unset ($key, $val);
 
     $historyData = array();
-	$historyDataTime = array();
+	$historyDataTime = array(
+						 'hours' => array(),
+						 'weekday' => array(),
+						 'monthday' => array(),
+						 );
 
     if (strlen($reviewhost['history_table'])) {
         $res = Database::find('review')->query('SELECT review.*
@@ -60,6 +152,7 @@
                                   $_REQUEST['checksum']
                                   );
         $historyData = $res->fetch_assoc();
+		timeStats($historyData);
 
         while ($newData = $res->fetch_assoc()) {
             foreach ($newData as $key=>$value) {
@@ -88,92 +181,7 @@
                 }
             }
 			
-		// Figure out time stats
-		
-		// Hour of day
-			$ts_min = date('G', strtotime($newData['ts_min']));
-			$ts_max = date('G', strtotime($newData['ts_max']));
-			
-			if ($ts_min == $ts_max) {
-				@$historyDataTime['hours'][$ts_min] += $newData['ts_cnt'];
-			}
-			else {
-				$cnt = 1;
-				$i = $ts_min;
-				while ($i != $ts_max) {
-					$cnt++;
-					$i++;
-					if ($i >= 24)
-						$i -= 24;
-				}
-					
-				$per = $newData['ts_cnt'] / $cnt;
-				
-				$i = $ts_min;
-				while ($i != $ts_max) {
-					@$historyDataTime['hours'][$i] += $per;	
-					$i++;
-					if ($i >= 24)
-						$i -= 24;
-				}
-			}
-			
-		// Day of week
-			$ts_min = date('w', strtotime($newData['ts_min']));
-			$ts_max = date('w', strtotime($newData['ts_max']));
-			
-			if ($ts_min == $ts_max) {
-				@$historyDataTime['weekday'][$ts_min] += $newData['ts_cnt'];
-			}
-			else {
-				$cnt = 1;
-				$i = $ts_min;
-				while ($i != $ts_max) {
-					$cnt++;
-					$i++;
-					if ($i >= 7)
-						$i -= 7;
-				}
-					
-				$per = $newData['ts_cnt'] / $cnt;
-				
-				$i = $ts_min;
-				while ($i != $ts_max) {
-					@$historyDataTime['weekday'][$i] += $per;	
-					$i++;
-					if ($i >= 7)
-						$i -= 7;
-				}	
-			}
-		
-		// Day of month
-			$ts_min = date('j', strtotime($newData['ts_min']));
-			$ts_max = date('j', strtotime($newData['ts_max']));
-			
-			if ($ts_min == $ts_max) {
-				@$historyDataTime['monthday'][$ts_max] += $newData['ts_cnt'];
-			}
-			else {
-				$cnt = 1;
-				$i = $ts_min;
-				while ($i != $ts_max) {
-					$cnt++;
-					$i++;
-					if ($i >= 31)
-						$i -= 31;
-				}
-					
-				$per = $newData['ts_cnt'] / $cnt;
-				
-				$i = $ts_min;
-				while ($i != $ts_max) {
-					@$historyDataTime['monthday'][$i] += $per;	
-					$i++;
-					if ($i >= 31)
-						$i -= 31;
-				}	
-			}
-			
+			timeStats($newData);
         }
         unset($newData);
 
