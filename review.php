@@ -77,7 +77,7 @@
 			while ($i != $ts_max) {
 				$cnt++;
 				$i++;
-				if ($i >= $max)
+				if ($i > $max)
 					$i -= $max;
 			}
 				
@@ -87,7 +87,7 @@
 			while ($i != $ts_max) {
 				@$historyDataTime['monthday'][$i] += $per;	
 				$i++;
-				if ($i >= $max)
+				if ($i > $max)
 					$i -= $max;
 			}	
 		}
@@ -104,7 +104,7 @@
 			while ($i != $ts_max) {
 				$cnt++;
 				$i++;
-				if ($i >= 12)
+				if ($i > 12)
 					$i -= 12;
 			}
 				
@@ -114,7 +114,7 @@
 			while ($i != $ts_max) {
 				@$historyDataTime['month'][$i] += $per;	
 				$i++;
-				if ($i >= 12)
+				if ($i > 12)
 					$i -= 12;
 			}
 		}
@@ -389,7 +389,7 @@
 				</span><br>
 				Day of the month <span class="inlinesparkbar" style="float: right;">
 					<?php
-						for ($i = 0; $i < 31; $i++) {
+						for ($i = 1; $i <= 31; $i++) {
 							if (!isset($historyDataTime['monthday'][$i]))
 								echo "0,";
 							else
@@ -399,7 +399,7 @@
 				</span><br>
 				Months <span class="inlinesparkbar" style="float: right;">
 					<?php
-						for ($i = 0; $i < 12; $i++) {
+						for ($i = 1; $i <= 12; $i++) {
 							if (!isset($historyDataTime['month'][$i]))
 								echo "0,";
 							else
