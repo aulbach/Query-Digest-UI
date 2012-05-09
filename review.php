@@ -220,18 +220,20 @@
         }
         unset($newData);
 
-        foreach ($historyData as $key=>&$val) {
-            if (in_array($key, array('checksum')))
-                continue;
-            if (is_numeric($val)) {
-                if (stripos($key, 'time') !== false) {
-                    $val *= 1000;
-                    $val = round($val, 0);
-                }
-                else
-                    $val = round($val, 2);
-            }
-        }
+		if (is_array($historyData) && count($historyData)) {
+			foreach ($historyData as $key=>&$val) {
+				if (in_array($key, array('checksum')))
+					continue;
+				if (is_numeric($val)) {
+					if (stripos($key, 'time') !== false) {
+						$val *= 1000;
+						$val = round($val, 0);
+					}
+					else
+						$val = round($val, 2);
+				}
+			}
+		}
         unset ($key, $val);
 		
     }
@@ -244,12 +246,14 @@
     }
 	unset ($key, $val);
 	
-	foreach ($historyData as $key=>&$val) {
-        if (in_array($key, array('checksum')))
-            continue;
-        if (is_numeric($val)) 
-            $val = number_format($val);
-    }
+	if (is_array($historyData) && count($historyData)) {
+		foreach ($historyData as $key=>&$val) {
+			if (in_array($key, array('checksum')))
+				continue;
+			if (is_numeric($val)) 
+				$val = number_format($val);
+		}
+	}
 	unset ($key, $val);
 ?>
 
