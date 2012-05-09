@@ -31,6 +31,7 @@
 				if ($i >= 24)
 					$i -= 24;
 			}
+			@$historyDataTime['hours'][$i] += $per;	
 		}
 		
 	// Day of week
@@ -49,7 +50,7 @@
 				if ($i >= 7)
 					$i -= 7;
 			}
-				
+			
 			$per = $row['ts_cnt'] / $cnt;
 			
 			$i = $ts_min;
@@ -58,7 +59,8 @@
 				$i++;
 				if ($i >= 7)
 					$i -= 7;
-			}	
+			}
+			@$historyDataTime['weekday'][$i] += $per;	
 		}
 	
 	// Day of month
@@ -89,7 +91,8 @@
 				$i++;
 				if ($i > $max)
 					$i -= $max;
-			}	
+			}
+			@$historyDataTime['monthday'][$i] += $per;	
 		}
 	// Month
 		$ts_min = date('n', strtotime($row['ts_min']));
@@ -117,6 +120,7 @@
 				if ($i > 12)
 					$i -= 12;
 			}
+			@$historyDataTime['month'][$i] += $per;	
 		}
 	}
 	
@@ -230,40 +234,6 @@
         }
         unset ($key, $val);
 		
-	// Handle overflows
-		$keys = array_keys($historyDataTime['hours']);
-		foreach ( $keys as $key ) {
-			if ($key >= 24) {
-				$nkey = $key;
-				while ($nkey > 24)
-					$nkey -= 24;
-				$historyDataTime['hours'][$nkey] += $historyDataTime['hours'][$key];
-				unset($historyDataTime['hours'][$key]);
-			}
-		}
-
-		$keys = array_keys($historyDataTime['weekday']);
-		foreach ( $keys as $key ) {
-			if ($key >= 7) {
-				$nkey = $key;
-				while ($nkey > 7)
-					$nkey -= 7;
-				$historyDataTime['weekday'][$nkey] += $historyDataTime['weekday'][$key];
-				unset($historyDataTime['weekday'][$key]);
-			}
-		}
-		
-		$keys = array_keys($historyDataTime['monthday']);
-		foreach ( $keys as $key ) {
-			if ($key >= 31) {
-				$nkey = $key;
-				while ($nkey > 31)
-					$nkey -= 31;
-				$historyDataTime['monthday'][$nkey] += $historyDataTime['monthday'][$key];
-				unset($historyDataTime['monthday'][$key]);
-			}
-		}
-		
     }
     
     foreach ($reviewData as $key=>&$val) {
@@ -369,41 +339,49 @@
 			<div id="timestats" style="float: right;">
 				Time of day <span class="inlinesparkbar" style="float: right;">
 					<?php
+						$comma = '';
 						for ($i = 0; $i < 24; $i++) {
 							if (!isset($historyDataTime['hours'][$i]))
-								echo "0,";
+								echo $comma."0";
 							else
-								echo round($historyDataTime['hours'][$i], 0).",";
+								echo $comma.round($historyDataTime['hours'][$i], 0);
+							$comma = ',';
 						}
 					?>
 				</span><br>
 				Weekday <span class="inlinesparkbar" style="float: right;">
 					<?php
+						$comma = '';
 						for ($i = 0; $i < 7; $i++) {
 							if (!isset($historyDataTime['weekday'][$i]))
-								echo "0,";
+								echo $comma."0";
 							else
-								echo round($historyDataTime['weekday'][$i], 0).",";
+								echo $comma.round($historyDataTime['weekday'][$i], 0);
+							$comma = ',';
 						}
 					?>
 				</span><br>
 				Day of the month <span class="inlinesparkbar" style="float: right;">
 					<?php
+						$comma = '';
 						for ($i = 1; $i <= 31; $i++) {
 							if (!isset($historyDataTime['monthday'][$i]))
-								echo "0,";
+								echo $comma."0";
 							else
-								echo round($historyDataTime['monthday'][$i], 0).",";
+								echo $comma.round($historyDataTime['monthday'][$i], 0);
+							$comma = ',';
 						}
 					?>
 				</span><br>
 				Months <span class="inlinesparkbar" style="float: right;">
 					<?php
+						$comma = '';
 						for ($i = 1; $i <= 12; $i++) {
 							if (!isset($historyDataTime['month'][$i]))
-								echo "0,";
+								echo $comma."0";
 							else
-								echo round($historyDataTime['month'][$i], 0).",";
+								echo $comma.round($historyDataTime['month'][$i], 0);
+							$comma = ',';
 						}
 					?>
 				</span><br>
