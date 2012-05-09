@@ -87,6 +87,93 @@
                                              / ($newData['ts_cnt']+$historyData['ts_cnt']);
                 }
             }
+			
+		// Figure out time stats
+		
+		// Hour of day
+			$ts_min = date('G', strtotime($newData['ts_min']));
+			$ts_max = date('G', strtotime($newData['ts_max']));
+			
+			if ($ts_min == $ts_max) {
+				@$historyDataTime['hours'][$ts_min] += $newData['ts_cnt'];
+			}
+			else {
+				$cnt = 1;
+				$i = $ts_min;
+				while ($i != $ts_max) {
+					$cnt++;
+					$i++;
+					if ($i >= 24)
+						$i -= 24;
+				}
+					
+				$per = $newData['ts_cnt'] / $cnt;
+				
+				$i = $ts_min;
+				while ($i != $ts_max) {
+					@$historyDataTime['hours'][$i] += $per;	
+					$i++;
+					if ($i >= 24)
+						$i -= 24;
+				}
+			}
+			
+		// Day of week
+			$ts_min = date('w', strtotime($newData['ts_min']));
+			$ts_max = date('w', strtotime($newData['ts_max']));
+			
+			if ($ts_min == $ts_max) {
+				@$historyDataTime['weekday'][$ts_min] += $newData['ts_cnt'];
+			}
+			else {
+				$cnt = 1;
+				$i = $ts_min;
+				while ($i != $ts_max) {
+					$cnt++;
+					$i++;
+					if ($i >= 7)
+						$i -= 7;
+				}
+					
+				$per = $newData['ts_cnt'] / $cnt;
+				
+				$i = $ts_min;
+				while ($i != $ts_max) {
+					@$historyDataTime['weekday'][$i] += $per;	
+					$i++;
+					if ($i >= 7)
+						$i -= 7;
+				}	
+			}
+		
+		// Day of month
+			$ts_min = date('j', strtotime($newData['ts_min']));
+			$ts_max = date('j', strtotime($newData['ts_max']));
+			
+			if ($ts_min == $ts_max) {
+				@$historyDataTime['monthday'][$ts_max] += $newData['ts_cnt'];
+			}
+			else {
+				$cnt = 1;
+				$i = $ts_min;
+				while ($i != $ts_max) {
+					$cnt++;
+					$i++;
+					if ($i >= 31)
+						$i -= 31;
+				}
+					
+				$per = $newData['ts_cnt'] / $cnt;
+				
+				$i = $ts_min;
+				while ($i != $ts_max) {
+					@$historyDataTime['monthday'][$i] += $per;	
+					$i++;
+					if ($i >= 31)
+						$i -= 31;
+				}	
+			}
+			
         }
         unset($newData);
 
@@ -104,32 +191,37 @@
         }
         unset ($key, $val);
 		
-		$res = Database::find('review')->query('SELECT HOUR(ts_min) AS `min`,
-											           HOUR(ts_max) AS `max`,
-													   ts_cnt AS `cnt`
-                                  FROM '.$reviewhost['history_table'].' AS review
-                                 WHERE review.checksum = ?
-                                  ',
-                                  $_REQUEST['checksum']
-                                  );
-        while ($td = $res->fetch_assoc()) {
-			if ($td['min'] == $td['max']) {
-				@$historyDataTime[$td['min']] += $td['cnt'];
-				continue;
-			}
-			
-			if ($td['min'] > $td['max'])
-				$td['min'] += 24;
-				
-			$per = $td['cnt'] / ($td['max'] - $td['min']);
-			for ($i = $td['min']; $i <= $td['max']; $i++)
-				@$historyDataTime[$i] += $per;
-		}
-		$keys = array_keys($historyDataTime);
+	// Handle overflows
+		$keys = array_keys($historyDataTime['hours']);
 		foreach ( $keys as $key ) {
 			if ($key >= 24) {
-				$historyDataTime[$key-24] += $historyDataTime[$key];
-				unset($historyDataTime[$key]);
+				$nkey = $key;
+				while ($nkey > 24)
+					$nkey -= 24;
+				$historyDataTime['hours'][$nkey] += $historyDataTime['hours'][$key];
+				unset($historyDataTime['hours'][$key]);
+			}
+		}
+
+		$keys = array_keys($historyDataTime['weekday']);
+		foreach ( $keys as $key ) {
+			if ($key >= 7) {
+				$nkey = $key;
+				while ($nkey > 7)
+					$nkey -= 7;
+				$historyDataTime['weekday'][$nkey] += $historyDataTime['weekday'][$key];
+				unset($historyDataTime['weekday'][$key]);
+			}
+		}
+		
+		$keys = array_keys($historyDataTime['monthday']);
+		foreach ( $keys as $key ) {
+			if ($key >= 31) {
+				$nkey = $key;
+				while ($nkey > 31)
+					$nkey -= 31;
+				$historyDataTime['monthday'][$nkey] += $historyDataTime['monthday'][$key];
+				unset($historyDataTime['monthday'][$key]);
 			}
 		}
 		
@@ -234,6 +326,40 @@
         <?php if (!strlen($reviewhost['history_table'])) { ?>
             Please create a history table to get detailed stats
         <?php } else { ?>
+
+			<div id="timestats" style="float: right;">
+				Time of day <span class="inlinesparkbar" style="float: right;">
+					<?php
+						for ($i = 0; $i < 24; $i++) {
+							if (!isset($historyDataTime['hours'][$i]))
+								echo "0,";
+							else
+								echo round($historyDataTime['hours'][$i], 0).",";
+						}
+					?>
+				</span><br>
+				Weekday <span class="inlinesparkbar" style="float: right;">
+					<?php
+						for ($i = 0; $i < 7; $i++) {
+							if (!isset($historyDataTime['weekday'][$i]))
+								echo "0,";
+							else
+								echo round($historyDataTime['weekday'][$i], 0).",";
+						}
+					?>
+				</span><br>
+				Day of the month <span class="inlinesparkbar" style="float: right;">
+					<?php
+						for ($i = 0; $i < 31; $i++) {
+							if (!isset($historyDataTime['monthday'][$i]))
+								echo "0,";
+							else
+								echo round($historyDataTime['monthday'][$i], 0).",";
+						}
+					?>
+				</span><br>
+			</div>
+		
             Seen between <?php echo $reviewData['first_seen']; ?> and <?php echo $reviewData['last_seen']; ?>.
             <p>
                 <?php
@@ -265,17 +391,6 @@
                     }
 
                 ?>
-				
-				Time of day <span class="inlinesparkline">
-					<?php
-						for ($i = 0; $i < 24; $i++) {
-							if (!isset($historyDataTime[$i]))
-								echo "0,";
-							else
-								echo round($historyDataTime[$i], 0).",";
-						}
-					?>
-				</span>
             </p>
             <table class="dataTable">
                 <thead>
