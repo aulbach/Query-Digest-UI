@@ -62,8 +62,11 @@
 		}
 	
 	// Day of month
+	// This won't work beyond a single month stretch, but that seems unlikely right now
+	// Also known as bug #123 that will bite me in the butt for saying it's unlikely
 		$ts_min = date('j', strtotime($row['ts_min']));
 		$ts_max = date('j', strtotime($row['ts_max']));
+		$max = date('t', strtotime($row['ts_min']));
 		
 		if ($ts_min == $ts_max) {
 			@$historyDataTime['monthday'][$ts_max] += $row['ts_cnt'];
@@ -74,8 +77,8 @@
 			while ($i != $ts_max) {
 				$cnt++;
 				$i++;
-				if ($i >= 31)
-					$i -= 31;
+				if ($i >= $max)
+					$i -= $max;
 			}
 				
 			$per = $row['ts_cnt'] / $cnt;
@@ -84,9 +87,36 @@
 			while ($i != $ts_max) {
 				@$historyDataTime['monthday'][$i] += $per;	
 				$i++;
-				if ($i >= 31)
-					$i -= 31;
+				if ($i >= $max)
+					$i -= $max;
 			}	
+		}
+	// Month
+		$ts_min = date('n', strtotime($row['ts_min']));
+		$ts_max = date('n', strtotime($row['ts_max']));
+		
+		if ($ts_min == $ts_max) {
+			@$historyDataTime['month'][$ts_min] += $row['ts_cnt'];
+		}
+		else {
+			$cnt = 1;
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				$cnt++;
+				$i++;
+				if ($i >= 12)
+					$i -= 12;
+			}
+				
+			$per = $row['ts_cnt'] / $cnt;
+			
+			$i = $ts_min;
+			while ($i != $ts_max) {
+				@$historyDataTime['month'][$i] += $per;	
+				$i++;
+				if ($i >= 12)
+					$i -= 12;
+			}
 		}
 	}
 	
@@ -141,6 +171,7 @@
 						 'hours' => array(),
 						 'weekday' => array(),
 						 'monthday' => array(),
+						 'month' => array(),
 						 );
 
     if (strlen($reviewhost['history_table'])) {
@@ -363,6 +394,16 @@
 								echo "0,";
 							else
 								echo round($historyDataTime['monthday'][$i], 0).",";
+						}
+					?>
+				</span><br>
+				Months <span class="inlinesparkbar" style="float: right;">
+					<?php
+						for ($i = 0; $i < 12; $i++) {
+							if (!isset($historyDataTime['month'][$i]))
+								echo "0,";
+							else
+								echo round($historyDataTime['month'][$i], 0).",";
 						}
 					?>
 				</span><br>
