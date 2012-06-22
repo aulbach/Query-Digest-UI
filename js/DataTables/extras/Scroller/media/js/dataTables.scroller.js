@@ -2,12 +2,12 @@
  * @summary     Scroller
  * @description Virtual rendering for DataTables
  * @file        Scroller.js
- * @version     1.0.2
+ * @version     1.1.0
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @license     GPL v2 or BSD 3 point style
  * @contact     www.sprymedia.co.uk/contact
  *
- * @copyright Copyright 2011 Allan Jardine, all rights reserved.
+ * @copyright Copyright 2011-2012 Allan Jardine, all rights reserved.
  *
  * This source file is free software, under either the GPL v2 license or a
  * BSD style license, available at:
@@ -15,7 +15,7 @@
  *   http://datatables.net/license_bsd
  */
 
-(function($, window, document) {
+(/** @lends <global> */function($, window, document) {
 
 
 /** 
@@ -39,7 +39,7 @@
  * Key features include:
  *   <ul class="limit_length">
  *     <li>Speed! The aim of Scroller for DataTables is to make rendering large data sets fast</li>
- *     <li>Full compatibility with deferred rendering in DataTables 1.8 for maximum speed</li>
+ *     <li>Full compatibility with deferred rendering in DataTables 1.9 for maximum speed</li>
  *     <li>Correct visual scrolling implementation, similar to "infinite scrolling" in DataTable core</li>
  *     <li>Integration with state saving in DataTables (scrolling position is saved)</li>
  *     <li>Easy to use</li>
@@ -51,7 +51,7 @@
  *  @param {object} [oOpts={}] Configuration object for FixedColumns. Options are defined by {@link Scroller.oDefaults}
  * 
  *  @requires jQuery 1.4+
- *  @requires DataTables 1.8.0+
+ *  @requires DataTables 1.9.0+
  * 
  *  @example
  * 		$(document).ready(function() {
@@ -81,7 +81,7 @@ var Scroller = function ( oDTSettings, oOpts ) {
 	 * @namespace
 	 * @extends Scroller.DEFAULTS
 	 */
-	this.s = $.extend( {
+	this.s = {
 		/** 
 		 * DataTables settings object
 		 *  @type     object
@@ -166,7 +166,8 @@ var Scroller = function ( oDTSettings, oOpts ) {
 		 *  @default  null
 		 */
 		"drawTO": null
-	}, Scroller.oDefaults, oOpts );
+	};
+	this.s = $.extend( this.s, Scroller.oDefaults, oOpts );
 	
 	/**
 	 * DOM elements used by the class instance
@@ -317,7 +318,7 @@ Scroller.prototype = {
 
 		this.s.viewportHeight = $(this.dom.scroller).height();
 		this.s.viewportRows = parseInt( this.s.viewportHeight/this.s.rowHeight, 10 )+1;
-		this.s.dt._iDisplayLength = this.s.viewportRows * 3;
+		this.s.dt._iDisplayLength = this.s.viewportRows * this.s.displayBuffer;
 		
 		if ( this.s.trace )
 		{
@@ -357,9 +358,8 @@ Scroller.prototype = {
 		this.dom.force.style.top = "0px";
 		this.dom.force.style.left = "0px";
 		this.dom.force.style.width = "1px";
-		//this.dom.force.style.backgroundColor = "blue";
 
-		this.dom.scroller = $('div.dataTables_scrollBody', this.s.dt.nTableWrapper)[0];
+		this.dom.scroller = $('div.'+this.s.dt.oClasses.sScrollBody, this.s.dt.nTableWrapper)[0];
 		this.dom.scroller.appendChild( this.dom.force );
 		this.dom.scroller.style.position = "relative";
 
@@ -368,15 +368,33 @@ Scroller.prototype = {
 		this.dom.table.style.top = "0px";
 		this.dom.table.style.left = "0px";
 
-		/* Initial size calculations */
-		if ( this.s.rowHeight != 'auto' )
+		// Add class to 'announce' that we are a Scroller table
+		$(this.s.dt.nTableWrapper).addClass('DTS');
+
+		// Add a 'loading' indicator
+		if ( this.s.loadingIndicator )
 		{
-			this.s.rowHeight = false;
+			$(this.dom.scroller.parentNode)
+				.css('position', 'relative')
+				.append('<div class="DTS_Loading">'+this.s.dt.oLanguage.sLoadingRecords+'</div>');
+		}
+
+		/* Initial size calculations */
+		if ( this.s.rowHeight && this.s.rowHeight != 'auto' )
+		{
+			this.s.autoHeight = false;
 		}
 		this.fnMeasure( false );
 
 		/* Scrolling callback to see if a page change is needed */
 		$(this.dom.scroller).scroll( function () {
+			that._fnScroll.call( that );
+		} );
+
+		/* In iOS we catch the touchstart event incase the user tries to scroll
+		 * while the display is already scrolling
+		 */
+		$(this.dom.scroller).bind('touchstart', function () {
 			that._fnScroll.call( that );
 		} );
 		
@@ -393,12 +411,9 @@ Scroller.prototype = {
 		/* Add a state saving parameter to the DT state saving so we can restore the exact
 		 * position of the scrolling
 		 */
-		this.s.dt.aoStateSave.push( {
-			"fn": function (oS, sVal) {
-				return sVal+',"iScroller":'+that.dom.scroller.scrollTop;
-			},
-			"sName": "Scroller_State"
-		} );
+		this.s.dt.oApi._fnCallbackReg( this.s.dt, 'aoStateSaveParams', function (oS, oData) {
+			oData.iScroller = that.dom.scroller.scrollTop;
+		}, "Scroller_State" );
 	},
 
 
@@ -416,6 +431,14 @@ Scroller.prototype = {
 			that = this,
 			iScrollTop = this.dom.scroller.scrollTop,
 			iTopRow;
+
+		/* If the table has been sorted or filtered, then we use the redraw that
+		 * DataTables as done, rather than performing our own
+		 */
+		if ( this.s.dt.bFiltered || this.s.dt.bSorted )
+		{
+			return;
+		}
 
 		if ( this.s.trace )
 		{
@@ -444,7 +467,8 @@ Scroller.prototype = {
 		 */
 		if ( iScrollTop < this.s.redrawTop || iScrollTop > this.s.redrawBottom )
 		{
-			iTopRow = parseInt( iScrollTop / this.s.rowHeight, 10 ) - this.s.viewportRows;
+			var preRows = ((this.s.displayBuffer-1)/2) * this.s.viewportRows;
+			iTopRow = parseInt( iScrollTop / this.s.rowHeight, 10 ) - preRows;
 			if ( iTopRow < 0 )
 			{
 				/* At the start of the table */
@@ -511,7 +535,8 @@ Scroller.prototype = {
 	{
 		var
 			that = this,
-			iScrollTop = this.dom.scroller.scrollTop;
+			iScrollTop = this.dom.scroller.scrollTop,
+			iScrollBottom = iScrollTop + this.s.viewportHeight;
 		
 		/* Set the height of the scrolling forcer to be suitable for the number of rows
 		 * in this draw
@@ -535,8 +560,8 @@ Scroller.prototype = {
 		this.s.tableTop = iTableTop;
 		this.s.tableBottom = $(this.s.dt.nTable).height() + this.s.tableTop;
 
-		this.s.redrawTop = iScrollTop - (this.s.viewportHeight/2);
-		this.s.redrawBottom = this.s.tableBottom - (1.5 * this.s.viewportHeight);
+		this.s.redrawTop = iScrollTop - ( (iScrollTop - this.s.tableTop) * this.s.boundaryScale );
+		this.s.redrawBottom = iScrollTop + ( (this.s.tableBottom - iScrollBottom) * this.s.boundaryScale );
 
 		if ( this.s.trace )
 		{
@@ -585,22 +610,28 @@ Scroller.prototype = {
 	 */
 	"_fnCalcRowHeight": function ()
 	{
-		var
-			nDiv = document.createElement('div'),
-			nTable = this.s.dt.nTable.cloneNode( false ),
-			nBody = document.createElement( 'tbody' ),
-			nTr = document.createElement('tr'),
-			nTd = document.createElement('td');
-		
-		nTd.innerHTML = "&nbsp;";
-		nTr.appendChild( nTd );
-		nBody.appendChild( nTr );
-		nTable.appendChild( nBody );
-		nDiv.className = this.s.dt.oClasses.sScrollBody;
-		nDiv.appendChild( nTable );
-		document.body.appendChild( nDiv );
-		this.s.rowHeight = $(nTr).height();
-		document.body.removeChild( nDiv );
+		var nTable = this.s.dt.nTable.cloneNode( false );
+		var nContainer = $(
+			'<div class="'+this.s.dt.oClasses.sWrapper+' DTS">'+
+				'<div class="'+this.s.dt.oClasses.sScrollWrapper+'">'+
+					'<div class="'+this.s.dt.oClasses.sScrollBody+'"></div>'+
+				'</div>'+
+			'</div>'
+		)[0];
+
+		$(nTable).append(
+			'<tbody>'+
+				'<tr>'+
+					'<td>&nbsp;</td>'+
+				'</tr>'+
+			'</tbody>'
+		);
+
+		$('div.'+this.s.dt.oClasses.sScrollBody, nContainer).append( nTable );
+
+		document.body.appendChild( nContainer );
+		this.s.rowHeight = $('tbody tr', nTable).outerHeight();
+		document.body.removeChild( nContainer );
 	},
 
 
@@ -701,7 +732,7 @@ Scroller.oDefaults = {
 	 *    var oTable = $('#example').dataTable( {
 	 *        "sScrollY": "200px",
 	 *        "sDom": "frtiS",
-	 *        "bDeferRender": true
+	 *        "bDeferRender": true,
 	 *        "oScroller": {
 	 *          "trace": true
 	 *        }
@@ -719,7 +750,7 @@ Scroller.oDefaults = {
 	 *    var oTable = $('#example').dataTable( {
 	 *        "sScrollY": "200px",
 	 *        "sDom": "frtiS",
-	 *        "bDeferRender": true
+	 *        "bDeferRender": true,
 	 *        "oScroller": {
 	 *          "rowHeight": 30
 	 *        }
@@ -738,13 +769,78 @@ Scroller.oDefaults = {
 	 *    var oTable = $('#example').dataTable( {
 	 *        "sScrollY": "200px",
 	 *        "sDom": "frtiS",
-	 *        "bDeferRender": true
+	 *        "bDeferRender": true,
 	 *        "oScroller": {
 	 *          "serverWait": 100
 	 *        }
 	 *    } );
 	 */
-	"serverWait": 200
+	"serverWait": 200,
+
+	/** 
+	 * The display buffer is what Scroller uses to calculate how many rows it should pre-fetch
+	 * for scrolling. Scroller automatically adjusts DataTables' display length to pre-fetch
+	 * rows that will be shown in "near scrolling" (i.e. just beyond the current display area).
+	 * The value is based upon the number of rows that can be displayed in the viewport (i.e. 
+	 * a value of 1), and will apply the display range to records before before and after the
+	 * current viewport - i.e. a factor of 3 will allow Scroller to pre-fetch 1 viewport's worth
+	 * of rows before the current viewport, the current viewport's rows and 1 viewport's worth
+	 * of rows after the current viewport. Adjusting this value can be useful for ensuring 
+	 * smooth scrolling based on your data set.
+	 *  @type     int
+	 *  @default  7
+	 *  @static
+	 *  @example
+	 *    var oTable = $('#example').dataTable( {
+	 *        "sScrollY": "200px",
+	 *        "sDom": "frtiS",
+	 *        "bDeferRender": true,
+	 *        "oScroller": {
+	 *          "displayBuffer": 10
+	 *        }
+	 *    } );
+	 */
+	"displayBuffer": 9,
+
+	/** 
+	 * Scroller uses the boundary scaling factor to decide when to redraw the table - which it
+	 * typically does before you reach the end of the currently loaded data set (in order to
+	 * allow the data to look continuous to a user scrolling through the data). If given as 0
+	 * then the table will be redrawn whenever the viewport is scrolled, while 1 would not
+	 * redraw the table until the currently loaded data has all been shown. You will want 
+	 * something in the middle - the default factor of 0.5 is usually suitable.
+	 *  @type     float
+	 *  @default  0.5
+	 *  @static
+	 *  @example
+	 *    var oTable = $('#example').dataTable( {
+	 *        "sScrollY": "200px",
+	 *        "sDom": "frtiS",
+	 *        "bDeferRender": true,
+	 *        "oScroller": {
+	 *          "boundaryScale": 0.75
+	 *        }
+	 *    } );
+	 */
+	"boundaryScale": 0.5,
+
+	/** 
+	 * Show (or not) the loading element in the background of the table. Note that you should
+	 * include the dataTables.scroller.css file for this to be displayed correctly.
+	 *  @type     boolean
+	 *  @default  false
+	 *  @static
+	 *  @example
+	 *    var oTable = $('#example').dataTable( {
+	 *        "sScrollY": "200px",
+	 *        "sDom": "frtiS",
+	 *        "bDeferRender": true,
+	 *        "oScroller": {
+	 *          "loadingIndicator": true
+	 *        }
+	 *    } );
+	 */
+	"loadingIndicator": false
 };
 
 
@@ -756,21 +852,20 @@ Scroller.oDefaults = {
 
 /**
  * Name of this class
- *  @constant CLASS
  *  @type     String
  *  @default  Scroller
+ *  @static
  */
 Scroller.prototype.CLASS = "Scroller";
 
 
 /**
  * Scroller version
- *  @constant  Scroller.VERSION
  *  @type      String
  *  @default   See code
  *  @static
  */
-Scroller.VERSION = "1.0.2";
+Scroller.VERSION = "1.1.0";
 Scroller.prototype.VERSION = Scroller.VERSION;
 
 
@@ -784,7 +879,7 @@ Scroller.prototype.VERSION = Scroller.VERSION;
  */
 if ( typeof $.fn.dataTable == "function" &&
      typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
-     $.fn.dataTableExt.fnVersionCheck('1.8.0') )
+     $.fn.dataTableExt.fnVersionCheck('1.9.0') )
 {
 	$.fn.dataTableExt.aoFeatures.push( {
 		"fnInit": function( oDTSettings ) {
@@ -799,8 +894,11 @@ if ( typeof $.fn.dataTable == "function" &&
 }
 else
 {
-	alert( "Warning: Scroller requires DataTables 1.8.0 or greater - www.datatables.net/download");
+	alert( "Warning: Scroller requires DataTables 1.9.0 or greater - www.datatables.net/download");
 }
 
+
+// Attach Scroller to DataTables so it can be accessed as an 'extra'
+$.fn.dataTable.Scroller = Scroller;
 
 })(jQuery, window, document);
