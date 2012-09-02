@@ -42,7 +42,7 @@ $settings['defaultColumnVis']['Comments']      = true;
 $reviewhost = array(
 // Replace hostname and database in this setting
 // use host=hostname:port if not the default port
-    'dsn'           => 'mysql:host=hostname;dbname=percona',
+    'dsn'           => 'mysql:host=hostname;port=3306;dbname=percona',
     'user'          => 'user',
     'password'      => 'password',
 // See http://www.percona.com/doc/percona-toolkit/2.1/pt-query-digest.html#cmdoption-pt-query-digest--review
@@ -55,7 +55,7 @@ $reviewhost = array(
 
 $explainhosts = array(
     'label1'   => array(
-        'dsn'       => 'mysql:host=hostname1:3306',
+        'dsn'       => 'mysql:host=hostname1;port=3306',
         'user'      => 'user',
         'password'  => 'password',
     // By default we scan the host to see what databases we can run a
@@ -67,7 +67,7 @@ $explainhosts = array(
         ),
     ),
     'label2'   => array(
-        'dsn'       => 'mysql:host=hostname2:3306',
+        'dsn'       => 'mysql:host=hostname2;port=3306',
         'user'      => 'user',
         'password'  => 'password',
     // You can also just set the field and keep it empty. We will scan for valid databases
