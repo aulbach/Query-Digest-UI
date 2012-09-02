@@ -41,7 +41,7 @@ $settings['defaultColumnVis']['Comments']      = true;
 
 $reviewhost = array(
 // Replace hostname and database in this setting
-// use host=hostname:port if not the default port
+// use host=hostname;port=portnum if not the default port
     'dsn'           => 'mysql:host=hostname;port=3306;dbname=percona',
     'user'          => 'user',
     'password'      => 'password',
